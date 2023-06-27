@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
+    "jsx": "preserve",
+    "checkJs": true,
     "target": "es5",
-    "module": "esnext",
+    "module": "CommonJS",
+    "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "moduleResolution": "node",
     "paths": {
@@ -14,6 +17,7 @@
       "dom",
       "dom.iterable",
       "scripthost"
-    ]
-  }
+    ]    
+  },
+  "include": ["typings"]
 }
