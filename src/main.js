@@ -3,7 +3,10 @@ import App from '@/App'
 import components from '@/components/UI'
 import router from '@/router/router'
 import directives from '@/directives'
-// import store from '@/store'
+import store from '@/store'
+import VueCookies from 'vue3-cookies'
+
+// import './assets/css/main.css'
 
 const app = createApp(App)
 
@@ -17,5 +20,6 @@ directives.forEach(directive => {
 
 app
   .use(router)
-  // .use(store)
+  .use(store)
+  .use(VueCookies)
   .mount('#app')

@@ -10,10 +10,9 @@
 import toggleMixin from '@/mixins/toggleMixin'
 
 export default {
-  name: 'my-dialog',
+  name: 'app-dialog',
   mixins: [toggleMixin],
   mounted () {
-
   }
 }
 </script>
