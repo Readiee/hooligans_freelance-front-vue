@@ -4,8 +4,8 @@ import { useCookies } from 'vue3-cookies'
 const { cookies } = useCookies()
 
 const API_URL = 'http://localhost:3000/'
-// const accessToken = cookies.get('accessToken')
-const accessToken = 'tokennfa'
+const accessToken = cookies.get('accessToken')
+// const accessToken = ''
 console.log(`accessToken: ${accessToken}`)
 
 const state = () => ({
@@ -42,6 +42,7 @@ const actions = {
 
   // надо ли отправлять cookie при login?
   async loginApi ({ commit }, payload) {
+    // const config = { withCredentials: true, credentials: 'include' }
     const response = await axios
       .post(API_URL + 'auth/login', payload)
       .catch((err) => {
