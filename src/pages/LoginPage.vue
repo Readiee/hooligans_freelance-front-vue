@@ -94,7 +94,7 @@ export default {
       if (this.getLoggedIn){
         this.$router.push('/home')
       } else {
-        alert('failed')
+        alert('Login Error')
       }
     }
   }
@@ -102,25 +102,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-
-.card {
-  //position: fixed;
-  //top: 53%;
-  //left: 50%;
-  //transform: translate(-50%, -50%);
-  margin: 30px auto;
-  width: 1000px;
-  display: flex;
-  background-color: white;
-  padding: 70px;
-  border-radius: @border-radius;
-  box-shadow: @box-shadow;
-  justify-content: space-between;
-}
-
-.card-img {
-  height: 480px;
-}
 
 label {
   display: block;

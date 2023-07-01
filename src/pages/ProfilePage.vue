@@ -1,8 +1,10 @@
 <template>
   <div class="container">
-    {{ getUserProfile.id }}
-    {{ getUserProfile.username }}
-    {{ getUserProfile.email }}
+    <div>
+      <h2>Username: {{ getUserProfile.name }}</h2>
+      <h2>Email: {{ getUserProfile.email }}</h2>
+    </div>
+
   </div>
 </template>
 

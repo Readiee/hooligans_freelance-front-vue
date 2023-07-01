@@ -7,13 +7,13 @@
 
         <div class="form-group">
           <input
-            id="username"
+            id="name"
             type="text"
             placeholder="Имя"
-            v-model.trim="form.username"
-            :class="{'is-invalid': formErrors.username}"
+            v-model.trim="form.name"
+            :class="{'is-invalid': formErrors.name}"
           />
-          <div v-if="formErrors.username" class="error-feedback">{{ formErrors.username }}</div>
+          <div v-if="formErrors.name" class="error-feedback">{{ formErrors.name }}</div>
         </div>
 
         <div class="form-group">
@@ -72,7 +72,7 @@ export default {
   data () {
     return {
       form: {
-        username: '',
+        name: '',
         email: '',
         password: '',
         password_confirm: ''
@@ -94,8 +94,8 @@ export default {
     submitForm () {
       this.formErrors = {}
 
-      if (!this.form.username) {
-        this.formErrors.username = 'Введите имя пользователя.'
+      if (!this.form.name) {
+        this.formErrors.name = 'Введите имя пользователя.'
       }
 
       if (!this.form.email) {
@@ -116,7 +116,7 @@ export default {
     },
     async handleRegister () {
       const user = {
-        username: this.form.username,
+        name: this.form.name,
         email: this.form.email,
         password: this.form.password
       }
@@ -127,25 +127,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-
-.card {
-  //position: fixed;
-  //top: 53%;
-  //left: 50%;
-  //transform: translate(-50%, -50%);
-  margin: 30px auto;
-  width: 1000px;
-  display: flex;
-  background-color: white;
-  padding: 70px;
-  border-radius: @border-radius;
-  box-shadow: @box-shadow;
-  justify-content: space-between;
-}
-
-.card-img {
-  height: 480px;
-}
 
 label {
   display: block;

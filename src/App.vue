@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="getUserProfile.id !== 0" class="navbar">
+    <div v-if="getLoggedIn" class="navbar">
       <div class="container content-distributed">
 
         <ul class="navbar__items">
@@ -16,9 +16,11 @@
           </li>
         </ul>
 
-        <a href="/">Logo</a>
+        <router-link to="/" class="nav-link">
+          Logo
+        </router-link>
 
-        <ul v-if="getUserProfile.id === 0" class="navbar__items">
+        <ul v-if="!getLoggedIn" class="navbar__items">
           <li class="nav-item">
             <router-link to="/login" class="nav-link">
               Войти
@@ -34,7 +36,7 @@
         <ul v-else class="navbar__items">
           <li class="nav-item">
             <router-link to="/profile" class="nav-link">
-              {{ getUserProfile.username }}
+              {{ getUserProfile.name }}
             </router-link>
           </li>
           <li class="nav-item">
@@ -46,10 +48,8 @@
       </div>
     </div>
 
-    <div class="app">
-      <div class="container">
-        <router-view />
-      </div>
+    <div class="container">
+      <router-view />
     </div>
   </div>
 </template>
@@ -162,6 +162,7 @@ a, a:visited, a:hover {
 
   a {
     text-decoration: none;
+    cursor: pointer;
   }
 }
 
@@ -169,6 +170,32 @@ a, a:visited, a:hover {
   text-decoration: none;
   color: @primary-color;
   font-weight: 700;
+}
+.fixed-centered{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: auto;
+}
+
+.card {
+  //position: fixed;
+  //top: 53%;
+  //left: 50%;
+  //transform: translate(-50%, -50%);
+  margin: 30px auto 0;
+  width: 1000px;
+  display: flex;
+  background-color: white;
+  padding: 70px;
+  border-radius: @border-radius;
+  box-shadow: @box-shadow;
+  justify-content: space-between;
+}
+
+.card-img {
+  height: 480px;
 }
 
 </style>

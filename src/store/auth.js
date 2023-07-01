@@ -4,14 +4,15 @@ import { useCookies } from 'vue3-cookies'
 const { cookies } = useCookies()
 
 const API_URL = 'http://localhost:3000/'
-const token = cookies.get('token')
-console.log(`Token: ${token}`)
+// const accessToken = cookies.get('accessToken')
+const accessToken = 'tokennfa'
+console.log(`accessToken: ${accessToken}`)
 
 const state = () => ({
   loggedIn: false,
   userProfile: {
     id: 0,
-    username: '',
+    name: '',
     email: ''
   }
 })
@@ -23,69 +24,78 @@ const getters = {
   getUserProfile (state){
     return state.userProfile
   }
-
 }
 
 const actions = {
   async registerApi ({ commit }, user) {
-    await axios.post(API_URL + 'auth/register', user)
-      .then((response) => {
-        if (response && response.data) {
-          router.push('/login')
-          alert('Регистрация прошла успешно! Теперь вы можете войти в свой аккаунт.')
-          console.log(response.data)
-        }
-      }).catch((err) => {
-        alert('Register Error')
+    const response = axios.post(API_URL + 'users/register', user)
+      .catch((err) => {
+        alert(err)
         console.log(err)
       })
+    if (response && response.data) {
+      alert('Регистрация прошла успешно! Теперь вы можете войти в свой аккаунт.')
+      await router.push('/login')
+      console.log(response.data)
+    }
   },
 
+  // надо ли отправлять cookie при login?
   async loginApi ({ commit }, payload) {
     const response = await axios
       .post(API_URL + 'auth/login', payload)
       .catch((err) => {
-        alert('Login Error')
+        // alert('Login Error')
         console.log(err)
       })
 
     if (response && response.data) {
-      // cookies.set('token', response.headers.getAuthorization())
-      cookies.set('token', response.data.token)
+      console.log(response.data.accessToken)
+      // cookies.set('accessToken', response.headers.getAuthorization())
+      cookies.set('accessToken', response.data.accessToken)
+      console.log(cookies.get('accessToken'))
       commit('setLoggedIn', true)
-    } else {
-      commit('setLoggedIn', false)
     }
   },
 
-  // надо просить isTokenValid c бэка
-  async accessApi ({ commit }) {
-    if (token) {
-      await axios.post(API_URL + '/auth/access', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-        .then((response) => {
-          if (response && response.data.isTokenValid) {
-            commit('setLoggedIn', true)
-          } else {
-            commit('setLoggedIn', false)
+  async accessApi ({ commit, dispatch }) {
+    if (accessToken) {
+      try {
+        const response = await axios.post(API_URL + 'auth/access', {}, {
+          headers: {
+            Authorization: accessToken,
+            'Content-Type': 'application/json'
           }
-        }).catch((err) => {
-          commit('setLoggedIn', false)
-          console.log(err)
         })
-    } else {
-      commit('setLoggedIn', false)
+        if (response && response.data) {
+          commit('setLoggedIn', true)
+          commit('setUserProfile', response.data)
+        } // else
+      } catch (err) {
+        commit('setLoggedIn', false)
+        dispatch('userLogout')
+        console.log(err)
+      }
     }
+  },
+
+  async userLogout ({ commit }){
+    cookies.remove('accessToken')
+    await commit('setLoggedIn', false)
+    const resetUser = {
+      id: 0,
+      name: '',
+      email: ''
+    }
+    await commit('setUserProfile', resetUser)
   },
 
   async userProfile ({ commit }){
     const response = await axios
-      .get(API_URL + '/user/profile', {
+      .get(API_URL + 'users/profile', {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: accessToken,
+          'Content-Type': 'application/json'
         }
       })
       .catch((err) => {
@@ -95,18 +105,8 @@ const actions = {
     if (response && response.data){
       commit('setUserProfile', response.data)
     }
-  },
-
-  async userLogout ({ commit }){
-    cookies.remove('token')
-    commit('setLoggedIn', false)
-    const resetUser = {
-      id: 0,
-      username: '',
-      email: ''
-    }
-    commit('setUserProfile', resetUser)
   }
+
 }
 
 const mutations = {
@@ -116,7 +116,7 @@ const mutations = {
   setUserProfile (state, data){
     state.userProfile = {
       id: data.id,
-      username: data.username,
+      name: data.name,
       email: data.email
     }
   }
