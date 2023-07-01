@@ -1,0 +1,30 @@
+Index: src/store/auth.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/store/auth.js b/src/store/auth.js
+--- a/src/store/auth.js	(date 1688208417775)
++++ b/src/store/auth.js	
+@@ -27,6 +27,21 @@
+ }
+ 
+ const actions = {
++  // async registerApi ({ commit }, user) {
++  //   await axios.post(API_URL + 'users/register', user)
++  //     .then((response) => {
++  //       if (response && response.data.regStatus) {
++  //         router.push('/login')
++  //         alert('Регистрация прошла успешно! Теперь вы можете войти в свой аккаунт.')
++  //         console.log(response.data)
++  //       }
++  //     }).catch((err) => {
++  //       alert(err.message)
++  //       // alert(err.response.data.message)
++  //       console.log(err)
++  //     })
++  // },
++
+   async registerApi ({ commit }, user) {
+     const response = axios.post(API_URL + 'users/register', user)
+       .catch((err) => {
