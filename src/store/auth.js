@@ -47,7 +47,7 @@ const actions = {
         { withCredentials: true, credentials: 'include' }
       )
       .catch((err) => {
-        alert('Login Error: ' + err)
+        // alert('Login Error: ' + err)
         console.log(err)
       })
 
