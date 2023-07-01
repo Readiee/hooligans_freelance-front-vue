@@ -4,9 +4,8 @@ import { useCookies } from 'vue3-cookies'
 const { cookies } = useCookies()
 
 const API_URL = 'http://localhost:3000/'
-const accessToken = cookies.get('accessToken')
 // const accessToken = ''
-console.log(`accessToken: ${accessToken}`)
+const accessToken = cookies.get('accessToken')
 
 const state = () => ({
   loggedIn: false,
@@ -27,8 +26,9 @@ const getters = {
 }
 
 const actions = {
-  async registerApi ({ commit }, user) {
-    const response = axios.post(API_URL + 'users/register', user)
+  async registerApi ({ commit }, payload) {
+    const response = axios
+      .post(API_URL + 'users/register', payload) // name, email, password
       .catch((err) => {
         alert(err)
         console.log(err)
@@ -36,51 +36,51 @@ const actions = {
     if (response && response.data) {
       alert('Регистрация прошла успешно! Теперь вы можете войти в свой аккаунт.')
       await router.push('/login')
-      console.log(response.data)
     }
   },
 
   // надо ли отправлять cookie при login?
+  // как правильно сохранять куку из хедеров?
   async loginApi ({ commit }, payload) {
-    // const config = { withCredentials: true, credentials: 'include' }
     const response = await axios
-      .post(API_URL + 'auth/login', payload)
+      .post(API_URL + 'auth/login', payload, // email, password
+        { withCredentials: true, credentials: 'include' }
+      )
       .catch((err) => {
-        // alert('Login Error')
+        alert('Login Error: ' + err)
         console.log(err)
       })
 
     if (response && response.data) {
-      console.log(response.data.accessToken)
-      // cookies.set('accessToken', response.headers.getAuthorization())
-      cookies.set('accessToken', response.data.accessToken)
-      console.log(cookies.get('accessToken'))
-      commit('setLoggedIn', true)
+      const cookiesArray = response.headers.cookie.split('; ')
+      cookiesArray.forEach(cookie => {
+        const [name, value] = cookie.split('=')
+        cookies.set(name, value)
+      })
+      // cookies.set('accessToken', response.headers.cookie) // cookie header title
+      // commit('setLoggedIn', true)
     }
   },
 
   async accessApi ({ commit, dispatch }) {
     if (accessToken) {
       try {
-        const response = await axios.post(API_URL + 'auth/access', {}, {
-          headers: {
-            Authorization: accessToken,
-            'Content-Type': 'application/json'
-          }
-        })
+        const response = await axios
+          .post(API_URL + 'auth/access', {}, {
+            withCredentials: true, credentials: 'include'
+          })
         if (response && response.data) {
           commit('setLoggedIn', true)
           commit('setUserProfile', response.data)
         } // else
       } catch (err) {
-        commit('setLoggedIn', false)
         dispatch('userLogout')
         console.log(err)
       }
     }
   },
 
-  async userLogout ({ commit }){
+  async logoutApi ({ commit }){
     cookies.remove('accessToken')
     await commit('setLoggedIn', false)
     const resetUser = {
@@ -91,13 +91,10 @@ const actions = {
     await commit('setUserProfile', resetUser)
   },
 
-  async userProfile ({ commit }){
+  async profileApi ({ commit }){
     const response = await axios
       .get(API_URL + 'users/profile', {
-        headers: {
-          Authorization: accessToken,
-          'Content-Type': 'application/json'
-        }
+        withCredentials: true, credentials: 'include'
       })
       .catch((err) => {
         console.log(err)
