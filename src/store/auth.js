@@ -57,8 +57,6 @@ const actions = {
         const [name, value] = cookie.split('=')
         cookies.set(name, value)
       })
-      // cookies.set('accessToken', response.headers.cookie) // cookie header title
-      // commit('setLoggedIn', true)
     }
   },
 
@@ -74,10 +72,10 @@ const actions = {
           commit('setUserProfile', response.data)
         } // else
       } catch (err) {
-        dispatch('userLogout')
+        dispatch('logoutApi')
         console.log(err)
       }
-    }
+    } else dispatch('logoutApi')
   },
 
   async logoutApi ({ commit }){
