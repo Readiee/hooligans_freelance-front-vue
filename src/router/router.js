@@ -15,14 +15,14 @@ const routes = [
     name: 'home',
     component: HomePage,
     meta: {
-      middleware: true // Требуется авторизация
+      middleware: false // Публичная
     }
   },
   {
     path: '/home',
     component: HomePage,
     meta: {
-      middleware: true // Требуется авторизация
+      middleware: false // Публичная
     }
   },
   {
@@ -30,7 +30,7 @@ const routes = [
     name: 'login',
     component: LoginPage,
     meta: {
-      middleware: true // Доступно только неавторизованным пользователям
+      middleware: true // Только для неавторизованных
     }
   },
   {
@@ -38,7 +38,7 @@ const routes = [
     name: 'register',
     component: RegisterPage,
     meta: {
-      middleware: true // Доступно только неавторизованным пользователям
+      middleware: true // Только для неавторизованных
     }
   },
   {
@@ -46,25 +46,28 @@ const routes = [
     name: 'profile',
     component: ProfilePage,
     meta: {
-      middleware: true // Требуется авторизация
+      middleware: true // Приватная
     }
   },
   {
     path: '/clients',
     component: ClientsPage,
+    name: 'clients',
     meta: {
-      middleware: true // Требуется авторизация
+      middleware: false // Публичная
     }
   },
   {
     path: '/services',
     component: ServicesPage,
+    name: 'services',
     meta: {
-      middleware: true // Требуется авторизация
+      middleware: false // Публичная
     }
   },
   {
     path: '/:pathMatch(.*)*',
+    name: 'notfound',
     component: NotFoundPage
   }
 ]

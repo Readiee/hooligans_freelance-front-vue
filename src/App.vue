@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="getLoggedIn" class="navbar">
+    <div class="navbar">
       <div class="container content-distributed">
 
         <ul class="navbar__items">
@@ -16,7 +16,7 @@
           </li>
         </ul>
 
-        <router-link to="/" class="nav-link">
+        <router-link to="/" class="nav-link" style="position: absolute; left: 50%">
           Logo
         </router-link>
 
@@ -185,7 +185,7 @@ a, a:visited, a:hover {
   width: 1000px;
   display: flex;
   background-color: white;
-  padding: 70px;
+  padding: 50px;
   border-radius: @border-radius;
   box-shadow: @box-shadow;
   justify-content: space-between;
