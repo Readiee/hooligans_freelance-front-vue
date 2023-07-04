@@ -23,15 +23,15 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  await store.dispatch('auth/accessApi')
+  await store.dispatch('auth/auth')
   const loggedIn = store.getters['auth/getLoggedIn']
 
   if (!to.meta.middleware) {
     return next()
   }
-  if (to.name !== 'login' && to.name !== 'register' && !loggedIn) next({ name: 'login' })
-  else if ((to.name === 'login' || to.name === 'register') && loggedIn) next({ name: 'home' })
-  else next()
+  if (to.name !== 'login' && to.name !== 'register' && !loggedIn) return next({ name: 'login' })
+  else if ((to.name === 'login' || to.name === 'register') && loggedIn) return next({ name: 'home' })
+  else return next()
 })
 
 export default router

@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     ...mapActions('auth', {
-      actionRegisterApi: 'registerApi'
+      actionRegister: 'register'
     }),
 
     submitForm () {
@@ -120,7 +120,7 @@ export default {
         email: this.form.email,
         password: this.form.password
       }
-      await this.actionRegisterApi(user)
+      await this.actionRegister(user)
     }
   }
 }

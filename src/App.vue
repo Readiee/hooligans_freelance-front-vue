@@ -67,10 +67,10 @@ export default {
   },
   methods: {
     ...mapActions('auth', {
-      actionLogoutApi: 'logoutApi'
+      actionLogout: 'logout'
     }),
     async logout () {
-      await this.actionLogoutApi()
+      await this.actionLogout()
       if (!this.getLoggedIn) {
         this.$router.push('/login')
       }
