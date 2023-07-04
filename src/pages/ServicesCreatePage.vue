@@ -11,6 +11,10 @@
       </button>
     </div>
     <div v-show="activeButton === 0" class="container__step1">
+<<<<<<< HEAD
+=======
+      <!-- Код для первой вкладки -->
+>>>>>>> 026d2a0 (Форма создания услуги)
       <div class="addwork__head">
         <span class="text_type1">Начнём с названия вашей работы.</span>
         <span class="text_type2">Это поможет вашей работе найти подходящих клиентов.</span>
@@ -97,6 +101,10 @@
       </form>
     </div>
     <div v-show="activeButton === 2" class="container__step3">
+<<<<<<< HEAD
+=======
+      <!-- Код для второй вкладки -->
+>>>>>>> 026d2a0 (Форма создания услуги)
       <div class="addwork__head">
         <span class="text_type1">Категория и описание работы.</span>
         <span class="text_type2">Категория работы помогает клиентам в поиске подходящей услуги.</span>
@@ -106,6 +114,7 @@
           <input placeholder="Полное описание:" class="line-input__field"  id="description" v-model.trim="service.description" required>
           <div class="line-input"></div>
         </div>
+<<<<<<< HEAD
         <div class="form-group" style="margin-top: 119px;">
           <h4 style="">Выберете категории:</h4>
 <!--          <div class="tag-chips">-->
@@ -138,6 +147,24 @@
           padding: 15px 60px;
           gap: 10px;
         "
+=======
+        <div class="form-group" style="margin-top: 51px;">
+          <input placeholder="Город" class="line-input__field"  id="city" v-model.trim="service.city" required>
+          <div class="line-input"></div>
+        </div>
+        <app-primary-btn
+            style="
+            position: absolute;
+            top: 280px;
+            left: 1000px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            padding: 15px 60px;
+            gap: 10px;
+          "
+>>>>>>> 026d2a0 (Форма создания услуги)
             type="button"
             @click="nextStep"
         >
@@ -145,6 +172,10 @@
         </app-primary-btn>
       </form>
     </div>
+<<<<<<< HEAD
+=======
+    <!-- Добавьте код для третьей вкладки здесь -->
+>>>>>>> 026d2a0 (Форма создания услуги)
   </div>
 </template>
 
@@ -154,8 +185,12 @@ import { ref } from 'vue'
 export default {
   data () {
     return {
+<<<<<<< HEAD
       buttons: ['Название', 'Местоположение', 'Описание работы'],
       tags: ['Перевод', 'Мобильное приложение', 'Веб-дизайн']
+=======
+      buttons: ['Название', 'Местоположение', 'Описание работы']
+>>>>>>> 026d2a0 (Форма создания услуги)
     }
   },
 
@@ -165,6 +200,7 @@ export default {
       title: '',
       shortDescription: '',
       description: '',
+<<<<<<< HEAD
       selectedCountry: '',
       tags: []
     })
@@ -188,12 +224,17 @@ export default {
         service.value.tags.push(tag)
       }
     }
+=======
+      selectedCountry: ''
+    })
+>>>>>>> 026d2a0 (Форма создания услуги)
 
     function setActiveButton (index) {
       activeButton.value = index
     }
 
     const selectedCountry = ref('russia')
+<<<<<<< HEAD
     function nextStep () {
       if (activeButton.value === 0) {
         if (service.value.title && service.value.shortDescription) {
@@ -216,6 +257,12 @@ export default {
         }
         console.log(service.value)
       }
+=======
+    service.value.selectedCountry = selectedCountry.value
+    function nextStep () {
+      activeButton.value += 1
+      console.log(service.value)
+>>>>>>> 026d2a0 (Форма создания услуги)
     }
 
     return {
@@ -223,10 +270,14 @@ export default {
       service,
       setActiveButton,
       nextStep,
+<<<<<<< HEAD
       selectedCountry,
       addNewTag,
       toggleTag,
       newTag
+=======
+      selectedCountry
+>>>>>>> 026d2a0 (Форма создания услуги)
     }
   }
 }
@@ -380,6 +431,7 @@ input[type="radio"]:checked + label {
   background-color: #8554D8;
   color: #fff;
 }
+<<<<<<< HEAD
 .tag-chips {
   display: flex;
   padding: 4px 10px;
@@ -403,4 +455,6 @@ input[type="radio"]:checked + label {
 .tag-chip.active {
   background-color: #8554D8;
 }
+=======
+>>>>>>> 026d2a0 (Форма создания услуги)
 </style>
