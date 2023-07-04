@@ -9,6 +9,7 @@
 <!--</template>-->
 
 <template>
+<<<<<<< HEAD
   <div class="profile__container">
   <aside class="profile__card">
     <div class="profile__img">
@@ -56,18 +57,74 @@
   </AppTabs>
   </div>
   </div>
+=======
+    <div class="profile__container">
+      <div class="profile__card">
+        <div class="profile__img">
+          <img src="http://1001goroskop.ru/img/gadanie/derevo_zh/_derevo.jpg" class="img" />
+          <!--- Выше требуется реализация фото профиля пользователя ---->
+        </div>
+        <div class="profile__description">
+          <div>{{getUserProfile.name}}</div>
+          <div class="hobby">UI/UX , Графический дизайнер</div>
+          <div class="location">Российская федерация</div>
+        </div>
+        <!--- Ещё будет работа над этим --->
+        <div class="edit__profile">
+          <app-primary-btn>Редактировать профиль</app-primary-btn>
+        </div>
+        <!--- Edit profile, требуется логика редактирования профиля пользователя --->
+        <div class="profile__infr">
+          <div class="profile__email">
+            Почта
+            {{getUserProfile.email}}
+          </div>
+          <div class="profile__name">
+            Компания
+            {{getUserProfile.name}}
+          </div>
+        </div>
+        <!--- Отображение информации о пользователе снизу --->
+      </div>
+      <div>
+        <div class="profile__buttons">
+          <button @click="currentTab = 'jobs'" :class="{ active: currentTab === 'jobs' }">Работы</button>
+          <button @click="currentTab = 'services'" :class="{ active: currentTab === 'services' }">Услуги</button>
+          <button @click="currentTab = 'reviews'" :class="{ active: currentTab === 'reviews' }">Отзывы</button>
+          <button @click="currentTab = 'clients'" :class="{ active: currentTab === 'clients' }">Клиенты</button>
+        </div>
+
+        <div v-show="currentTab === 'jobs'">
+          <!-- Код для раздела "Работы" -->
+        </div>
+        <div v-show="currentTab === 'services'">
+          <!-- Код для раздела "Услуги" -->
+        </div>
+        <div v-show="currentTab === 'reviews'">
+          <!-- Код для раздела "Отзывы" -->
+        </div>
+        <div v-show="currentTab === 'clients'">
+          <!-- Код для раздела "Клиенты" -->
+        </div>
+      </div>
+    </div>
+>>>>>>> 026d2a0 (Форма создания услуги)
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import AppPrimaryBtn from '@/components/UI/AppPrimaryButton'
+<<<<<<< HEAD
 import AppTabs from '@/components/UI/AppTabs.vue'
 import { ref } from 'vue'
+=======
+>>>>>>> 026d2a0 (Форма создания услуги)
 
 export default {
   name: 'ProfilePage',
   data () {
     return {
+<<<<<<< HEAD
       tabs: [
         { name: 'jobs', label: 'Портфолио' },
         { name: 'services', label: 'Услуги' },
@@ -90,6 +147,17 @@ export default {
   methods: {
   },
   components: { AppTabs, AppPrimaryBtn },
+=======
+      currentTab: 'jobs'
+    }
+  },
+  methods: {
+    changeTab (tab) {
+      this.currentTab = tab
+    }
+  },
+  components: { AppPrimaryBtn },
+>>>>>>> 026d2a0 (Форма создания услуги)
   computed: {
     ...mapGetters('auth', {
       getUserProfile: 'getUserProfile'
@@ -104,8 +172,21 @@ export default {
 .profile__container{
   width: 1440px;
   height: 900px;
+<<<<<<< HEAD
 }
 .profile__card{
+=======
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.profile__card{
+  margin-left: 110px;
+  margin-top: 30px;
+  margin-right: 883px;
+>>>>>>> 026d2a0 (Форма создания услуги)
   width: 447px;
   border: 2px none rgba(120, 120, 120, 0.4);
   height: 750px;
