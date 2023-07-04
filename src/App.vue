@@ -4,7 +4,7 @@
       <div class="container content-distributed">
 
         <ul class="navbar__items">
-          <li class="nav-item">
+          <li v-if="getLoggedIn" class="nav-item">
             <router-link to="/clients" class="nav-link">
               Клиенты
             </router-link>
