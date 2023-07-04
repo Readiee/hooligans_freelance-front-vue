@@ -1,126 +1,81 @@
 <template>
   <div class="container">
     <div class="card">
-      <form @submit.prevent="submitForm">
+      <VeeForm @submit="submitForm">
         <h3>Logo</h3>
         <h1 style="margin: 40px 0;">Регистрация</h1>
 
         <div class="form-group">
-          <input
-            id="name"
-            type="text"
-            placeholder="Имя"
-            v-model.trim="form.name"
-            :class="{'is-invalid': formErrors.name}"
-          />
-          <div v-if="formErrors.name" class="error-feedback">{{ formErrors.name }}</div>
+          <VeeField v-model="form.name" type="text" name="name" rules="required|max:35" :placeholder="`Имя`">
+          </VeeField>
+          <VeeErrorMessage name="name" class="error-feedback" />
         </div>
 
         <div class="form-group">
-          <input
-            id="email"
-            type="email"
-            placeholder="Email"
-            v-model.trim="form.email"
-            :class="{'is-invalid': formErrors.email}"
-          />
-          <div v-if="formErrors.email" class="error-feedback">{{ formErrors.email }}</div>
+          <VeeField v-model="form.email" type="text" name="email" rules="required|email" :placeholder="`Email`">
+          </VeeField>
+          <VeeErrorMessage name="email" class="error-feedback" />
         </div>
 
         <div class="form-group">
-          <input
-            id="password"
-            type="password"
-            placeholder="Пароль"
-            v-model="form.password"
-            :class="{'is-invalid': formErrors.password}"
-          />
-          <div v-if="formErrors.password" class="error-feedback">{{ formErrors.password }}</div>
+          <VeeField v-model="form.password" type="password" name="password" rules="required|min:6" :placeholder="`Пароль`">
+          </VeeField>
+          <VeeErrorMessage name="password" class="error-feedback" />
         </div>
 
         <div class="form-group">
-          <input
-            id="password_confirm"
-            type="password"
-            placeholder="Подтверждение пароля"
-            v-model="form.password_confirm"
-            :class="{'is-invalid': formErrors.password_confirm}"
-          />
-          <div v-if="formErrors.password_confirm" class="error-feedback">{{ formErrors.password_confirm }}</div>
+          <VeeField v-model="form.password_confirm" type="password" name="password_confirm" rules="required|confirmed:@password" :placeholder="`Потверждение пароля`">
+          </VeeField>
+          <VeeErrorMessage name="password_confirm" class="error-feedback" />
         </div>
 
         <app-primary-btn style="margin-top: 10px;" type="submit">Зарегистрироваться</app-primary-btn>
         <p style="text-align: center; margin-top: 40px;">Уже есть аккаунт?
-          <router-link class=colored-link to="/login">Войдите</router-link>
+          <router-link class="colored-link" to="/login">Войдите</router-link>
         </p>
-      </form>
+
+      </VeeForm>
+
       <img
         class="card-img"
         src="@/assets/images/reg_form_img.png"
         alt="RegistrationImage">
-
     </div>
   </div>
 </template>
 
 <script>
-
-import { mapActions } from 'vuex'
+import { useForm } from 'vee-validate'
+import { useStore } from 'vuex'
 
 export default {
-  name: 'RegisterPage',
-  data () {
-    return {
-      form: {
-        name: '',
-        email: '',
-        password: '',
-        password_confirm: ''
-      },
-      formErrors: {},
-      successful: false,
-      loading: false,
-      message: ''
+  setup () {
+    const store = useStore()
+
+    const { resetForm, errors } = useForm()
+
+    const form = {
+      name: '',
+      email: '',
+      password: '',
+      password_confirm: ''
     }
-  },
-  computed: {},
-  mounted () {
-  },
-  methods: {
-    ...mapActions('auth', {
-      actionRegister: 'register'
-    }),
 
-    submitForm () {
-      this.formErrors = {}
+    const submitForm = () => {
+      if (Object.keys(errors.value).length === 0) {
+        const payload = {
+          name: form.name,
+          email: form.email,
+          password: form.password
+        }
+        store.dispatch('auth/register', payload)
+        resetForm()
+      }
+    }
 
-      if (!this.form.name) {
-        this.formErrors.name = 'Введите имя пользователя.'
-      }
-
-      if (!this.form.email) {
-        this.formErrors.email = 'Введите email.'
-      }
-
-      if (!this.form.password) {
-        this.formErrors.password = 'Введите пароль.'
-      }
-
-      if (this.form.password !== this.form.password_confirm) {
-        this.formErrors.password_confirm = 'Пароли не совпадают.'
-      }
-
-      if (Object.keys(this.formErrors).length === 0) {
-        this.handleRegister()
-      }
-    },
-    async handleRegister () {
-      const user = {
-        name: this.form.name,
-        email: this.form.email,
-        password: this.form.password
-      }
-      await this.actionRegister(user)
+    return {
+      form,
+      submitForm
     }
   }
 }
@@ -134,7 +89,7 @@ label {
 }
 
 .form-group {
-  width: 300px;
+  width: 350px;
   margin-bottom: 30px;
 
   input {
@@ -155,4 +110,5 @@ label {
   color: red;
   font-size: 12px;
 }
+
 </style>
