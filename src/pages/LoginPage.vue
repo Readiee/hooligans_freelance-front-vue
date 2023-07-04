@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     ...mapActions('auth', {
-      actionLoginApi: 'loginApi'
+      actionLogin: 'login'
     }),
 
     submitForm () {
@@ -90,12 +90,7 @@ export default {
         email: this.form.email,
         password: this.form.password
       }
-      await this.actionLoginApi(payload)
-      if (this.getLoggedIn){
-        this.$router.push('/home')
-      } else {
-        alert('Login Error')
-      }
+      await this.actionLogin(payload)
     }
   }
 }
