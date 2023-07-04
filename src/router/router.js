@@ -1,75 +1,20 @@
-import LoginPage from '@/pages/LoginPage'
-import RegisterPage from '@/pages/RegisterPage'
-import ProfilePage from '@/pages/ProfilePage'
-import HomePage from '@/pages/HomePage'
-import ClientsPage from '@/pages/ClientsPage'
-import ServicesPage from '@/pages/ServicesPage'
-import NotFoundPage from '@/pages/NotFoundPage'
+import homeRoutes from '@/router/modules/home'
+import authRoutes from '@/router/modules/auth'
+import userRoutes from '@/router/modules/users'
+import clientsRoutes from '@/router/modules/clients'
+import servicesRoutes from '@/router/modules/services'
+import errorRoutes from '@/router/modules/errors'
 
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomePage,
-    meta: {
-      middleware: false // Публичная
-    }
-  },
-  {
-    path: '/home',
-    component: HomePage,
-    meta: {
-      middleware: false // Публичная
-    }
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginPage,
-    meta: {
-      middleware: true // Только для неавторизованных
-    }
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: RegisterPage,
-    meta: {
-      middleware: true // Только для неавторизованных
-    }
-  },
-  {
-    path: '/profile',
-    name: 'profile',
-    component: ProfilePage,
-    meta: {
-      middleware: true // Приватная
-    }
-  },
-  {
-    path: '/clients',
-    component: ClientsPage,
-    name: 'clients',
-    meta: {
-      middleware: false // Публичная
-    }
-  },
-  {
-    path: '/services',
-    component: ServicesPage,
-    name: 'services',
-    meta: {
-      middleware: false // Публичная
-    }
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'notfound',
-    component: NotFoundPage
-  }
+  ...homeRoutes,
+  ...authRoutes,
+  ...userRoutes,
+  ...clientsRoutes,
+  ...servicesRoutes,
+  ...errorRoutes
 ]
 
 const router = createRouter({
