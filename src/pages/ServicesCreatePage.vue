@@ -11,7 +11,6 @@
       </button>
     </div>
     <div v-show="activeButton === 0" class="container__step1">
-      <!-- Код для первой вкладки -->
       <div class="addwork__head">
         <span class="text_type1">Начнём с названия вашей работы.</span>
         <span class="text_type2">Это поможет вашей работе найти подходящих клиентов.</span>
@@ -98,7 +97,6 @@
       </form>
     </div>
     <div v-show="activeButton === 2" class="container__step3">
-      <!-- Код для второй вкладки -->
       <div class="addwork__head">
         <span class="text_type1">Категория и описание работы.</span>
         <span class="text_type2">Категория работы помогает клиентам в поиске подходящей услуги.</span>
@@ -108,22 +106,38 @@
           <input placeholder="Полное описание:" class="line-input__field"  id="description" v-model.trim="service.description" required>
           <div class="line-input"></div>
         </div>
-        <div class="form-group" style="margin-top: 51px;">
-          <input placeholder="Город" class="line-input__field"  id="city" v-model.trim="service.city" required>
-          <div class="line-input"></div>
+        <div class="form-group" style="margin-top: 119px;">
+          <h4 style="">Выберете категории:</h4>
+<!--          <div class="tag-chips">-->
+<!--            <div-->
+<!--                v-for="(tag, index) in tags"-->
+<!--                :key="index"-->
+<!--                class="tag-chip"-->
+<!--                :class="{ active: service.tags.includes(tag) }"-->
+<!--                @click="toggleTag(tag)"-->
+<!--            >-->
+<!--              {{ tag }}-->
+<!--            </div>-->
+<!--&lt;!&ndash;            <div class="tag-chip new-tag-chip" @click="openModal">&ndash;&gt;-->
+<!--&lt;!&ndash;              + Добавить категорию&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--          </div>-->
+        </div>
+        <div class="form-group" style="margin-top: 231px;">
+          <h4>Выберете то, что относится к вашей работе:</h4>
         </div>
         <app-primary-btn
             style="
-            position: absolute;
-            top: 280px;
-            left: 1000px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: fit-content;
-            padding: 15px 60px;
-            gap: 10px;
-          "
+          position: absolute;
+          top: 317px;
+          left: 1000px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: fit-content;
+          padding: 15px 60px;
+          gap: 10px;
+        "
             type="button"
             @click="nextStep"
         >
@@ -131,7 +145,6 @@
         </app-primary-btn>
       </form>
     </div>
-    <!-- Добавьте код для третьей вкладки здесь -->
   </div>
 </template>
 
@@ -141,7 +154,8 @@ import { ref } from 'vue'
 export default {
   data () {
     return {
-      buttons: ['Название', 'Местоположение', 'Описание работы']
+      buttons: ['Название', 'Местоположение', 'Описание работы'],
+      tags: ['Перевод', 'Мобильное приложение', 'Веб-дизайн']
     }
   },
 
@@ -151,18 +165,57 @@ export default {
       title: '',
       shortDescription: '',
       description: '',
-      selectedCountry: ''
+      selectedCountry: '',
+      tags: []
     })
+    const newTag = ref('')
+
+    // Функция для добавления нового тега
+    function addNewTag () {
+      if (newTag.value) {
+        // Проверяем, что новый тег не пустой
+        service.value.tags.push(newTag.value)
+        newTag.value = ''
+      }
+    }
+    function toggleTag (tag) {
+      if (service.value.tags.includes(tag)) {
+        // Удалить тег, если уже выбран
+        const index = service.value.tags.indexOf(tag)
+        service.value.tags.splice(index, 1)
+      } else {
+        // Добавить тег, если не выбран
+        service.value.tags.push(tag)
+      }
+    }
 
     function setActiveButton (index) {
       activeButton.value = index
     }
 
     const selectedCountry = ref('russia')
-    service.value.selectedCountry = selectedCountry.value
     function nextStep () {
-      activeButton.value += 1
-      console.log(service.value)
+      if (activeButton.value === 0) {
+        if (service.value.title && service.value.shortDescription) {
+          activeButton.value += 1
+        } else {
+          console.log('Пожалуйста, заполните название работы и краткое описание')
+        }
+        console.log(service.value)
+      } else if (activeButton.value === 1) {
+        if (selectedCountry.value) {
+          service.value.selectedCountry = selectedCountry.value
+          activeButton.value += 1
+        }
+        console.log(service.value)
+      } else if (activeButton.value === 2) {
+        if (service.value.description) {
+          activeButton.value += 1
+        } else {
+          console.log('Пожалуйста, заполните полное описание работы')
+        }
+        console.log(service.value)
+      }
     }
 
     return {
@@ -170,7 +223,10 @@ export default {
       service,
       setActiveButton,
       nextStep,
-      selectedCountry
+      selectedCountry,
+      addNewTag,
+      toggleTag,
+      newTag
     }
   }
 }
@@ -323,5 +379,28 @@ label {
 input[type="radio"]:checked + label {
   background-color: #8554D8;
   color: #fff;
+}
+.tag-chips {
+  display: flex;
+  padding: 4px 10px;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 10px;
+  justify-content: center;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+  background-color: white;
+}
+
+.tag-chip.active {
+  background-color: #8554D8;
 }
 </style>
