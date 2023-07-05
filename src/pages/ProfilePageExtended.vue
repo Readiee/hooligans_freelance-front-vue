@@ -9,75 +9,87 @@
 <!--</template>-->
 
 <template>
-    <div class="profile__container">
-      <div class="profile__card">
-        <div class="profile__img">
-          <img src="http://1001goroskop.ru/img/gadanie/derevo_zh/_derevo.jpg" class="img" />
-          <!--- Выше требуется реализация фото профиля пользователя ---->
-        </div>
-        <div class="profile__description">
-          <div>{{getUserProfile.name}}</div>
-          <div class="hobby">UI/UX , Графический дизайнер</div>
-          <div class="location">Российская федерация</div>
-        </div>
-        <!--- Ещё будет работа над этим --->
-        <div class="edit__profile">
-          <app-primary-btn>Редактировать профиль</app-primary-btn>
-        </div>
-        <!--- Edit profile, требуется логика редактирования профиля пользователя --->
-        <div class="profile__infr">
-          <div class="profile__email">
-            Почта
-            {{getUserProfile.email}}
-          </div>
-          <div class="profile__name">
-            Компания
-            {{getUserProfile.name}}
-          </div>
-        </div>
-        <!--- Отображение информации о пользователе снизу --->
+  <div class="profile__container">
+  <aside class="profile__card">
+    <div class="profile__img">
+      <img src="http://1001goroskop.ru/img/gadanie/derevo_zh/_derevo.jpg" class="img" />
+      <!--- Выше требуется реализация фото профиля пользователя ---->
+    </div>
+    <div class="profile__description">
+      <div>{{getUserProfile.name}}</div>
+      <div class="hobby">UI/UX , Графический дизайнер</div>
+      <div class="location">Российская федерация</div>
+    </div>
+    <!--- Ещё будет работа над этим --->
+    <div class="edit__profile">
+      <app-primary-btn>Редактировать профиль</app-primary-btn>
+    </div>
+    <!--- Edit profile, требуется логика редактирования профиля пользователя --->
+    <div class="profile__infr">
+      <div class="profile__email">
+        Почта
+        {{getUserProfile.email}}
       </div>
-      <div>
-        <div class="profile__buttons">
-          <button @click="currentTab = 'jobs'" :class="{ active: currentTab === 'jobs' }">Работы</button>
-          <button @click="currentTab = 'services'" :class="{ active: currentTab === 'services' }">Услуги</button>
-          <button @click="currentTab = 'reviews'" :class="{ active: currentTab === 'reviews' }">Отзывы</button>
-          <button @click="currentTab = 'clients'" :class="{ active: currentTab === 'clients' }">Клиенты</button>
-        </div>
-
-        <div v-show="currentTab === 'jobs'">
-          <!-- Код для раздела "Работы" -->
-        </div>
-        <div v-show="currentTab === 'services'">
-          <!-- Код для раздела "Услуги" -->
-        </div>
-        <div v-show="currentTab === 'reviews'">
-          <!-- Код для раздела "Отзывы" -->
-        </div>
-        <div v-show="currentTab === 'clients'">
-          <!-- Код для раздела "Клиенты" -->
-        </div>
+      <div class="profile__name">
+        Компания
+        {{getUserProfile.name}}
       </div>
     </div>
+  </aside>
+  <div class="tab-nav">
+  <AppTabs
+      :names="tabs"
+      :selectedTab="selectedTab"
+      @changeTab="changeTab">
+    <div v-if="selectedTab === 'jobs'">
+      Lorem ipsum dolor sit amet.
+    </div>
+    <div v-if="selectedTab === 'services'">
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi, id.
+    </div>
+    <div v-if="selectedTab === 'reviews'">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, atque. Laborum iusto odit minus incidunt.
+    </div>
+    <div v-if="selectedTab === 'clients'">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, atque. Laborum iusto odit minus incidunt.
+    </div>
+  </AppTabs>
+  </div>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import AppPrimaryBtn from '@/components/UI/AppPrimaryButton'
+import AppTabs from '@/components/UI/AppTabs.vue'
+import { ref } from 'vue'
 
 export default {
   name: 'ProfilePage',
   data () {
     return {
-      currentTab: 'jobs'
+      tabs: [
+        { name: 'jobs', label: 'Портфолио' },
+        { name: 'services', label: 'Услуги' },
+        { name: 'reviews', label: 'Отзывы' },
+        { name: 'clients', label: 'Клиенты' }
+      ]
+    }
+  },
+  setup (){
+    const selectedTab = ref('Vue')
+
+    const changeTab = (tabName) => {
+      selectedTab.value = tabName
+    }
+    return {
+      selectedTab,
+      changeTab
     }
   },
   methods: {
-    changeTab (tab) {
-      this.currentTab = tab
-    }
   },
-  components: { AppPrimaryBtn },
+  components: { AppTabs, AppPrimaryBtn },
   computed: {
     ...mapGetters('auth', {
       getUserProfile: 'getUserProfile'
@@ -92,16 +104,8 @@ export default {
 .profile__container{
   width: 1440px;
   height: 900px;
-  display: flex;
-  overflow: auto;
-  min-height: 100vh;
-  align-items: center;
-  flex-direction: column;
 }
 .profile__card{
-  margin-left: 110px;
-  margin-top: 30px;
-  margin-right: 883px;
   width: 447px;
   border: 2px none rgba(120, 120, 120, 0.4);
   height: 750px;
