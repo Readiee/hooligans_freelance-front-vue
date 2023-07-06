@@ -7,9 +7,6 @@ import store from '@/store'
 import VueCookies from 'vue3-cookies'
 import setupVeeValidate from '@/plugins/vee-validate'
 
-// import { defineRule } from 'vee-validate'
-// import AllRules from '@vee-validate/rules'
-
 // import './assets/css/main.css'
 
 const app = createApp(App)
@@ -21,10 +18,6 @@ components.forEach(component => {
 directives.forEach(directive => {
   app.directive(directive.name, directive)
 })
-
-// Object.keys(AllRules).forEach(rule => {
-//   defineRule(rule, AllRules[rule])
-// })
 
 setupVeeValidate(app)
 

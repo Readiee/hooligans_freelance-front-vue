@@ -1,6 +1,6 @@
 import { defineRule, configure, Field, Form, ErrorMessage } from 'vee-validate'
 import { localize, setLocale } from '@vee-validate/i18n'
-import { required, email, min, confirmed, max } from '@vee-validate/rules'
+import AllRules from '@vee-validate/rules'
 // import ru from '@vee-validate/i18n/dist/locale/ru.json'
 
 export default function setupVeeValidate (app) {
@@ -8,11 +8,9 @@ export default function setupVeeValidate (app) {
   app.component('VeeForm', Form)
   app.component('VeeErrorMessage', ErrorMessage)
 
-  defineRule('required', required)
-  defineRule('email', email)
-  defineRule('min', min)
-  defineRule('max', max)
-  defineRule('confirmed', confirmed)
+  Object.keys(AllRules).forEach(rule => {
+    defineRule(rule, AllRules[rule])
+  })
 
   configure({
     generateMessage: localize(
@@ -28,8 +26,9 @@ export default function setupVeeValidate (app) {
           },
           confirmed: (field) => {
             console.log(field)
-            return 'Поля не совпадают'
-          }
+            return 'Поля не совпадают.'
+          },
+          integer: 'Введите целое число.'
         }
       }
     ),
