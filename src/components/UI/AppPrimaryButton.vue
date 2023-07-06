@@ -14,7 +14,6 @@ export default {
 .btn {
   display: inline-block;
   min-width: fit-content;
-  width: 100%;
   padding: 14px 18px;
   background: @primary-color;
   color: black;

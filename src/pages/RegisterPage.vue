@@ -111,4 +111,8 @@ label {
   font-size: 12px;
 }
 
+button {
+  width: 100%;
+}
+
 </style>

@@ -35,8 +35,11 @@
 
         <ul v-else class="navbar__items">
           <li class="nav-item">
-            <router-link to="/profile" class="nav-link">
-              {{ getUserProfile.name }}
+            <router-link to="/profile" class="nav-link user-group">
+              <div class="user-group__avatar">
+                <img :src="getUserProfile.image" alt="User Avatar">
+              </div>
+              <div class="user-group__username">{{ getUserProfile.name }}</div>
             </router-link>
           </li>
           <li class="nav-item">
@@ -217,16 +220,25 @@ footer{
 .user-group{
   display: flex;
   align-items: center;
+  object-fit: cover;
 }
 
 .user-group__avatar{
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .user-group__username{
-  margin-left: 6px;
+  margin-left: 10px;
   font-size: @font-size-small;
   font-weight: bold;
 }

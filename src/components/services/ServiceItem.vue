@@ -2,8 +2,10 @@
   <div class="service-card">
     <div class="service-card__content">
       <div class="service-card__content__header">
-        <div class="user-group">
-          <img class="user-group__avatar" src="@/assets/images/rand_avatar.jpg" alt="User Avatar">
+        <div class="user-group" style="margin-right: 20px;">
+          <div class="user-group__avatar">
+            <img :src="userImage" alt="User Avatar">
+          </div>
           <p class="user-group__username">{{ author.name }}</p>
         </div>
         <img class="" src="@/assets/images/more_details.svg"
@@ -36,13 +38,21 @@ export default {
       type: Object,
       required: true
     }
+  },
+  computed: {
+    userImage (){
+      const API_URL = 'http://localhost:3000'
+      const newUrl = `${API_URL}${this.author.awatar.substr(1)}`
+      console.log(newUrl)
+      return newUrl
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
 .service-card {
-  height: 285px;
+  height: 300px;
   width: 270px;
   padding: 24px;
   border-radius: @border-radius;
@@ -62,7 +72,7 @@ export default {
 
 .service-card__content {
   > * {
-    margin-top: 10px;
+    margin-top: 15px;
   }
 
   > :first-child {
@@ -87,10 +97,9 @@ export default {
 .service-card__content__desc {
   color: @non-active-color;
   display: -webkit-box;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 3;
 }
 
 .service-card__content__cost {

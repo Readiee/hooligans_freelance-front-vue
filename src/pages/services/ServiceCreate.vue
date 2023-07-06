@@ -29,13 +29,13 @@
                     v-model="form.desc"
                     type="textarea"
                     name="desc"
-                    rules="required|max:300"
+                    rules="required|max:500"
                     :placeholder="`Описание`">
           </VeeField>
           <VeeErrorMessage name="desc" class="error-feedback" />
         </div>
 
-        <app-primary-btn style="margin-top: 10px;" type="submit">Создать</app-primary-btn>
+        <app-primary-btn style="margin-top: 10px;" type="submit">Отправить</app-primary-btn>
 
       </VeeForm>
     </div>
@@ -115,7 +115,6 @@ label {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-family: Arial, sans-serif;
     font-size: 14px;
     resize: none;
   }

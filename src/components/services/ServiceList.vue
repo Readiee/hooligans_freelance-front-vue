@@ -1,7 +1,7 @@
 <template>
-  <div v-if="service_cards.length > 0" class="card-container">
+  <div v-if="serviceCards.length > 0" class="card-container">
     <service-item
-      v-for="card in service_cards"
+      v-for="card in serviceCards"
       :service="card.service"
       :author="card.author"
       :key="card.service.id"
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import ServiceItem from '@/components/Services/ServiceItem.vue'
+import ServiceItem from '@/components/services/ServiceItem.vue'
 
 export default {
   name: 'service-list',
@@ -18,7 +18,7 @@ export default {
     ServiceItem
   },
   props: {
-    service_cards: {
+    serviceCards: {
       type: Array,
       required: true
     }
@@ -32,6 +32,6 @@ export default {
   width: fit-content;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: 20px;
 }
 </style>

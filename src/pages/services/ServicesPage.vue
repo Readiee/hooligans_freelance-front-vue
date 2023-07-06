@@ -1,29 +1,28 @@
 <template>
   <div>
-    <service-list :service_cards="this.service_cards"></service-list>
+    <service-list :serviceCards="this.serviceCards"></service-list>
   </div>
 </template>
 
 <script>
 
 import { getServicesApi } from '@/services/services_service'
-import ServiceList from '@/components/Services/ServiceList.vue'
+import ServiceList from '@/components/services/ServiceList.vue'
 
 export default {
   components: { ServiceList },
   data () {
     return {
-      service_cards: []
+      serviceCards: []
     }
   },
   mounted () {
     this.fetchServices()
-    console.log(this.service_cards)
   },
   methods: {
     async fetchServices (){
       try {
-        this.service_cards = await getServicesApi()
+        this.serviceCards = await getServicesApi()
       } catch (err){
         alert('Не удалось получить услуги.')
         console.log(err)
