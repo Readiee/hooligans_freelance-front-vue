@@ -7,7 +7,7 @@ export default [
     name: 'profile',
     component: ProfilePage,
     meta: {
-      middleware: true // Приватная
+      middleware: false // Приватная
     }
   },
   {
@@ -15,7 +15,7 @@ export default [
     name: 'edit_profile',
     component: EditProfilePageExtended,
     meta: {
-      middleware: true // Приватная
+      middleware: false // Приватная
     }
   }
 
