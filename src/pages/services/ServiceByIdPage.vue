@@ -6,7 +6,7 @@
     <p>Cost: {{serviceItem.service.cost}}</p>
     <p>Desc: {{serviceItem.service.description}}</p>
     <div
-      v-if="store.getters['auth/getUserProfile'].id === this.serviceItem.author.id"
+      v-if="store.getters['auth/getUserProfile'].id === this.serviceItem.author.id || store.getters['auth/getUserProfile'].role === 'Admin'"
       class="btns"
       style="width: 300px;">
         <app-primary-btn
