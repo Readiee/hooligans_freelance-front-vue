@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '@/router/router'
 
 const API_URL = 'http://localhost:3000/'
 
@@ -29,26 +30,39 @@ export async function getUserProductsApi (id) {
 
 // Получение услуг других пользователей
 export async function getServicesApi () {
-  const response = await axiosInstance.get('/products')
-  console.log(response.data)
-  response.data = response.data.map(item => ({
-    service: item.product,
-    author: item.author
-  }))
-  console.log(response)
-  console.log(response.data)
-  return response.data
+  try {
+    const response = await axiosInstance.get('/products')
+    console.log(response.data)
+    response.data = response.data.map(item => ({
+      service: item.product,
+      author: item.author
+    }))
+    console.log(response.data)
+    return response.data
+  } catch (err){
+    alert(err.message)
+    console.log(err)
+  }
 }
 
 export async function getServiceByIdApi (id) {
-  const response = await axiosInstance.get('/products/' + id)
-  const data = response.data
-  const updatedData = {
-    service: data.product,
-    author: data.author
+  try {
+    const response = await axiosInstance.get('/products/' + id)
+    const data = response.data
+    const updatedData = {
+      service: data.product,
+      author: data.author
+    }
+    console.log(updatedData)
+    return updatedData
+  } catch (err){
+    alert(err.message)
+    console.log(err)
+    await router.push('/notfound')
+
+    // if (err.response.status === 400){
+    // }
   }
-  console.log(updatedData)
-  return updatedData
 }
 
 // Создание услуги

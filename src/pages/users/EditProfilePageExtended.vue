@@ -33,22 +33,30 @@
                               v-model.trim="form.texts.name"
                               rules="required|min:4"
                     />
-                    <VeeErrorMessage name="name" class="error-feedback" style="color:red"/>
+                    <VeeErrorMessage name="name" class="error-feedback" />
                   </div>
-                  <div class="form-group" style="margin-left: 30px;">
-                    <VeeField placeholder="Email"
-                              class="line-input__field"
-                              name="email"
-                              v-model.trim="form.texts.email"
-                              rules="required|email"
-                    />
-                    <VeeErrorMessage name="email" />
-                  </div>
+
+                  <!--                  <div class="form-group" style="margin-left: 30px;">-->
+                  <!--                    <VeeField placeholder="Email"-->
+                  <!--                              class="line-input__field"-->
+                  <!--                              name="email"-->
+                  <!--                              v-model.trim="form.texts.email"-->
+                  <!--                              rules="required|email"-->
+                  <!--                    />-->
+                  <!--                    <VeeErrorMessage name="email" />-->
+                  <!--                  </div>-->
+
                 </div>
 
                 <!--                <input-row>-->
-                <!--                  <VeeField placeholder="Профессия" class="line-input__field" name="hobby" v-model.trim="form.hobby" />-->
-                <!--                  <VeeErrorMessage name="hobby" />-->
+                <!--                  <div class="form-group">-->
+                <!--                    <VeeField-->
+                <!--                      placeholder="Профессия"-->
+                <!--                      class="line-input__field"-->
+                <!--                      name="hobby"-->
+                <!--                      v-model.trim="form.hobby"/>-->
+                <!--                    <VeeErrorMessage name="hobby" />-->
+                <!--                  </div>-->
                 <!--                </input-row>-->
               </div>
             </div>
@@ -144,25 +152,17 @@ export default {
       }, 1000)
     },
     updateFormTexts () {
-      try {
-        const payload = {
-          name: this.form.texts.name,
-          email: this.form.texts.email
-        }
-        console.log(payload)
-        updateProfileTextsApi(payload)
-      } catch (err) {
-        console.log(err)
+      const payload = {
+        name: this.form.texts.name,
+        email: this.form.texts.email
       }
+      console.log(payload)
+      updateProfileTextsApi(payload)
     },
     updateProfileAvatar () {
-      try {
-        const formData = new FormData()
-        formData.append('picture', this.form.image)
-        updateProfileAvatarApi(formData)
-      } catch (err) {
-        console.log(err)
-      }
+      const formData = new FormData()
+      formData.append('picture', this.form.image)
+      updateProfileAvatarApi(formData)
     },
     changeTab (tabName) {
       this.selectedTab = tabName
@@ -196,18 +196,26 @@ export default {
 }
 
 .input-rows {
-  width: auto;
+  width: 100%;
+
+  * {
+    width: 100%;
+  }
+
+  > * {
+    margin-top: 20px;
+  }
 }
 
 .input-row {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 .line-input__field {
   border: none;
   outline: none;
-  width: 243px;
   border-bottom: 1px solid rgba(1, 1, 1, 0.20);
 }
 

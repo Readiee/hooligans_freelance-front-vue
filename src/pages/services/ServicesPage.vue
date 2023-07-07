@@ -21,12 +21,7 @@ export default {
   },
   methods: {
     async fetchServices (){
-      try {
-        this.serviceCards = await getServicesApi()
-      } catch (err){
-        alert('Не удалось получить услуги.')
-        console.log(err)
-      }
+      this.serviceCards = await getServicesApi()
     }
   }
 }
