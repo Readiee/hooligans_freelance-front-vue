@@ -58,12 +58,11 @@ export default {
 
     const id = route.params.id
     const getCreatorId = async () => {
-      const serviceItem = await getServiceByIdApi(id)
       try {
+        const serviceItem = await getServiceByIdApi(id)
         return serviceItem.author.id
-      } catch (err){
+      } catch (err) {
         console.log(err)
-        await router.push('/services')
       }
     }
 
@@ -78,11 +77,16 @@ export default {
     onMounted(async () => {
       const creatorId = await getCreatorId()
       if (store.getters['auth/getUserProfile'].id === creatorId || store.getters['auth/getUserProfile'].role === 'Admin') {
-        const data = await getServiceByIdApi(id)
-        form.title = data.service.title
-        form.cost = data.service.cost
-        form.desc = data.service.description
-        isLoaded.value = true
+        try {
+          const data = await getServiceByIdApi(id)
+          form.title = data.service.title
+          form.cost = data.service.cost
+          form.desc = data.service.description
+          isLoaded.value = true
+        } catch (err) {
+          console.log(err)
+          await router.push('/notfound')
+        }
       } else await router.push('/services')
     })
 
