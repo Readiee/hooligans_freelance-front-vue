@@ -17,7 +17,6 @@ export async function registerApi (payload) {
     return await axiosInstance.post('authentication/register', payload) // username, email, password
   } catch (err) {
     console.log(err)
-    throw err
   }
 }
 
