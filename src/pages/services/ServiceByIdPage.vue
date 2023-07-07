@@ -58,15 +58,9 @@ export default {
   },
   methods: {
     async fetchServiceById (){
-      try {
-        const id = this.$route.params.id
-        this.serviceItem = await getServiceByIdApi(id)
-        this.isLoaded = true
-      } catch (err){
-        alert('Не удалось получить услугу.')
-        this.$router.push('/notfound')
-        console.log(err)
-      }
+      const id = this.$route.params.id
+      this.serviceItem = await getServiceByIdApi(id)
+      this.isLoaded = true
     },
     async deleteService () {
       try {

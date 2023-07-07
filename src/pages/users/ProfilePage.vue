@@ -86,9 +86,9 @@ export default {
 
 <style scoped>
 .profile__container {
-  width: 1440px;
-  height: 900px;
-  position: relative;
+  //width: 1440px;
+  //height: 900px;
+  //position: relative;
 }
 
 .profile__card {

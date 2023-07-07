@@ -21,23 +21,32 @@ export async function getUserProfileApi (id) {
 
 // Обновить аватар
 export async function updateProfileAvatarApi (payload) {
-  const response = await axiosInstancePatch.patch('users/awatar', payload, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  })
-  console.log(response)
-  return response
+  try {
+    const response = await axiosInstancePatch.patch('users/awatar', payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    alert(err.message)
+  }
 }
 
 // Обновить текстовые данные
 export async function updateProfileTextsApi (payload) {
-  const response = await axiosInstancePatch.patch('users/update', payload, {
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-
-    }
-  })
-  console.log(response)
-  return response
+  try {
+    const response = await axiosInstancePatch.patch('users/update', payload, {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      }
+    })
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    alert(err.message)
+  }
 }
