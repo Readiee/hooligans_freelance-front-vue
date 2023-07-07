@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <div class="navbar">
       <div class="container content-distributed">
 
@@ -35,8 +35,11 @@
 
         <ul v-else class="navbar__items">
           <li class="nav-item">
-            <router-link to="/profile" class="nav-link">
-              {{ getUserProfile.name }}
+            <router-link to="/profile" class="nav-link user-group">
+              <div class="user-group__avatar">
+                <img :src="getUserProfile.image" alt="User Avatar">
+              </div>
+              <div class="user-group__username">{{ getUserProfile.name }}</div>
             </router-link>
           </li>
           <li class="nav-item">
@@ -48,9 +51,17 @@
       </div>
     </div>
 
-    <div class="container">
-      <router-view />
+    <div class="page">
+      <div class="container">
+        <router-view />
+      </div>
     </div>
+
+    <footer>
+      <div class="container content-distributed">
+        © 2023 HTTPS Hooligans. All rights almost reserved.
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -101,6 +112,9 @@ body {
 }
 
 .app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 a, a:visited, a:hover {
@@ -111,6 +125,7 @@ a, a:visited, a:hover {
 .container {
   margin: 0 auto;
   width: 1170px;
+  height: 100%;
 }
 
 .content-distributed {
@@ -163,6 +178,17 @@ a, a:visited, a:hover {
   }
 }
 
+.page{
+  flex: 1
+}
+
+footer{
+  border-top: 1px solid #ccc;
+  align-self: center;
+  margin-top: 40px;
+  height:100px;
+}
+
 .colored-link{
   text-decoration: none;
   color: @primary-color;
@@ -177,10 +203,6 @@ a, a:visited, a:hover {
 }
 
 .card {
-  //position: fixed;
-  //top: 53%;
-  //left: 50%;
-  //transform: translate(-50%, -50%);
   margin: 30px auto 0;
   width: 1000px;
   display: flex;
@@ -193,6 +215,32 @@ a, a:visited, a:hover {
 
 .card-img {
   height: 480px;
+}
+
+.user-group{
+  display: flex;
+  align-items: center;
+  object-fit: cover;
+}
+
+.user-group__avatar{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.user-group__username{
+  margin-left: 10px;
+  font-size: @font-size-small;
+  font-weight: bold;
 }
 
 </style>

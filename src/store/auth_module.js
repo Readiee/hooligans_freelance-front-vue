@@ -6,7 +6,9 @@ const state = () => ({
   userProfile: {
     id: 0,
     name: '',
-    email: ''
+    email: '',
+    image: '',
+    role: 'User'
   }
 })
 
@@ -24,9 +26,10 @@ const actions = {
       await router.push('/login')
     } catch (err) {
       if (err.code === 'ERR_BAD_REQUEST') {
-        alert('Данная почта уже занята.')
+        // alert(err.message)
       }
       console.log(err)
+      alert(err.message)
     }
   },
 
@@ -37,7 +40,7 @@ const actions = {
       await router.push('/home')
     } catch (err) {
       if (err.code === 'ERR_BAD_REQUEST') {
-        alert('Учетной записи с указанной почтой не существует.')
+        alert(err.message)
       }
       console.log(err)
     }
@@ -62,7 +65,9 @@ const actions = {
       const resetUser = {
         id: 0,
         name: '',
-        email: ''
+        email: '',
+        image: '',
+        role: 'User'
       }
       await commit('setUserProfile', resetUser)
       await router.push('/login')
@@ -90,10 +95,14 @@ const mutations = {
     state.userProfile = {
       id: data.id,
       name: data.name,
-      email: data.email
+      email: data.email,
+      image: `${API_URL}${data.awatar.substr(1)}`,
+      role: data.role
     }
   }
 }
+
+const API_URL = 'http://localhost:3000'
 
 export default {
   namespaced: true,

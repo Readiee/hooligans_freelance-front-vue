@@ -1,96 +1,66 @@
 <template>
   <div class="container">
     <div class="card">
-      <form @submit.prevent="submitForm">
+      <VeeForm @submit="submitForm">
         <h3>Logo</h3>
         <h1 style="margin: 40px 0;">Авторизация</h1>
 
         <div class="form-group">
-          <input
-            id="email"
-            type="email"
-            placeholder="Email"
-            v-model.trim="form.email"
-            :class="{'is-invalid': formErrors.email}"
-          />
-          <div v-if="formErrors.email" class="error-feedback">{{ formErrors.email }}</div>
+          <VeeField v-model="form.email" type="text" name="email" rules="required|email" :placeholder="`Email`">
+          </VeeField>
+          <VeeErrorMessage name="email" class="error-feedback" />
         </div>
 
         <div class="form-group">
-          <input
-            id="password"
-            type="password"
-            placeholder="Пароль"
-            v-model="form.password"
-            :class="{'is-invalid': formErrors.password}"
-          />
-          <div v-if="formErrors.password" class="error-feedback">{{ formErrors.password }}</div>
+          <VeeField v-model="form.password" type="password" name="password" rules="required" :placeholder="`Пароль`">
+          </VeeField>
+          <VeeErrorMessage name="password" class="error-feedback" />
         </div>
 
         <app-primary-btn style="margin-top: 10px;" type="submit">Войти</app-primary-btn>
         <p style="text-align: center; margin-top: 40px;">Нет аккаунта?
-          <router-link class=colored-link to="/register">Зарегистрироваться</router-link>
+          <router-link class="colored-link" to="/register">Зарегистрируйтесь</router-link>
         </p>
-      </form>
+
+      </VeeForm>
+
       <img
         class="card-img"
         src="@/assets/images/reg_form_img.png"
-        alt="SignInImage">
-
+        alt="RegistrationImage">
     </div>
   </div>
 </template>
 
 <script>
-
-import { mapActions, mapGetters } from 'vuex'
+import { useForm } from 'vee-validate'
+import { useStore } from 'vuex'
 
 export default {
-  name: 'LoginPage',
-  data () {
-    return {
-      form: {
-        email: '',
-        password: ''
-      },
-      formErrors: {},
-      loading: false,
-      message: ''
+  setup () {
+    const store = useStore()
+
+    const { resetForm, errors } = useForm()
+
+    const form = {
+      email: '',
+      password: ''
     }
-  },
-  computed: {
-    ...mapGetters('auth', {
-      getLoggedIn: 'getLoggedIn'
-    })
-  },
-  mounted () {
-  },
-  methods: {
-    ...mapActions('auth', {
-      actionLogin: 'login'
-    }),
 
-    submitForm () {
-      this.formErrors = {}
+    const submitForm = () => {
+      if (Object.keys(errors.value).length === 0) {
+        const payload = {
+          email: form.email,
+          password: form.password
+        }
+        store.dispatch('auth/login', payload)
+        resetForm()
+      }
+    }
 
-      if (!this.form.email) {
-        this.formErrors.email = 'Введите email.'
-      }
-
-      if (!this.form.password) {
-        this.formErrors.password = 'Введите пароль.'
-      }
-
-      if (Object.keys(this.formErrors).length === 0) {
-        this.handleLogin()
-      }
-    },
-    async handleLogin () {
-      const payload = {
-        email: this.form.email,
-        password: this.form.password
-      }
-      await this.actionLogin(payload)
+    return {
+      form,
+      submitForm
     }
   }
 }
@@ -104,7 +74,7 @@ label {
 }
 
 .form-group {
-  width: 300px;
+  width: 350px;
   margin-bottom: 30px;
 
   input {
@@ -125,4 +95,9 @@ label {
   color: red;
   font-size: 12px;
 }
+
+button {
+  width: 100%;
+}
+
 </style>

@@ -38,7 +38,10 @@ const clickOnTab = (tabName) => {
 .tab-nav {
   margin-top: 30px;
   margin-left: 617px;
+<<<<<<< HEAD
   padding: 22px 30px;
+=======
+>>>>>>> origin/bulat-front
   display: flex;
   gap: 10px;
   border-radius: 10px;
@@ -51,7 +54,11 @@ const clickOnTab = (tabName) => {
   justify-content: center;
   margin-right: 15px;
   cursor: pointer;
+<<<<<<< HEAD
   padding: 0 20px;
+=======
+  padding:12px 20px;
+>>>>>>> origin/bulat-front
   border-radius: 10px;
   border: 1px solid black;
   transition: background-color 0.2s;
@@ -60,6 +67,10 @@ const clickOnTab = (tabName) => {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+<<<<<<< HEAD
+=======
+  gap: 10px;
+>>>>>>> origin/bulat-front
 }
 
 .tab-nav__item.selected {
@@ -67,9 +78,15 @@ const clickOnTab = (tabName) => {
 }
 
 .tab-content {
+<<<<<<< HEAD
   margin-top: 244px;
   margin-left: 625px;
   padding: 20px ;
+=======
+  margin-top: 54.5px;
+  margin-left: 625px;
+  padding: 0px 73px;
+>>>>>>> origin/bulat-front
   border-radius: 7px;
   background: #fff;
 }
