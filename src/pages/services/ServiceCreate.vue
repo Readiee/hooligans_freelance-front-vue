@@ -49,7 +49,7 @@ import { createServiceApi } from '@/services/services_service'
 
 export default {
   setup () {
-    const { resetForm, errors } = useForm()
+    const { errors } = useForm()
 
     const form = {
       title: '',
@@ -67,7 +67,6 @@ export default {
         try {
           await createServiceApi(payload)
           alert('Услуга создана')
-          resetForm()
           await router.push('/services')
         } catch (err) {
           alert('Не удалось создать услугу.')

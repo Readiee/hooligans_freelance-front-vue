@@ -16,6 +16,12 @@ const axiosInstancePost = axios.create({
   }
 })
 
+const axiosInstancePatch = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+  credentials: 'include'
+})
+
 // Получение услуг пользователя
 export async function getUserProductsApi (id) {
   try {
@@ -67,15 +73,26 @@ export async function getServiceByIdApi (id) {
 
 // Создание услуги
 export async function createServiceApi (payload) {
-  const response = await axiosInstancePost.post('products/add', payload) // title, cost, desc
-  console.log(response)
-  return response
+  try {
+    const response = await axiosInstancePost.post('products/add', payload) // title, cost, desc
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    alert(err.message)
+  }
 }
 
 export async function updateServiceApi (payload) {
-  const response = await axiosInstancePost.post('products/update', payload) // prodId, title, cost, desc
-  console.log(response)
-  return response
+  try {
+    const response = await axiosInstancePatch.patch('products/update', payload) // prodId, title, cost, desc
+    console.log(response)
+    return response
+  } catch (err){
+    console.log(err)
+    alert(err.message)
+    await router.push('/services')
+  }
 }
 
 export async function deleteServiceApi (payload) {

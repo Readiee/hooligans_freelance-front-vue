@@ -14,9 +14,14 @@ const axiosInstancePatch = axios.create({
 
 // Получение информации о пользователе
 export async function getUserProfileApi (id) {
-  const response = await axiosInstance.get('users/' + id)
-  console.log(response)
-  return response
+  try {
+    const response = await axiosInstance.get('users/' + id)
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    alert(err.message)
+  }
 }
 
 // Обновить аватар
