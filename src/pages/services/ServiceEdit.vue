@@ -76,7 +76,7 @@ export default {
 
     onMounted(async () => {
       const creatorId = await getCreatorId()
-      if (store.getters['auth/getUserProfile'].id === creatorId) {
+      if (store.getters['auth/getUserProfile'].id === creatorId || store.getters['auth/getUserProfile'].role === 'Admin') {
         try {
           const data = await getServiceByIdApi(id)
           form.title = data.service.title

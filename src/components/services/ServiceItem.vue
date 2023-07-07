@@ -6,7 +6,7 @@
           <div class="user-group__avatar">
             <img :src="userImage" alt="User Avatar">
           </div>
-          <p class="user-group__username">{{ author.name }}</p>
+          <p class="user-group__username" style="width: 100px;">{{ author.name }}</p>
         </div>
         <img class="" src="@/assets/images/more_details.svg"
              alt="More Service Details">
