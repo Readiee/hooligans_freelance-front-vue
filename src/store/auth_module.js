@@ -53,6 +53,7 @@ const actions = {
       commit('setLoggedIn', true)
       commit('setUserProfile', response.data)
     } catch (err) {
+      alert(err.message)
       dispatch('logout')
       console.log(err)
     }
@@ -73,6 +74,7 @@ const actions = {
       await router.push('/login')
     } catch (err) {
       console.log(err)
+      alert(err.message)
     }
   },
 
