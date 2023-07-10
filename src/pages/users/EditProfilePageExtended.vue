@@ -1,19 +1,27 @@
 <template>
-  <div class="edit-profile__container container">
-    <div class="edit-profile__content">
+  <div class="container">
+    <header>
       <router-link to="/profile">
         <span>Назад в профиль</span>
       </router-link>
-      <!-- Ваш код формы редактирования профиля -->
-    </div>
-    <div class="tabs">
-      <app-vertical-tabs :names="tabs" :selectedTab="selectedTab" @changeTab="changeTab">
-        <div class="mainInformation" v-if="selectedTab === 'mainInformation'">
-          <VeeForm @submit="saveProfile">
+    </header>
+
+    <section class="content-block">
+      <AppVerticalTabs :names="tabs"
+                       :selectedTab="selectedTab"
+                       @changeTab="changeTab">
+      </AppVerticalTabs>
+
+      <div class="tab-content">
+
+        <div id="main-information" v-if="selectedTab === 'mainInformation'">
+          <AppForm @submit="saveProfile">
             <div class="form__inputs">
-              <div>
+              <div class="form__inputs__avatar" style="margin-right: 20px;">
                 <label for="avatar">
-                  <AppImage :src="previewImage" />
+                  <InteractiveImage :src="previewImage"
+                                    :interactiveText="'Загрузить фото'"
+                                    class="avatar__image" />
                 </label>
                 <input
                   id="avatar"
@@ -23,84 +31,72 @@
                   style="display: none">
               </div>
 
-              <div class="input-rows" style="margin-left: 20px; margin-top: 20px;">
-
+              <InputRows>
                 <div class="input-row">
-                  <div class="form-group">
-                    <VeeField placeholder="Имя"
-                              class="line-input__field"
-                              name="name"
-                              v-model.trim="form.texts.name"
-                              rules="required|min:4"
-                    />
-                    <VeeErrorMessage name="name" class="error-feedback" />
-                  </div>
-
-                  <!--                  <div class="form-group" style="margin-left: 30px;">-->
-                  <!--                    <VeeField placeholder="Email"-->
-                  <!--                              class="line-input__field"-->
-                  <!--                              name="email"-->
-                  <!--                              v-model.trim="form.texts.email"-->
-                  <!--                              rules="required|email"-->
-                  <!--                    />-->
-                  <!--                    <VeeErrorMessage name="email" />-->
-                  <!--                  </div>-->
-
+                  <AppInput v-model="form.texts.name"
+                            :type="`text`"
+                            :name="`name`"
+                            :rules="`required|min:4`"
+                            :placeholder="`Имя`">
+                  </AppInput>
                 </div>
-
-                <!--                <input-row>-->
-                <!--                  <div class="form-group">-->
-                <!--                    <VeeField-->
-                <!--                      placeholder="Профессия"-->
-                <!--                      class="line-input__field"-->
-                <!--                      name="hobby"-->
-                <!--                      v-model.trim="form.hobby"/>-->
-                <!--                    <VeeErrorMessage name="hobby" />-->
+                <!--                  <div class="input-row">-->
+                <!--                    <AppInput v-model="form.texts.email"-->
+                <!--                              :type="`text`"-->
+                <!--                              :name="`email`"-->
+                <!--                              :rules="`required|email`"-->
+                <!--                              :placeholder="`Email`">-->
+                <!--                    </AppInput>-->
                 <!--                  </div>-->
-                <!--                </input-row>-->
-              </div>
+              </InputRows>
             </div>
 
-            <div class="form__btns" style="margin-top: 15px;">
-              <app-primary-btn
+            <div class="form__btns" style="margin-top: 20px;">
+              <AppPrimaryBtn
                 type="submit"
                 :disabled="!avatarIsChanged & !textsAreChanged"
                 :class="{ disabled: !avatarIsChanged & !textsAreChanged }"
               >Отправить
-              </app-primary-btn>
+              </AppPrimaryBtn>
             </div>
-
-            <!-- Добавьте остальные поля информации о пользователе -->
-          </VeeForm>
+          </AppForm>
         </div>
+
         <div v-if="selectedTab === 'aboutMe'">
           Здесь может быть список ваших услуг.
         </div>
+
         <div v-if="selectedTab === 'url'">
           Здесь могут быть отзывы о вас.
         </div>
+
         <div v-if="selectedTab === 'exp'">
           Здесь могут быть клиенты для которых вы выполняли работу.
         </div>
+
         <div v-if="selectedTab === 'account'">
           Здесь могут быть клиенты для которых вы выполняли работу.
         </div>
-      </app-vertical-tabs>
-    </div>
+
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import AppVerticalTabs from '@/components/UI/AppVerticalTabs.vue'
-import AppImage from '@/components/UI/AppImage.vue'
+import AppImage from '@/components/UI/InteractiveImage.vue'
 import { updateProfileAvatarApi, updateProfileTextsApi } from '@/services/users_service'
 import store from '@/store'
 import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
+import AppForm from '@/components/AppForm.vue'
+import AppVerticalTabs from '@/components/UI/AppVerticalTabs.vue'
+import AppInput from '@/components/UI/AppInput.vue'
+import InputRows from '@/components/UI/InputRows.vue'
 
 export default {
   name: 'EditProfile',
-  components: { AppPrimaryBtn, AppImage, AppVerticalTabs },
+  components: { InputRows, AppInput, AppVerticalTabs, AppForm, AppPrimaryBtn, InteractiveImage: AppImage },
   data () {
     return {
       tabs: [
@@ -152,12 +148,7 @@ export default {
       }, 1000)
     },
     updateFormTexts () {
-      const payload = {
-        name: this.form.texts.name,
-        email: this.form.texts.email
-      }
-      console.log(payload)
-      updateProfileTextsApi(payload)
+      updateProfileTextsApi(JSON.stringify(this.form.texts))
     },
     updateProfileAvatar () {
       const formData = new FormData()
@@ -180,9 +171,27 @@ export default {
 }
 </script>
 
-<style scoped>
-.edit-profile__container {
-//width: 1440px; //height: 900px; //position: relative;
+<style scoped lang="less">
+.content-block {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+.tab-content {
+  margin-left: 40px;
+  padding: 40px;
+  width: 100%;
+  height: fit-content;
+  border-radius: @border-radius;
+  background: white;
+  box-shadow: @box-shadow;
+}
+.avatar__image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
 }
 
 .mainInformation {
@@ -232,11 +241,15 @@ export default {
   justify-content: end;
 
   button {
-    width: 300px;
+    width: 200px;
   }
 }
 
 .disabled {
   opacity: 0.5;
+  cursor: default;
+  &:hover {
+    filter: brightness(1);
+  }
 }
 </style>

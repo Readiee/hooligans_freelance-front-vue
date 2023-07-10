@@ -6,24 +6,22 @@
 
 <script>
 export default {
-  name: 'app-primary-btn'
+  name: 'app-secondary-btn'
 }
 </script>
 
 <style scoped lang="less">
 .btn {
-  width: 100%;
-  padding: 14px 18px;
-  background: @primary-color;
-  border: none;
+  padding: 16px 18px;
   border-radius: @border-radius;
   font-weight: 700;
   font-size: @font-size-small;
-  cursor: pointer;
+  border: 1px solid black;
+  background: none;
   transition: 0.1s ease-in-out;
 
   &:hover {
-    filter: brightness(0.9);
+    background-color: @light-gray;
   }
   //&:focus{
   //  filter: brightness(0.8);

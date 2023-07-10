@@ -22,18 +22,6 @@ const axiosInstancePatch = axios.create({
   credentials: 'include'
 })
 
-// Получение услуг пользователя
-export async function getUserProductsApi (id) {
-  try {
-    const response = await axiosInstance.get('users/' + id + '/products')
-    console.log(response)
-    return response
-  } catch (err) {
-    console.log(err)
-    throw err
-  }
-}
-
 // Получение услуг других пользователей
 export async function getServicesApi () {
   try {

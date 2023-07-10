@@ -203,7 +203,7 @@ footer{
 }
 
 .card {
-  margin: 30px auto 0;
+  margin: 0 auto;
   width: 1000px;
   display: flex;
   background-color: white;

@@ -1,40 +1,58 @@
 <template>
   <div class="container">
     <div class="card">
-      <VeeForm @submit="submitForm">
+      <AppForm @submit="submitForm">
         <h3>Logo</h3>
         <h1 style="margin: 40px 0;">Регистрация</h1>
 
-        <div class="form-group">
-          <VeeField v-model="form.name" type="text" name="name" rules="required|max:35" :placeholder="`Имя`">
-          </VeeField>
-          <VeeErrorMessage name="name" class="error-feedback" />
-        </div>
+        <InputRows>
+          <div class="input-row">
+            <AppInput v-model="form.name"
+                      :type="`text`"
+                      :name="`name`"
+                      :rules="`required|max:35`"
+                      :placeholder="`Имя`">
+            </AppInput>
+          </div>
 
-        <div class="form-group">
-          <VeeField v-model="form.email" type="text" name="email" rules="required|email" :placeholder="`Email`">
-          </VeeField>
-          <VeeErrorMessage name="email" class="error-feedback" />
-        </div>
+          <div class="input-row">
+            <AppInput v-model="form.email"
+                      :type="`text`"
+                      :name="`email`"
+                      :rules="`required|email`"
+                      :placeholder="`Email`">
+            </AppInput>
+          </div>
 
-        <div class="form-group">
-          <VeeField v-model="form.password" type="password" name="password" rules="required|min:6" :placeholder="`Пароль`">
-          </VeeField>
-          <VeeErrorMessage name="password" class="error-feedback" />
-        </div>
+          <div class="input-row">
+            <AppInput v-model="form.password"
+                      :type="`password`"
+                      :name="`password`"
+                      :rules="`required|min:6`"
+                      :placeholder="`Пароль`">
+            </AppInput>
+          </div>
 
-        <div class="form-group">
-          <VeeField v-model="form.password_confirm" type="password" name="password_confirm" rules="required|confirmed:@password" :placeholder="`Потверждение пароля`">
-          </VeeField>
-          <VeeErrorMessage name="password_confirm" class="error-feedback" />
-        </div>
+          <div class="input-row">
+            <AppInput v-model="form.password_confirm"
+                      :type="`password`"
+                      :name="`password_confirm`"
+                      :rules="`required|confirmed:@password`"
+                      :placeholder="`Потверждение пароля`">
+            </AppInput>
+          </div>
+        </InputRows>
 
-        <app-primary-btn style="margin-top: 10px;" type="submit">Зарегистрироваться</app-primary-btn>
+        <AppPrimaryBtn
+          style="margin-top: 15px;"
+          type="submit">
+          Зарегистрироваться
+        </AppPrimaryBtn>
         <p style="text-align: center; margin-top: 40px;">Уже есть аккаунт?
           <router-link class="colored-link" to="/login">Войдите</router-link>
         </p>
 
-      </VeeForm>
+      </AppForm>
 
       <img
         class="card-img"
@@ -47,8 +65,13 @@
 <script>
 import { useForm } from 'vee-validate'
 import { useStore } from 'vuex'
+import AppInput from '@/components/UI/AppInput.vue'
+import AppForm from '@/components/AppForm.vue'
+import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
+import InputRows from '@/components/UI/InputRows.vue'
 
 export default {
+  components: { InputRows, AppPrimaryBtn, AppForm, AppInput },
   setup () {
     const store = useStore()
 
@@ -82,37 +105,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-
-label {
-  display: block;
-  margin-top: 10px;
-}
-
-.form-group {
+form {
   width: 350px;
-  margin-bottom: 30px;
-
-  input {
-    border: none;
-    border-bottom: 1px solid #ccc;
-    padding: 5px;
-    width: 100%;
-
-    &:focus {
-      outline: none;
-      border-bottom-color: #888;
-    }
-  }
 }
-
-.error-feedback {
-  margin-top: 5px;
-  color: red;
-  font-size: 12px;
-}
-
-button {
-  width: 100%;
-}
-
 </style>
