@@ -1,25 +1,63 @@
 <template>
-  <input :value="modelValue" @input="updateInput" class="input" type="text" />
+  <div class="input-group">
+    <VeeField
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+      :type="type"
+      :name="name"
+      :rules="rules"
+      :placeholder="placeholder">
+    </VeeField>
+    <VeeErrorMessage name="name" class="error-feedback" />
+  </div>
+
 </template>
 
 <script>
 export default {
   name: 'app-input',
   props: {
-    modelValue: [String, Number]
-  },
-  methods: {
-    updateInput (event) {
-      this.$emit('update:modelValue', event.target.value)
+    modelValue: [String, Number],
+    type: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    rules: {
+      type: String,
+      required: true
+    },
+    placeholder: {
+      type: String,
+      required: true
     }
   }
 }
 </script>
 
-<style>
-.input {
+<style scoped>
+.input-group{
   width: 100%;
-  border: 2px solid rgb(187, 84, 32);
-  padding: 10px 15px;
+}
+
+input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: #888;
+  }
+}
+
+.error-feedback {
+  margin-top: 5px;
+  color: red;
+  font-size: 12px;
 }
 </style>

@@ -28,18 +28,13 @@ const clickOnTab = (tabName) => {
           @click="clickOnTab(tab.name)">{{tab.label}}
       </span>
     </div>
-    <div class="tab-content">
-      <slot/>
-    </div>
   </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 .tab-nav {
-  margin-top: 30px;
-  margin-left: 617px;
   display: flex;
-  gap: 10px;
+  gap: 15px;
   border-radius: 10px;
 }
 
@@ -48,14 +43,14 @@ const clickOnTab = (tabName) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 15px;
   cursor: pointer;
   padding:12px 20px;
   border-radius: 10px;
-  border: 1px solid black;
+  outline: 1px solid black;
+  outline-offset: -1px;
   transition: background-color 0.2s;
   color: black;
-  font-size: 18px;
+  font-size: @font-size-medium;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -63,14 +58,8 @@ const clickOnTab = (tabName) => {
 }
 
 .tab-nav__item.selected {
-  background-color: #8554D8;
-}
-
-.tab-content {
-  margin-top: 54.5px;
-  margin-left: 625px;
-  padding: 0px 73px;
-  border-radius: 7px;
-  background: #fff;
+  background-color: @secondary-color;
+  outline: none;
+  color: white;
 }
 </style>

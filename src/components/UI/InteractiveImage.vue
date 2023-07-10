@@ -6,7 +6,7 @@
       <div
         class="overlay"
         :class="{ active: isHovered }">
-        Загрузить фото
+        {{ interactiveText }}
       </div>
       <img :src="src" :alt="alt" class="image" />
   </div>
@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'AppImage',
+  name: 'interactive-image',
   data () {
     return {
       isHovered: false
@@ -28,6 +28,10 @@ export default {
     alt: {
       type: String,
       default: ''
+    },
+    interactiveText: {
+      type: String,
+      required: true
     }
   }
 }
@@ -36,8 +40,6 @@ export default {
 <style scoped>
 .image-container {
   margin: 0;
-  width: 170px;
-  height: 170px;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
@@ -55,7 +57,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,7 +67,7 @@ export default {
   transition: opacity 0.3s ease;
 }
 .overlay.active{
-  opacity: 0.8;
+  opacity: 1;
   transition: opacity 0.3s ease;
 }
 </style>

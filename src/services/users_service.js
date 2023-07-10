@@ -12,18 +12,6 @@ const axiosInstancePatch = axios.create({
   credentials: 'include'
 })
 
-// Получение информации о пользователе
-export async function getUserProfileApi (id) {
-  try {
-    const response = await axiosInstance.get('users/' + id)
-    console.log(response)
-    return response
-  } catch (err) {
-    console.log(err)
-    alert(err.message)
-  }
-}
-
 // Обновить аватар
 export async function updateProfileAvatarApi (payload) {
   try {
@@ -36,7 +24,7 @@ export async function updateProfileAvatarApi (payload) {
     return response
   } catch (err) {
     console.log(err)
-    alert(err.message)
+    // alert(err.message)
   }
 }
 
@@ -52,6 +40,30 @@ export async function updateProfileTextsApi (payload) {
     return response
   } catch (err) {
     console.log(err)
-    alert(err.message)
+    // alert(err.message)
+  }
+}
+
+// Получение информации о пользователе
+export async function getUserProfileApi (id) {
+  try {
+    const response = await axiosInstance.get('users/' + id)
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    // alert(err.message)
+  }
+}
+
+// Получение услуг пользователя
+export async function getUserServices (id) {
+  try {
+    const response = await axiosInstance.get('users/' + id + '/products')
+    console.log(response.data)
+    return response.data
+  } catch (err) {
+    console.log(err)
+    // alert(err.message)
   }
 }

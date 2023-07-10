@@ -2,7 +2,9 @@
   <div class="service-card">
     <div class="service-card__content">
       <div class="service-card__content__header">
-        <div class="user-group" style="margin-right: 20px;">
+        <div v-if="author"
+             class="user-group"
+             style="margin-right: 20px;">
           <div class="user-group__avatar">
             <img :src="userImage" alt="User Avatar">
           </div>
@@ -17,34 +19,33 @@
         <p>{{ service.cost }} ₽</p>
       </div>
     </div>
-    <app-primary-btn
+    <AppPrimaryBtn
       style="margin-top: auto;"
       @click="this.$router.push('/services/' + service.id)"
     >Подробнее
-    </app-primary-btn>
+    </AppPrimaryBtn>
   </div>
 </template>
 
 <script>
+import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
+
 export default {
   name: 'service-item',
-  components: {},
+  components: { AppPrimaryBtn },
   props: {
     service: {
       type: Object,
       required: true
     },
     author: {
-      type: Object,
-      required: true
+      type: Object
     }
   },
   computed: {
-    userImage (){
+    userImage () {
       const API_URL = 'http://localhost:3000'
-      const newUrl = `${API_URL}${this.author.awatar.substr(1)}`
-      console.log(newUrl)
-      return newUrl
+      return `${API_URL}${this.author.awatar.substr(1)}`
     }
   }
 }
@@ -65,12 +66,18 @@ export default {
   * {
     cursor: default;
   }
-  button{
+
+  button {
     cursor: pointer;
   }
 }
 
 .service-card__content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-bottom: 15px;
+
   > * {
     margin-top: 15px;
   }
@@ -103,6 +110,7 @@ export default {
 }
 
 .service-card__content__cost {
+  margin-top: auto;
   padding: 8px;
   max-width: 100%;
   width: fit-content;
