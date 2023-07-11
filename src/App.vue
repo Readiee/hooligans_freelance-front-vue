@@ -5,18 +5,25 @@
 
         <ul class="navbar__items">
           <li v-if="getLoggedIn" class="nav-item">
-            <router-link to="/clients" class="nav-link">
+            <router-link to="/clients"
+                         class="nav-link"
+                         :class="{active: activeNavLink === 'clients'}">
               Клиенты
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/services" class="nav-link">
+            <router-link to="/services"
+                         class="nav-link"
+                         :class="{active: activeNavLink === 'services'}">
               Услуги
             </router-link>
           </li>
         </ul>
 
-        <router-link to="/" class="nav-link" style="position: absolute; left: 50%">
+        <router-link to="/"
+                     class="nav-link"
+                     :class="{active: activeNavLink === 'home'}"
+                     style="position: absolute; left: 50%; font-weight: 700;">
           Logo
         </router-link>
 
@@ -28,14 +35,16 @@
           </li>
           <li class="nav-item">
             <router-link to="/register" class="nav-link">
-              <app-primary-btn>Регистрация</app-primary-btn>
+              <AppPrimaryBtn>Регистрация</AppPrimaryBtn>
             </router-link>
           </li>
         </ul>
 
         <ul v-else class="navbar__items">
           <li class="nav-item">
-            <router-link to="/profile" class="nav-link user-group">
+            <router-link to="/profile"
+                         class="nav-link user-group"
+                         :class="{active: activeNavLink === 'profile'}">
               <div class="user-group__avatar">
                 <img :src="getUserProfile.image" alt="User Avatar">
               </div>
@@ -68,13 +77,18 @@
 <script>
 
 import { mapActions, mapGetters } from 'vuex'
+import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
 
 export default {
+  components: { AppPrimaryBtn },
   computed: {
     ...mapGetters('auth', {
       getUserProfile: 'getUserProfile',
       getLoggedIn: 'getLoggedIn'
-    })
+    }),
+    activeNavLink () {
+      return this.$route.path.split('/')[1]
+    }
   },
   methods: {
     ...mapActions('auth', {
@@ -155,9 +169,16 @@ a, a:visited, a:hover {
     margin-left: 30px;
     font-weight: 700;
     font-size: 14px;
+    .active {
+      font-weight: 700;
+      * {
+        font-weight: 700;
+      }
+    }
   }
   .nav-link{
     text-decoration: none;
+    font-weight: 400;
   }
 
   .nav-item:first-child {
@@ -240,7 +261,7 @@ footer{
 .user-group__username{
   margin-left: 10px;
   font-size: @font-size-small;
-  font-weight: bold;
+  font-weight: 400;
 }
 
 </style>

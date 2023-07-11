@@ -28,13 +28,13 @@ export async function getServicesApi () {
     const response = await axiosInstance.get('/products')
     console.log(response.data)
     response.data = response.data.map(item => ({
-      service: item.product,
+      service: item.element, // ПЕРЕИМЕНВОАТЬ В PRODUCT С НОВЫМ БЭКОМ
       author: item.author
     }))
     console.log(response.data)
     return response.data
   } catch (err){
-    alert(err.message)
+    // alert(err.message)
     console.log(err)
   }
 }
@@ -50,7 +50,7 @@ export async function getServiceByIdApi (id) {
     console.log(updatedData)
     return updatedData
   } catch (err){
-    alert(err.message)
+    // alert(err.message)
     console.log(err)
     await router.push('/notfound')
 
@@ -64,10 +64,10 @@ export async function createServiceApi (payload) {
   try {
     const response = await axiosInstancePost.post('products/add', payload) // title, cost, desc
     console.log(response)
-    return response
+    return response.data
   } catch (err) {
     console.log(err)
-    alert(err.message)
+    // alert(err.message)
   }
 }
 
@@ -75,16 +75,21 @@ export async function updateServiceApi (payload) {
   try {
     const response = await axiosInstancePatch.patch('products/update', payload) // prodId, title, cost, desc
     console.log(response)
-    return response
+    return response.data
   } catch (err){
     console.log(err)
-    alert(err.message)
+    // alert(err.message)
     await router.push('/services')
+    throw err
   }
 }
 
 export async function deleteServiceApi (payload) {
-  const response = await axiosInstancePost.post('products/delete', payload) // prodId
-  console.log(response)
-  return response
+  try {
+    const response = await axiosInstancePost.post('products/delete', payload) // prodId
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+  }
 }

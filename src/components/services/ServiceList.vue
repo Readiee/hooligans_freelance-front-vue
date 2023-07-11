@@ -28,10 +28,7 @@ export default {
 
 <style lang="less" scoped>
 .card-container {
-  margin: 0 auto;
+  margin: 0;
   width: fit-content;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
 }
 </style>

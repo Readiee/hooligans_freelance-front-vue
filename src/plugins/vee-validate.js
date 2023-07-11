@@ -34,7 +34,7 @@ export default function setupVeeValidate (app) {
     ),
     validateOnInput: false, // Валидация при вводе
     validateOnBlur: false, // Валидация при снятии фокуса
-    validateOnChange: false, // Валидация при изменении значения
+    validateOnChange: true, // Валидация при изменении значения
     validateOnModelUpdate: true // Валидация при обновлении модели
   })
 
