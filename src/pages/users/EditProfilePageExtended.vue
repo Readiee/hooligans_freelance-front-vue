@@ -19,7 +19,7 @@
             <div class="form__inputs">
               <div class="form__inputs__avatar" style="margin-right: 20px;">
                 <label for="avatar">
-                  <InteractiveImage :src="previewImage"
+                    <InteractiveImage :src="previewImage"
                                     :interactiveText="'Загрузить фото'"
                                     class="avatar__image" />
                 </label>
