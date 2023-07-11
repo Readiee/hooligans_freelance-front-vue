@@ -18,11 +18,16 @@ const getters = {
 }
 
 const actions = {
-  async register ({ commit }, payload) {
+  async register ({ dispatch }, payload) {
     try {
       const response = await registerApi(payload)
       console.log(response)
-      alert('Регистрация прошла успешно! Теперь вы можете войти в свой аккаунт.')
+      const loginPayload = {
+        email: response.data.email,
+        password: payload.password
+      }
+      await dispatch('login', loginPayload)
+      // alert('Регистрация прошла успешно! Теперь вы можете войти в свой аккаунт.')
       await router.push('/login')
     } catch (err) {
       if (err.code === 'ERR_BAD_REQUEST') {

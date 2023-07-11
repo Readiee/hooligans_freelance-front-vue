@@ -41,17 +41,22 @@
 
       <div class="tab-content">
         <div v-if="selectedTab === 'jobs'">
-          Здесь могут быть ваши работы.
+          <p>Здесь могут быть ваши работы</p>
         </div>
-        <div v-if="selectedTab === 'services'">
-          <service-list :serviceCards="serviceCards"></service-list>
-          Здесь может быть список ваших услуг.
+        <div v-if="selectedTab === 'services'" class="tab-content__services">
+          <div v-if="this.serviceCards.length > 0"
+               class="content-block">
+            <service-list class="services-list" :serviceCards="serviceCards"></service-list>
+          </div>
+          <p v-else>Здесь могут быть ваши услуги</p>
         </div>
+
         <div v-if="selectedTab === 'reviews'">
-          Здесь могут быть отзывы о вас.
+          <p>Здесь могут быть отзывы о вас.</p>
         </div>
+
         <div v-if="selectedTab === 'clients'">
-          Здесь могут быть клиенты для которых вы выполняли работу.
+          <p>Здесь могут быть клиенты для которых вы выполняли работу.</p>
         </div>
       </div>
     </div>
@@ -64,7 +69,7 @@ import AppSecondaryBtn from '@/components/UI/AppSecondaryButton.vue'
 import ServiceList from '@/components/services/ServiceList.vue'
 import { ref } from 'vue'
 import store from '@/store'
-import { getUserServices } from '@/services/users_service'
+import { getUserServicesApi } from '@/services/users_service'
 
 export default {
   name: 'ProfilePage',
@@ -80,24 +85,23 @@ export default {
 
     const userProfile = store.getters['auth/getUserProfile']
 
-    const changeTab = (tabName) => {
-      selectedTab.value = tabName
+    const serviceCards = ref([])
+
+    const fetchUserServices = async () => {
+      const data = await getUserServicesApi(userProfile.id)
+      console.log(data)
+      serviceCards.value = data
+      console.log(serviceCards)
+      console.log(serviceCards.value)
     }
 
-    const serviceCards = getUserServices(userProfile.id)
-    console.log(serviceCards)
-    //
-    // const services = getUserServices(userProfile.id)
-    // console.log(services)
-    // console.log(services[0]) // undefined
-    //
-    // Object.keys(services).forEach(service => {
-    //   console.log(service.id, 'ID')
-    //   const serviceCard = getServiceByIdApi(service.id)
-    //   console.log(serviceCard, 'CARD')
-    //   serviceCards.push(serviceCard)
-    // })
-    // console.log(serviceCards)
+    const changeTab = (tabName) => {
+      selectedTab.value = tabName
+      if (tabName === 'services') {
+        fetchUserServices()
+        console.log(serviceCards.value)
+      }
+    }
 
     return {
       tabs,
@@ -117,6 +121,7 @@ export default {
 }
 
 .profile__card {
+  height: fit-content;
   margin-right: 40px;
   padding: 40px;
   display: flex;
@@ -187,12 +192,23 @@ p{
 
 .tab-content {
   margin-top: 20px;
-  padding: 40px;
   width: 100%;
   height: fit-content;
-  border-radius: @border-radius;
-  background: white;
-  box-shadow: @box-shadow;
+  background: none;
+
+  > div {
+    p {
+      padding: 30px;
+      background-color: white;
+      box-shadow: @box-shadow;
+    }
+  }
+}
+
+.services-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
 </style>

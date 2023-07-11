@@ -25,7 +25,9 @@ const clickOnTab = (tabName) => {
           v-for="tab in names"
           :key="tab.name"
           :class="['tab-nav__item', {'selected': tab.name === selectedTab}]"
-          @click="clickOnTab(tab.name)">{{tab.label}}
+          @click="clickOnTab(tab.name)"
+      >
+        {{tab.label}}
       </span>
     </div>
   </div>

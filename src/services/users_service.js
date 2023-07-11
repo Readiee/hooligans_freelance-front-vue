@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store'
 
 const API_URL = 'http://localhost:3000/'
 
@@ -13,13 +14,14 @@ const axiosInstancePatch = axios.create({
 })
 
 // Обновить аватар
-export async function updateProfileAvatarApi (payload) {
+export async function updateProfileMainInfoAvatarApi (payload) {
   try {
     const response = await axiosInstancePatch.patch('users/awatar', payload, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
+    await store.dispatch('auth/auth')
     console.log(response)
     return response
   } catch (err) {
@@ -29,13 +31,30 @@ export async function updateProfileAvatarApi (payload) {
 }
 
 // Обновить текстовые данные
-export async function updateProfileTextsApi (payload) {
+export async function updateProfileMainInfoTextsApi (payload) {
   try {
     const response = await axiosInstancePatch.patch('users/update', payload, {
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
       }
     })
+    await store.dispatch('auth/auth')
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    // alert(err.message)
+  }
+}
+
+export async function updateProfileAboutMeApi (payload) {
+  try {
+    const response = await axiosInstancePatch.patch('users/update/aboutme', payload, {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      }
+    })
+    await store.dispatch('auth/auth')
     console.log(response)
     return response
   } catch (err) {
@@ -57,7 +76,7 @@ export async function getUserProfileApi (id) {
 }
 
 // Получение услуг пользователя
-export async function getUserServices (id) {
+export async function getUserServicesApi (id) {
   try {
     const response = await axiosInstance.get('users/' + id + '/products')
     console.log(response.data)

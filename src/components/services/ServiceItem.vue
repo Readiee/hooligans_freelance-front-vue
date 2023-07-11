@@ -57,7 +57,7 @@ export default {
   width: 270px;
   padding: 24px;
   border-radius: @border-radius;
-  box-shadow: @box-shadow;
+  box-shadow: 1px 1px 37px 1px rgba(0, 0, 0, 0.1);
 
   display: flex;
   flex-direction: column;

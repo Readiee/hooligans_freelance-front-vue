@@ -1,58 +1,87 @@
 <template>
   <div class="container">
     <div v-if="isLoaded" class="card">
-      <VeeForm @submit="submitForm">
+      <AppForm @submit="submitForm">
         <h1 style="margin-bottom: 40px;">Изменение услуги</h1>
 
-        <div class="form-group">
-          <VeeField v-model="form.title"
-                    type="text"
-                    name="title"
-                    rules="required|max:50"
-                    :placeholder="`Название`">
-          </VeeField>
-          <VeeErrorMessage name="title" class="error-feedback" />
-        </div>
+        <InputRows>
+          <div class="input-row">
+            <AppInput v-model="form.title"
+                      :type="`text`"
+                      :name="`title`"
+                      :rules="`required|max:50`"
+                      :placeholder="`Название`">
+            </AppInput>
+          </div>
 
-        <div class="form-group">
-          <VeeField v-model.trim="form.cost"
-                    type="text"
-                    name="cost"
-                    rules="required|integer"
-                    :placeholder="`Стоимость (в рублях, братик)`">
-          </VeeField>
-          <VeeErrorMessage name="cost" class="error-feedback" />
-        </div>
+          <div class="input-row">
+            <AppInput v-model.trim="form.cost"
+                      :type="`text`"
+                      :name="`cost`"
+                      :rules="`required|integer`"
+                      :placeholder="`Стоимость`">
+            </AppInput>
+          </div>
 
-        <div class="form-group">
-          <VeeField as="textarea"
-                    v-model="form.desc"
-                    type="textarea"
-                    name="desc"
-                    rules="required|max:500"
-                    :placeholder="`Описание`">
-          </VeeField>
-          <VeeErrorMessage name="desc" class="error-feedback" />
-        </div>
+          <div class="input-row">
+            <AppInput v-model="form.category"
+                      :type="`text`"
+                      :name="`category`"
+                      :rules="`required|max:400`"
+                      :placeholder="`Категория`">
+            </AppInput>
+          </div>
+
+          <div class="input-row">
+            <AppInput v-model="form.duration"
+                      :type="`text`"
+                      :name="`duration`"
+                      :rules="`required|max:400`"
+                      :placeholder="`Длительность`">
+            </AppInput>
+          </div>
+
+          <div class="input-row">
+            <AppInput v-model="form.places"
+                      :type="`text`"
+                      :name="`places`"
+                      :rules="`required|max:60`"
+                      :placeholder="`Место`">
+            </AppInput>
+          </div>
+
+          <div class="input-row">
+            <AppInput :as="`textarea`"
+                      v-model="form.desc"
+                      :type="`text`"
+                      :name="`desc`"
+                      :rules="`required|max:400`"
+                      :placeholder="`Описание`">
+            </AppInput>
+          </div>
+
+        </InputRows>
 
         <app-primary-btn style="margin-top: 10px;" type="submit">Отправить</app-primary-btn>
 
-      </VeeForm>
+      </AppForm>
     </div>
   </div>
 </template>
 
 <script>
-import { useForm } from 'vee-validate'
 import { useRoute } from 'vue-router'
 import router from '@/router/router'
 import { updateServiceApi, getServiceByIdApi } from '@/services/services_service'
 import { onMounted, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
+import AppInput from '@/components/UI/AppInput.vue'
+import InputRows from '@/components/UI/InputRows.vue'
+import AppForm from '@/components/AppForm.vue'
 
 export default {
+  components: { AppForm, InputRows, AppInput },
   setup () {
-    const { resetForm, errors } = useForm()
     const route = useRoute()
     const store = useStore()
 
@@ -70,7 +99,10 @@ export default {
     const form = reactive({
       title: '',
       cost: '',
-      desc: ''
+      desc: '',
+      category: '',
+      places: '',
+      duration: ''
     })
 
     const isLoaded = ref(false)
@@ -82,27 +114,30 @@ export default {
         form.title = data.service.title
         form.cost = data.service.cost
         form.desc = data.service.description
+        form.category = data.service.category
+        form.places = data.service.places
+        form.duration = data.service.duration
         isLoaded.value = true
       } else await router.push('/services')
     })
 
     const submitForm = async () => {
-      if (Object.keys(errors.value).length === 0) {
-        const payload = {
-          productId: Number(id),
-          title: form.title,
-          cost: form.cost,
-          description: form.desc
-        }
-        try {
-          await updateServiceApi(payload)
-          alert('Услуга изменена')
-          resetForm()
-          await router.push('/services/' + id)
-        } catch (err) {
-          alert('Не удалось создать услугу.')
-          console.log(err)
-        }
+      const payload = {
+        id: Number(id),
+        title: form.title,
+        cost: form.cost,
+        description: form.desc,
+        category: form.category,
+        places: form.places,
+        duration: form.duration
+      }
+      console.log(payload)
+      try {
+        await updateServiceApi(payload)
+        await router.push('/services/' + id)
+      } catch (err) {
+        alert('Не удалось изменить услугу.')
+        console.log(err)
       }
     }
     return {
@@ -115,49 +150,11 @@ export default {
 </script>
 
 <style scoped lang="less">
-.card{
+.card {
   width: fit-content;
-}
 
-label {
-  display: block;
-  margin-top: 10px;
-}
-
-.form-group {
-  width: 400px;
-  margin-bottom: 30px;
-
-  input {
-    border: none;
-    border-bottom: 1px solid #ccc;
-    padding: 5px;
-    width: 100%;
-
-    &:focus {
-      outline: none;
-      border-bottom-color: #888;
-    }
-  }
-
-  textarea {
-    width: 100%;
-    height: 200px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    resize: none;
-  }
-
-  textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-  }
-
-  textarea::placeholder {
-    color: #999;
+  form {
+    width: 350px;
   }
 }
 
