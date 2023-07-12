@@ -91,8 +91,6 @@ export default {
       const data = await getUserServicesApi(userProfile.id)
       console.log(data)
       serviceCards.value = data
-      console.log(serviceCards)
-      console.log(serviceCards.value)
     }
 
     const changeTab = (tabName) => {

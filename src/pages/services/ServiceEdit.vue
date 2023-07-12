@@ -85,7 +85,7 @@ export default {
     const route = useRoute()
     const store = useStore()
 
-    const id = route.params.id
+    const id = Number(route.params.id)
     const getCreatorId = async () => {
       const serviceItem = await getServiceByIdApi(id)
       try {
@@ -118,12 +118,11 @@ export default {
         form.places = data.service.places
         form.duration = data.service.duration
         isLoaded.value = true
-      } else await router.push('/services')
+      } else await router.push('/services/' + id)
     })
 
     const submitForm = async () => {
       const payload = {
-        id: Number(id),
         title: form.title,
         cost: form.cost,
         description: form.desc,
@@ -133,7 +132,7 @@ export default {
       }
       console.log(payload)
       try {
-        await updateServiceApi(payload)
+        await updateServiceApi(id, payload)
         await router.push('/services/' + id)
       } catch (err) {
         alert('Не удалось изменить услугу.')

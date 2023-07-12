@@ -12,7 +12,7 @@ export default {
 
 <style scoped lang="less">
 .btn {
-  padding: 16px 18px;
+  padding: 16px 20px;
   border-radius: @border-radius;
   font-weight: 700;
   font-size: @font-size-small;

@@ -13,7 +13,7 @@ export default {
 <style scoped lang="less">
 .btn {
   width: 100%;
-  padding: 14px 18px;
+  padding: 14px 20px;
   background: @primary-color;
   border: none;
   border-radius: @border-radius;

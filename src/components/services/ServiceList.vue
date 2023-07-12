@@ -2,9 +2,8 @@
   <div v-if="serviceCards.length > 0" class="card-container">
     <service-item
       v-for="card in serviceCards"
-      :service="card.service"
-      :author="card.author"
-      :key="card.service.id"
+      :service="card"
+      :key="card.id"
     />
   </div>
 </template>
