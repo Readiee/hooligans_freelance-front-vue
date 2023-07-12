@@ -12,73 +12,88 @@
                        @changeTab="changeTab">
       </AppVerticalTabs>
 
-      <div class="tab-content">
+      <div class="content-block__right">
+        <div class="tab-content">
 
-        <div id="main-information" v-if="selectedTab === 'mainInformation'">
-          <AppForm @submit="saveProfile">
-            <div class="form__inputs">
-              <div class="form__inputs__avatar" style="margin-right: 20px;">
-                <label for="avatar">
+          <div id="main-information" v-if="selectedTab === 'mainInformation'">
+            <AppForm>
+              <div class="form__inputs">
+                <div class="form__inputs__avatar" style="margin-right: 20px;">
+                  <label for="avatar">
                     <InteractiveImage :src="previewImage"
-                                    :interactiveText="'Загрузить фото'"
-                                    class="avatar__image" />
-                </label>
-                <input
-                  id="avatar"
-                  type="file"
-                  accept="image/*"
-                  @change=uploadImage
-                  style="display: none">
-              </div>
-
-              <InputRows>
-                <div class="input-row">
-                  <AppInput v-model="form.texts.name"
-                            :type="`text`"
-                            :name="`name`"
-                            :rules="`required|min:4`"
-                            :placeholder="`Имя`">
-                  </AppInput>
+                                      :interactiveText="'Загрузить фото'"
+                                      class="avatar__image" />
+                  </label>
+                  <input
+                    id="avatar"
+                    type="file"
+                    accept="image/*"
+                    @change=uploadImage
+                    style="display: none">
                 </div>
-                <!--                  <div class="input-row">-->
-                <!--                    <AppInput v-model="form.texts.email"-->
-                <!--                              :type="`text`"-->
-                <!--                              :name="`email`"-->
-                <!--                              :rules="`required|email`"-->
-                <!--                              :placeholder="`Email`">-->
-                <!--                    </AppInput>-->
-                <!--                  </div>-->
-              </InputRows>
-            </div>
 
-            <div class="form__btns" style="margin-top: 20px;">
-              <AppPrimaryBtn
-                type="submit"
-                :disabled="!avatarIsChanged & !textsAreChanged"
-                :class="{ disabled: !avatarIsChanged & !textsAreChanged }"
-              >Отправить
-              </AppPrimaryBtn>
-            </div>
-          </AppForm>
+                <InputRows>
+                  <div class="input-row">
+                    <AppInput v-model="forms.mainInformation.texts.name"
+                              :type="`text`"
+                              :name="`name`"
+                              :rules="`required|min:4`"
+                              :placeholder="`Имя`">
+                    </AppInput>
+                  </div>
+                  <!--                  <div class="input-row">-->
+                  <!--                    <AppInput v-model="form.texts.email"-->
+                  <!--                              :type="`text`"-->
+                  <!--                              :name="`email`"-->
+                  <!--                              :rules="`required|email`"-->
+                  <!--                              :placeholder="`Email`">-->
+                  <!--                    </AppInput>-->
+                  <!--                  </div>-->
+                </InputRows>
+              </div>
+            </AppForm>
+          </div>
+
+          <div v-if="selectedTab === 'aboutMe'">
+            <AppForm>
+              <div class="form__inputs">
+                <InputRows>
+                  <div class="input-row">
+                    <AppInput v-model="forms.aboutMe.texts.section"
+                              :type="`text`"
+                              :name="`section`"
+                              :rules="`required|min:4`"
+                              :placeholder="`Название раздела`">
+                    </AppInput>
+                  </div>
+                </InputRows>
+              </div>
+            </AppForm>
+          </div>
+
+          <div v-if="selectedTab === 'url'">
+            Здесь могут быть отзывы о вас.
+          </div>
+
+          <div v-if="selectedTab === 'exp'">
+            Здесь могут быть клиенты для которых вы выполняли работу.
+          </div>
+
+          <div v-if="selectedTab === 'account'">
+            Здесь могут быть клиенты для которых вы выполняли работу.
+          </div>
         </div>
 
-        <div v-if="selectedTab === 'aboutMe'">
-          Здесь может быть список ваших услуг.
+        <div class="form__btns" style="margin-top: 20px;">
+          <AppPrimaryBtn
+            @click="saveProfile"
+            :disabled="!profileIsChanged"
+            :class="{ disabled: !profileIsChanged }"
+          >Отправить
+          </AppPrimaryBtn>
         </div>
-
-        <div v-if="selectedTab === 'url'">
-          Здесь могут быть отзывы о вас.
-        </div>
-
-        <div v-if="selectedTab === 'exp'">
-          Здесь могут быть клиенты для которых вы выполняли работу.
-        </div>
-
-        <div v-if="selectedTab === 'account'">
-          Здесь могут быть клиенты для которых вы выполняли работу.
-        </div>
-
       </div>
+
     </section>
   </div>
 </template>
@@ -86,13 +101,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import AppImage from '@/components/UI/InteractiveImage.vue'
-import { updateProfileAvatarApi, updateProfileTextsApi } from '@/services/users_service'
+import { updateProfileMainInfoAvatarApi, updateProfileMainInfoTextsApi } from '@/services/users_service'
 import store from '@/store'
 import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
 import AppForm from '@/components/AppForm.vue'
 import AppVerticalTabs from '@/components/UI/AppVerticalTabs.vue'
 import AppInput from '@/components/UI/AppInput.vue'
 import InputRows from '@/components/UI/InputRows.vue'
+
+const formTextsAreDifferent = (form, defaultForm) => {
+  return Object.keys(form.texts).some(field => form.texts[field] !== defaultForm.texts[field])
+}
 
 export default {
   name: 'EditProfile',
@@ -107,53 +126,74 @@ export default {
         { name: 'account', label: 'Управление аккаунтом' }
       ],
       selectedTab: 'mainInformation',
-      form: {
-        texts: {
-          name: store.getters['auth/getUserProfile'].name,
-          email: store.getters['auth/getUserProfile'].email
+      forms: {
+        mainInformation: {
+          texts: {
+            name: store.getters['auth/getUserProfile'].name,
+            email: store.getters['auth/getUserProfile'].email
+          },
+          image: null
         },
-        image: null
+        aboutMe: {
+          texts: {
+            section: 'Название раздела 1',
+            desc: 'Описание 1'
+          }
+        }
       },
-      defaultForm: {
-        texts: {
-          name: store.getters['auth/getUserProfile'].name,
-          email: store.getters['auth/getUserProfile'].email
-        },
-        image: null
-      },
+      changesSubmitted: false,
       previewImage: store.getters['auth/getUserProfile'].image
     }
   },
   computed: {
     ...mapGetters('auth', ['getUserProfile']),
-    avatarIsChanged () {
-      return this.form.image !== null
+    defaultForms () {
+      return {
+        mainInformation: {
+          texts: {
+            name: store.getters['auth/getUserProfile'].name,
+            email: store.getters['auth/getUserProfile'].email
+          },
+          image: store.getters['auth/getUserProfile'].image
+        },
+        aboutMe: {
+          texts: {
+            section: 'Название раздела 1',
+            desc: 'Описание 1'
+          }
+        }
+      }
     },
-    textsAreChanged () {
-      return Object.keys(this.form.texts).some(field => this.form.texts[field] !== this.defaultForm.texts[field])
+    profileIsChanged () {
+      return this.mainInformationAvatarIsChanged || this.mainInformationTextAreChanged ||
+        this.aboutMeChanged
+    },
+    mainInformationAvatarIsChanged () {
+      return this.forms.mainInformation.image !== null
+    },
+    mainInformationTextAreChanged () {
+      return formTextsAreDifferent(this.forms.mainInformation, this.defaultForms.mainInformation)
+    },
+    aboutMeChanged () {
+      return formTextsAreDifferent(this.forms.aboutMe, this.defaultForms.aboutMe)
     }
   },
   mounted () {
   },
   methods: {
     saveProfile () {
-      if (this.textsAreChanged) {
-        this.updateFormTexts()
+      if (this.mainInformationTextAreChanged) {
+        updateProfileMainInfoTextsApi(JSON.stringify(this.forms.mainInformation.texts))
       }
-      if (this.avatarIsChanged) {
-        this.updateProfileAvatar()
+      if (this.mainInformationAvatarIsChanged) {
+        const formData = new FormData()
+        formData.append('picture', this.forms.mainInformation.image)
+        updateProfileMainInfoAvatarApi(formData)
+        this.forms.mainInformation.image = null
       }
-      setTimeout(() => {
-        this.$router.push('/profile')
-      }, 1000)
-    },
-    updateFormTexts () {
-      updateProfileTextsApi(JSON.stringify(this.form.texts))
-    },
-    updateProfileAvatar () {
-      const formData = new FormData()
-      formData.append('picture', this.form.image)
-      updateProfileAvatarApi(formData)
+      if (this.aboutMeChanged) {
+        console.log('Тут должна быть логика обновления AboutMe')
+      }
     },
     changeTab (tabName) {
       this.selectedTab = tabName
@@ -165,7 +205,7 @@ export default {
       reader.onload = e => {
         this.previewImage = e.target.result
       }
-      this.form.image = image
+      this.forms.mainInformation.image = image
     }
   }
 }
@@ -175,19 +215,23 @@ export default {
 .content-block {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  grid-template-columns: 450px 1fr;
   margin-top: 50px;
 }
 
+.content-block__right{
+  width: 100%;
+}
+
 .tab-content {
-  margin-left: 40px;
   padding: 40px;
   width: 100%;
-  height: fit-content;
+  height: 400px;
   border-radius: @border-radius;
   background: white;
   box-shadow: @box-shadow;
 }
+
 .avatar__image {
   width: 150px;
   height: 150px;
@@ -248,6 +292,7 @@ export default {
 .disabled {
   opacity: 0.5;
   cursor: default;
+
   &:hover {
     filter: brightness(1);
   }
