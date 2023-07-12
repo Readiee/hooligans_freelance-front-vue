@@ -132,7 +132,7 @@ export default {
             name: store.getters['auth/getUserProfile'].name,
             email: store.getters['auth/getUserProfile'].email
           },
-          image: store.getters['auth/getUserProfile'].email
+          image: null
         },
         aboutMe: {
           texts: {
@@ -141,6 +141,7 @@ export default {
           }
         }
       },
+      changesSubmitted: false,
       previewImage: store.getters['auth/getUserProfile'].image
     }
   },
@@ -188,6 +189,7 @@ export default {
         const formData = new FormData()
         formData.append('picture', this.forms.mainInformation.image)
         updateProfileMainInfoAvatarApi(formData)
+        this.forms.mainInformation.image = null
       }
       if (this.aboutMeChanged) {
         console.log('Тут должна быть логика обновления AboutMe')

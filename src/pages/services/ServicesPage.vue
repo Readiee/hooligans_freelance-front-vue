@@ -1,12 +1,16 @@
 <template>
   <div class="container">
     <div class="content-block header">
+      <div class="header__title">
+        <h2>Список услуг</h2>
+      </div>
       <div class="header__btns">
         <router-link to="/services/create">
           <AppPrimaryBtn class="header__btns_btn">Создать свою услугу</AppPrimaryBtn>
         </router-link>
       </div>
     </div>
+
     <div v-if="this.serviceCards.length > 0"
          class="content-block">
       <service-list class="services-list"
@@ -49,9 +53,25 @@ export default {
   justify-content: center;
 }
 
+.header{
+  border-bottom: 1px #cccccc solid;
+  padding: 0 0 20px;
+  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  gap: 20px;
+}
+
+.header__title{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
 .header__btns {
-  width: 100%;
-  margin-bottom: 40px;
+  //width: 100%;
+  display: flex;
+  justify-content: end;
 
   .header__btns_btn {
     width: 200px;

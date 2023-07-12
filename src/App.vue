@@ -35,7 +35,7 @@
           </li>
           <li class="nav-item">
             <router-link to="/register" class="nav-link">
-              <AppPrimaryBtn>Регистрация</AppPrimaryBtn>
+              <AppSecondaryBtn>Регистрация</AppSecondaryBtn>
             </router-link>
           </li>
         </ul>
@@ -77,10 +77,10 @@
 <script>
 
 import { mapActions, mapGetters } from 'vuex'
-import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
+import AppSecondaryBtn from '@/components/UI/AppSecondaryButton.vue'
 
 export default {
-  components: { AppPrimaryBtn },
+  components: { AppSecondaryBtn },
   computed: {
     ...mapGetters('auth', {
       getUserProfile: 'getUserProfile',
@@ -174,6 +174,9 @@ a, a:visited, a:hover {
       * {
         font-weight: 700;
       }
+    }
+    button {
+      padding: 12px;
     }
   }
   .nav-link{

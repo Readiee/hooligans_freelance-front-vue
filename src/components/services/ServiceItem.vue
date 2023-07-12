@@ -1,17 +1,16 @@
 <template>
   <div class="service-card">
     <div class="service-card__content">
-      <div class="service-card__content__header">
-        <div v-if="author"
-             class="user-group"
+      <div v-if="service.author" class="service-card__content__header">
+        <div class="user-group"
              style="margin-right: 20px;">
           <div class="user-group__avatar">
             <img :src="userImage" alt="User Avatar">
           </div>
-          <p class="user-group__username" style="width: 100px;">{{ author.name }}</p>
+          <p class="user-group__username" style="width: 100px;">{{ service.author.name }}</p>
         </div>
-        <img class="" src="@/assets/images/more_details.svg"
-             alt="More Service Details">
+<!--        <img class="" src="@/assets/images/more_details.svg"-->
+<!--             alt="More Service Details">-->
       </div>
       <p class="service-card__content__title">{{ service.title }}</p>
       <p class="service-card__content__desc">{{ service.description }}</p>
@@ -35,17 +34,29 @@ export default {
   components: { AppPrimaryBtn },
   props: {
     service: {
-      type: Object,
+      id: Number,
+      image: String,
+      createdAt: String,
+      updatedAt: String,
+      places: String,
+      category: String,
+      duration: String,
+      title: String,
+      cost: String,
+      description: String,
+      authorId: Number,
+      isPublished: Boolean,
+      author: {
+        name: String,
+        awatar: String
+      },
       required: true
-    },
-    author: {
-      type: Object
     }
   },
   computed: {
     userImage () {
       const API_URL = 'http://localhost:3000'
-      return `${API_URL}${this.author.awatar.substr(1)}`
+      return `${API_URL}${this.service.author.awatar.substr(1)}`
     }
   }
 }
@@ -53,7 +64,7 @@ export default {
 
 <style lang="less" scoped>
 .service-card {
-  height: 300px;
+  height: fit-content;
   width: 270px;
   padding: 24px;
   border-radius: @border-radius;
@@ -76,14 +87,13 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  margin-bottom: 15px;
 
   > * {
-    margin-top: 15px;
+    margin-bottom: 15px;
   }
 
-  > :first-child {
-    margin-top: 0;
+  > :last-child {
+    //margin-bottom: 0;
   }
 }
 
@@ -102,6 +112,7 @@ export default {
 }
 
 .service-card__content__desc {
+  height: 50px;
   color: @non-active-color;
   display: -webkit-box;
   -webkit-line-clamp: 3;
