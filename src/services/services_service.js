@@ -42,13 +42,8 @@ export async function getServicesApi () {
 export async function getServiceByIdApi (id) {
   try {
     const response = await axiosInstance.get('/products/' + id)
-    const data = response.data
-    const updatedData = {
-      service: data.product,
-      author: data.author
-    }
-    console.log(updatedData)
-    return updatedData
+    console.log(response)
+    return response.data
   } catch (err){
     // alert(err.message)
     console.log(err)

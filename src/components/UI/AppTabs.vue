@@ -34,12 +34,14 @@ const clickOnTab = (tabName) => {
 
 <style lang="less" scoped>
 .tab-nav {
+  width: 100%;
   display: flex;
   gap: 15px;
   border-radius: 10px;
 }
 
 .tab-nav__item {
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;

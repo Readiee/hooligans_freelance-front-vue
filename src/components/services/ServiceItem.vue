@@ -7,7 +7,7 @@
           <div class="user-group__avatar">
             <img :src="userImage" alt="User Avatar">
           </div>
-          <p class="user-group__username" style="width: 100px;">{{ service.author.name }}</p>
+          <p class="user-group__username">{{ service.author.name }}</p>
         </div>
 <!--        <img class="" src="@/assets/images/more_details.svg"-->
 <!--             alt="More Service Details">-->
@@ -99,7 +99,6 @@ export default {
 
 .service-card__content__header {
   display: flex;
-  justify-content: space-between;
   align-items: start;
 }
 
@@ -112,7 +111,7 @@ export default {
 }
 
 .service-card__content__desc {
-  height: 50px;
+  height: 60px;
   color: @non-active-color;
   display: -webkit-box;
   -webkit-line-clamp: 3;
