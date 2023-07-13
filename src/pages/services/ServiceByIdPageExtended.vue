@@ -1,26 +1,40 @@
 <template>
   <div class="content">
     <div style="display: flex; flex-wrap: wrap; justify-content: start; margin-top: 48px;">
-      <img :src="previewImage" class="avatar__image">
+      <img :src="store.getters['auth/getUserProfile'].image" class="avatar__image">
       <div style="margin-left: 36px;">
-        <span class="text_type1" style="margin-right: 10px;">{{ serviceItem.author.name }}</span>
-        <span class="text_type2">{{ serviceItem.author.email }}</span>
-        <div>
-          <span class="text_type2">{{ serviceItem.service.description }}</span>
+        <span class="text_type1" style="margin-right: 10px;">{{ service.author.name }}</span>
+        <span class="text_type2">{{ service.email }}</span>
+        <div style="margin-top:15px;">
+          <h2>{{ service.title }}</h2>
+        </div>
+        <div style="margin-top: 10px;">
+          <span class="text_type2">{{ service.description }}</span>
         </div>
         <div class="service-card__content__cost">
-          <p>{{serviceItem.service.cost}} ₽</p>
+          <p>{{service.cost}} ₽</p>
         </div>
-        <app-primary-btn style="position: absolute;
-              margin-top: 40px;
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              width: fit-content;
-              padding: 15px 60px;
-              gap: 10px;">
-          Откликнуться/Редактировать
-        </app-primary-btn>
+        <div
+            v-if="store.getters['auth/getUserProfile'].id === this.serviceItem.author.id || store.getters['auth/getUserProfile'].role === 'Admin'"
+            class="btns">
+          <app-primary-btn
+              @click="this.$router.push('/services/' + this.serviceItem.service.id  + '/edit')">
+            Редактировать заказ
+          </app-primary-btn>
+          <app-primary-btn
+              @click="deleteService"
+              style="margin-top: 15px; background-color: red; color: white">
+            Удалить услугу
+          </app-primary-btn>
+        </div>
+        <div v-else
+             class="btns"
+             style="width: 300px;">
+          <app-primary-btn
+              @click="this.$router.push('/services/' + this.serviceItem.service.id  + '/order')">
+            Заказать
+          </app-primary-btn>
+        </div>
       </div>
     </div>
     <div class="block__mainInformation">
@@ -38,11 +52,11 @@
         <label class="text_type2">Что-нибудь придумаем</label>
         <span class="text_type3">Lorem ipsum</span>
         <label class="text_type2">Длительность</label>
-        <span class="text_type3">1 час 20 минут{{ serviceItem.service.times }}</span>
+        <span class="text_type3">1 час 20 минут{{ service.times }}</span>
       </div>
     </div>
     <div class="description">
-      <span>{{ serviceItem.service.description }}</span>
+      <span>{{ service.description }}</span>
     </div>
   </div>
 </template>
@@ -54,11 +68,6 @@ import store from '@/store'
 import { deleteServiceApi, getServiceByIdApi } from '@/services/services_service'
 
 export default {
-  computed: {
-    store () {
-      return store
-    }
-  },
   components: { AppPrimaryBtn },
   data () {
     return {
@@ -70,30 +79,33 @@ export default {
           type: Object
         }
       },
-      isLoaded: false,
-      previewImage: store.getters['auth/getUserProfile'].image
+      isLoaded: false
     }
   },
   mounted () {
     this.fetchServiceById()
     console.log(this.serviceItem)
   },
+  computed: {
+    store () {
+      return store
+    },
+    serviceId () {
+      return Number(this.$route.params.id)
+    }
+  },
   methods: {
-    async fetchServiceById (){
-      const id = this.$route.params.id
-      this.serviceItem = await getServiceByIdApi(id)
+    async fetchServiceById () {
+      this.service = await getServiceByIdApi(this.serviceId)
       this.isLoaded = true
     },
     async deleteService () {
       try {
-        const id = Number(this.$route.params.id)
-        const payload = {
-          productId: id
-        }
-        await deleteServiceApi(payload)
+        await deleteServiceApi(this.serviceId)
         this.$router.push('/services')
-      } catch (err){
+      } catch (err) {
         alert('Не удалось удалить услугу.')
+        this.$router.push('/services/' + this.serviceId)
         console.log(err)
       }
     }
@@ -125,7 +137,7 @@ export default {
 .block__mainInformation{
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin-top: 285px;
+  margin-top: 50px;
   width: 1229px;
   height: 249px;
   flex-shrink: 0;
@@ -139,22 +151,17 @@ export default {
   flex-shrink: 0;
 }
 .text_type1{
-  color: black;
-  font-size: 25px;
-  text-align: left;
+  font-size: 20px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 500;
   line-height: normal;
-  white-space: nowrap;
-  overflow: hidden;
 }
 .text_type2{
-  color: rgba(1, 1, 1, 0.30000001192092896);
+  color: rgba(1, 1, 1, 0.30);
   font-size: 18px;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 400;
   line-height: normal;
-  margin-bottom: 3px;
 }
 .text_type3{
   color: #010101;
@@ -193,5 +200,9 @@ export default {
   P {
     color: @secondary-color;
   }
+}
+.btns{
+  margin-top: 40px;
+  width: 300px;
 }
 </style>

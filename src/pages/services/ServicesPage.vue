@@ -42,6 +42,7 @@ export default {
     async fetchServices () {
       console.log(this.serviceCards)
       this.serviceCards = await getServicesApi()
+      console.log(this.serviceCards)
     }
   }
 }
