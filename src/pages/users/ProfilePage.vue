@@ -29,10 +29,10 @@
           <p>Почта</p>
           <h4>{{ userProfile.email }}</h4>
         </div>
-<!--        <div class="profile__position">-->
-<!--          <p>Компания</p>-->
-<!--          <h4>{{ userProfile.company }}</h4>-->
-<!--        </div>-->
+        <!--        <div class="profile__position">-->
+        <!--          <p>Компания</p>-->
+        <!--          <h4>{{ userProfile.company }}</h4>-->
+        <!--        </div>-->
       </div>
     </div>
     <div class="profile__tabs-container">
@@ -89,6 +89,9 @@ export default {
 
     const fetchUserServices = async () => {
       const data = await getUserServicesApi(userProfile.id)
+      data.forEach(item => {
+        item.author = null
+      })
       console.log(data)
       serviceCards.value = data
     }
@@ -128,9 +131,11 @@ export default {
   border-radius: @border-radius;
   background-color: #fff;
   box-shadow: @box-shadow;
+
   * {
     width: 100%;
   }
+
   .profile__img {
     margin: 0;
     width: 200px;
@@ -147,7 +152,7 @@ export default {
 
 }
 
-p{
+p {
   font-size: @font-size-medium;
   color: @non-active-color
 }
@@ -155,6 +160,7 @@ p{
 .profile__description {
   margin-top: 20px;
   text-align: center;
+
   > * {
     margin-bottom: 8px;
   }
@@ -172,10 +178,11 @@ p{
 }
 
 .profile__position {
-    margin-top: 30px;
-    h4{
-      margin-top: 5px;
-    }
+  margin-top: 30px;
+
+  h4 {
+    margin-top: 5px;
+  }
 }
 
 .img {
@@ -184,7 +191,7 @@ p{
   object-fit: cover;
 }
 
-.profile__tabs-container{
+.profile__tabs-container {
   width: 100%;
 }
 

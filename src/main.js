@@ -6,8 +6,10 @@ import directives from '@/directives'
 import store from '@/store'
 import VueCookies from 'vue3-cookies'
 import setupVeeValidate from '@/plugins/vee-validate'
+import setupVuetify from '@/plugins/veutify'
 
 // import './assets/css/main.css'
+import 'primeicons/primeicons.css'
 
 const app = createApp(App)
 
@@ -20,6 +22,7 @@ directives.forEach(directive => {
 })
 
 setupVeeValidate(app)
+setupVuetify(app)
 
 app
   .use(router)

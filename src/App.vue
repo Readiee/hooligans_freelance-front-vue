@@ -267,4 +267,14 @@ footer{
   font-weight: 400;
 }
 
+input[type=radio]{
+  display: block;
+}
+
+i {
+  &:hover {
+    filter: brightness(0.8);
+  }
+}
+
 </style>

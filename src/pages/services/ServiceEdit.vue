@@ -78,6 +78,7 @@ import { useStore } from 'vuex'
 import AppInput from '@/components/UI/AppInput.vue'
 import InputRows from '@/components/UI/InputRows.vue'
 import AppForm from '@/components/AppForm.vue'
+import { getCreatorId } from '@/hooks/getServiceCreatorId'
 
 export default {
   components: { AppForm, InputRows, AppInput },
@@ -86,14 +87,10 @@ export default {
     const store = useStore()
 
     const id = Number(route.params.id)
-    const getCreatorId = async () => {
-      const serviceItem = await getServiceByIdApi(id)
-      try {
-        return serviceItem.author.id
-      } catch (err){
-        console.log(err)
-        await router.push('/services')
-      }
+
+    let creatorId = 0
+    const setCreatorId = async () => {
+      creatorId = await getCreatorId(id)
     }
 
     const form = reactive({
@@ -108,15 +105,17 @@ export default {
     const isLoaded = ref(false)
 
     onMounted(async () => {
-      const creatorId = await getCreatorId()
+      await setCreatorId()
+      console.log(creatorId)
       if (store.getters['auth/getUserProfile'].id === creatorId || store.getters['auth/getUserProfile'].role === 'Admin') {
         const data = await getServiceByIdApi(id)
-        form.title = data.service.title
-        form.cost = data.service.cost
-        form.desc = data.service.description
-        form.category = data.service.category
-        form.places = data.service.places
-        form.duration = data.service.duration
+        console.log(data)
+        form.title = data.title
+        form.cost = data.cost
+        form.desc = data.description
+        form.category = data.category
+        form.places = data.places
+        form.duration = data.duration
         isLoaded.value = true
       } else await router.push('/services/' + id)
     })
