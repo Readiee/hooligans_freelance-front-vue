@@ -5,6 +5,7 @@
         :plan="plan"
         :number="index"
         :key="plan.id"
+        @remove="$emit('remove', plan)"
       />
     </div>
 </template>

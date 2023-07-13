@@ -22,13 +22,17 @@
         <!--        <div class="user-group__text__level">-->
         <!--          <p>{{ service.otsenka }}</p>-->
         <!--        </div>-->
-        <div class="user-group__text__level">
+        <div class="user-group__text__level" v-if="hasRights">
           <AppPrimaryBtn
-            v-if="hasRights"
             @click="this.$router.push('/services/' + service.id  + '/edit')"
-            style="width: fit-content; margin-top: 15px;">
+            style="width: 180px; margin-top: 15px;">
             Редактировать
           </AppPrimaryBtn>
+          <AppRedBtn
+            @click="deleteService"
+            style="width: 180px;">
+            Удалить
+          </AppRedBtn>
         </div>
       </div>
     </section>
@@ -120,7 +124,10 @@
 
           <div v-if="selectedTab === 'freeWindows'" class="tab-content__free-windows">
             <div v-if="this.freeWindows.length > 0">
-              <PlanList class="free-windows__list" :plans="freeWindows"></PlanList>
+              <PlanList class="free-windows__list"
+                        :plans="freeWindows"
+                        @remove="removePlan"
+              ></PlanList>
             </div>
             <p style="text-align: center" v-else>Нет сеансов.</p>
             <div class="tab-content__footer">
@@ -176,7 +183,13 @@ import AppRadio from '@/components/UI/AppRadio.vue'
 import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
 import { getCreatorId } from '@/hooks/getServiceCreatorId'
 import AppTabs from '@/components/UI/AppTabs.vue'
-import { createPlanApi, getCurrentEntriesApi, getFreeWindowsApi, signUpPlanApi } from '@/services/plans_service'
+import {
+  createPlanApi,
+  deletePlanApi,
+  getCurrentEntriesApi,
+  getFreeWindowsApi,
+  signUpPlanApi
+} from '@/services/plans_service'
 import AppDialog from '@/components/UI/AppDialog.vue'
 import AppForm from '@/components/AppForm.vue'
 import InputRows from '@/components/UI/InputRows.vue'
@@ -188,9 +201,11 @@ import { currentDate } from '@/hooks/currentDate'
 import { currentTime } from '@/hooks/currentTime'
 import { roundTime } from '@/hooks/roundTime'
 import PlanList from '@/components/plans/Planslist.vue'
+import router from '@/router/router'
+import AppRedBtn from '@/components/UI/AppRedButton.vue'
 
 export default {
-  components: { PlanList, AppTimePicker, AppDatePicker, InputRows, AppForm, AppDialog, AppTabs, AppPrimaryBtn, AppRadio, AppImage },
+  components: { AppRedBtn, PlanList, AppTimePicker, AppDatePicker, InputRows, AppForm, AppDialog, AppTabs, AppPrimaryBtn, AppRadio, AppImage },
   data () {
     return {
       service: {
@@ -314,9 +329,19 @@ export default {
     async signPlanUp () {
       try {
         await signUpPlanApi(this.selectedWindowId)
+        await router.push('/my-records')
       } catch (err) {
         console.log(err)
         alert('Не удалось записаться на услугу')
+      }
+    },
+    async removePlan (plan) {
+      console.log('deleting')
+      try {
+        await deletePlanApi(plan.record.id)
+      } catch (err) {
+        console.log(err)
+        alert('Не удалось удалить услугу')
       }
     }
   }

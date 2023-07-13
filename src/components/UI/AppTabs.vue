@@ -19,17 +19,15 @@ const clickOnTab = (tabName) => {
 </script>
 
 <template>
-  <div>
-    <div class="tab-nav">
+  <div class="tab-nav">
       <span
-          v-for="tab in names"
-          :key="tab.name"
-          :class="['tab-nav__item', {'selected': tab.name === selectedTab}]"
-          @click="clickOnTab(tab.name)"
+        v-for="tab in names"
+        :key="tab.name"
+        :class="['tab-nav__item', {'selected': tab.name === selectedTab}]"
+        @click="clickOnTab(tab.name)"
       >
-        {{tab.label}}
+        {{ tab.label }}
       </span>
-    </div>
   </div>
 </template>
 
@@ -48,7 +46,7 @@ const clickOnTab = (tabName) => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding:12px 20px;
+  padding: 12px 20px;
   border-radius: 10px;
   outline: 1px solid black;
   outline-offset: -1px;

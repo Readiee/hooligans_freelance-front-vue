@@ -13,7 +13,7 @@
 
     <div class="plan-row__right">
       <div class="plan-row__icons">
-        <i class="icon pi pi-trash"></i>
+        <i class="icon pi pi-trash" @click="$emit('remove', plan)"></i>
         <i class="icon pi pi-pencil" style="margin-left: 20px;"></i>
       </div>
     </div>

@@ -58,3 +58,24 @@ export async function signUpPlanApi (id) {
     throw err
   }
 }
+export async function getRecordsApi () {
+  try {
+    const response = await axiosInstanceWithCookie.get('/users/my-records')
+    console.log(response)
+    return response.data //
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}
+
+export async function deletePlanApi (id) {
+  try {
+    const response = await axiosInstanceWithCookie.delete('/plans/delete/' + id)
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}

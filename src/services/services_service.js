@@ -81,7 +81,7 @@ export async function updateServiceApi (id, payload) {
 
 export async function deleteServiceApi (id) {
   try {
-    const response = await axiosInstancePost.post('products/delete/' + id)
+    const response = await axiosInstancePost.delete('products/delete/' + id)
     console.log(response)
     return response
   } catch (err) {
