@@ -63,6 +63,7 @@ export default {
 }
 
 .header__title{
+  height: 50px;
   display: flex;
   justify-content: start;
   align-items: center;

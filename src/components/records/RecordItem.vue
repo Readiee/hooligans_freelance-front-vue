@@ -102,7 +102,7 @@ export default {
   align-items: start;
 
   h3 {
-    font-size: 18px;
+    //font-size: 18px;
   }
 }
 

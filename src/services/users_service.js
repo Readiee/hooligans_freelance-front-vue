@@ -78,7 +78,7 @@ export async function getUserProfileApi (id) {
 // Получение услуг пользователя
 export async function getUserServicesApi (id) {
   try {
-    const response = await axiosInstance.get('users/' + id + '/products')
+    const response = await axiosInstance.get('users/products/' + id)
     console.log(response.data)
     return response.data
   } catch (err) {

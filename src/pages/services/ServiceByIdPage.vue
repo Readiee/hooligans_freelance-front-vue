@@ -22,7 +22,7 @@
         <!--        <div class="user-group__text__level">-->
         <!--          <p>{{ service.otsenka }}</p>-->
         <!--        </div>-->
-        <div class="user-group__text__level" v-if="hasRights">
+        <div class="user-group__text__level" v-if="hasRights && store.getters['auth/getLoggedIn']">
           <AppPrimaryBtn
             @click="this.$router.push('/services/' + service.id  + '/edit')"
             style="width: 180px; margin-top: 15px;">
@@ -81,12 +81,15 @@
       <p v-else>Пока что нет свободных окон для записи.</p>
       <AppPrimaryBtn @click="signPlanUp"
                      v-if="freeWindows.length > 0"
-                     style="width: fit-content; margin-top: 30px; margin-left: auto;">Записаться</AppPrimaryBtn>
+                     style="width: fit-content; margin-top: 30px; margin-left: auto;"
+                     :disabled="!selectedWindowId"
+                     :class="{ disabled: !selectedWindowId }"
+      >Записаться</AppPrimaryBtn>
     </section>
 
     <!--    Для админа и креатора-->
     <section class="content-block details-windows-block-for-creator"
-             v-if="hasRights">
+             v-if="hasRights && store.getters['auth/getLoggedIn']">
       <div class="details-block">
         <div class="details__item">
           <p>Место</p>
@@ -124,7 +127,8 @@
 
         <div class="windows-block__tab-content">
 
-          <div v-if="selectedTab === 'freeWindows'" class="tab-content__free-windows">
+          <div v-if="selectedTab === 'freeWindows' && store.getters['auth/getLoggedIn']"
+               class="tab-content__free-windows">
             <div v-if="this.freeWindows.length > 0">
               <PlanList class="free-windows__list"
                         :plans="freeWindows"
@@ -134,8 +138,7 @@
             </div>
             <p style="text-align: center" v-else>Нет сеансов.</p>
             <div class="tab-content__footer">
-              <h4 v-if="hasRights"
-                  @click="dialogVisibleCreate = true">+ Добавить окно</h4>
+              <h4 @click="dialogVisibleCreate = true">+ Добавить окно</h4>
             </div>
           </div>
 
@@ -386,13 +389,15 @@ export default {
       }
     },
     async signPlanUp () {
-      try {
-        await signUpPlanApi(this.selectedWindowId)
-        await router.push('/records')
-      } catch (err) {
-        console.log(err)
-        alert('Не удалось записаться на услугу')
-      }
+      if (store.getters['auth/getLoggedIn']) {
+        try {
+          await signUpPlanApi(this.selectedWindowId)
+          await router.push('/records')
+        } catch (err) {
+          console.log(err)
+          alert('Не удалось записаться на услугу')
+        }
+      } else await router.push('/login')
     },
     async removePlan (plan) {
       console.log('deleting')

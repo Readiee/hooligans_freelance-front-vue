@@ -13,19 +13,19 @@
             </router-link>
           </li>
 
-          <li class="nav-item">
-            <router-link to="/records"
-                         class="nav-link"
-                         :class="{activeBRUH: activeNavLink === 'records'}">
-              Мои заказы
-            </router-link>
-          </li>
-
           <li v-if="getLoggedIn" class="nav-item">
             <router-link to="/clients"
                          class="nav-link"
                          :class="{activeBRUH: activeNavLink === 'clients'}">
               Клиенты
+            </router-link>
+          </li>
+
+          <li v-if="getLoggedIn" class="nav-item">
+            <router-link to="/records"
+                         class="nav-link"
+                         :class="{activeBRUH: activeNavLink === 'records'}">
+              Мои заказы
             </router-link>
           </li>
 
@@ -52,6 +52,7 @@
         </ul>
 
         <ul v-else class="navbar__items">
+
           <li class="nav-item">
             <router-link to="/profile"
                          class="nav-link user-group"
@@ -292,6 +293,15 @@ i {
   margin-top: 5px;
   color: red;
   font-size: 12px;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: default;
+
+  &:hover {
+    filter: brightness(1);
+  }
 }
 
 </style>

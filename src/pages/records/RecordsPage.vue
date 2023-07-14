@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="content-block header">
-      <h2>Мои заказы</h2>
+      <div class="header__title">
+        <h2>Мои заказы</h2>
+      </div>
     </div>
 
     <div v-if="this.recordCards.length > 0"
@@ -58,6 +60,13 @@ export default {
   margin-bottom: 20px;
   border-bottom: 1px #cccccc solid;
   padding: 0 0 20px;
+}
+
+.header__title{
+  height: 50px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
 .records-list {
