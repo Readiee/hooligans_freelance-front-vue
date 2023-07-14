@@ -69,17 +69,19 @@
     <!--    Для других юзеров -->
     <section class="content-block windows-block"
              v-if="!hasRights">
-      <h2 style="margin-bottom: 30px;">Выберите сеанс</h2>
-      <div class="windows__items">
+      <h2 style="margin-bottom: 30px;">Свободные окна</h2>
+      <div class="windows__items" v-if="freeWindows.length > 0">
         <app-radio v-for="window in freeWindows"
-                   :key="window.record.id"
+                   :key="window.id"
                    :label="window.datetime"
-                   :value="window.record.id"
+                   :value="String(window.id)"
                    v-model="selectedWindowId">
         </app-radio>
       </div>
+      <p v-else>Пока что нет свободных окон для записи.</p>
       <AppPrimaryBtn @click="signPlanUp"
-                     style="width: fit-content; margin-top: 30px;">Записаться</AppPrimaryBtn>
+                     v-if="freeWindows.length > 0"
+                     style="width: fit-content; margin-top: 30px; margin-left: auto;">Записаться</AppPrimaryBtn>
     </section>
 
     <!--    Для админа и креатора-->
@@ -127,12 +129,26 @@
               <PlanList class="free-windows__list"
                         :plans="freeWindows"
                         @remove="removePlan"
+                        @update="openUpdateDialog"
               ></PlanList>
             </div>
             <p style="text-align: center" v-else>Нет сеансов.</p>
             <div class="tab-content__footer">
               <h4 v-if="hasRights"
-                  @click="dialogVisible = true">+ Добавить окно</h4>
+                  @click="dialogVisibleCreate = true">+ Добавить окно</h4>
+            </div>
+          </div>
+
+          <div v-if="selectedTab === 'currentEntries'" class="tab-content__current-entries">
+            <div v-if="this.currentEntries.length > 0">
+              <PlanList class="current-entries__list"
+                        :plans="currentEntries"
+                        :can-be-deleted="false"
+                        @update="openUpdateDialog"
+              ></PlanList>
+            </div>
+            <p style="text-align: center" v-else>Нет записавшихся клиентов.</p>
+            <div class="tab-content__footer">
             </div>
           </div>
 
@@ -141,7 +157,7 @@
     </section>
 
 <!--    Добавление окна -->
-    <AppDialog v-model:show="dialogVisible">
+    <AppDialog v-model:show="dialogVisibleCreate">
       <AppForm @submit="createPlan" style="width: 400px;">
         <h2 style="margin-bottom: 30px;">Добавить окно</h2>
         <InputRows>
@@ -154,13 +170,46 @@
             <span>Дата</span>
             <AppDatePicker v-model="planDate"
                            :minDate="String(this.currentDate)"
+                           :name="`date`"
             ></AppDatePicker>
           </div>
 
           <div class="input-row">
             <span>Время</span>
             <AppTimePicker v-model="planTime"
-                           :minTime="currentRoundedTime"></AppTimePicker>
+                           :name="`time`"
+                           style="margin-left: auto;"></AppTimePicker>
+          </div>
+
+        </InputRows>
+        <div class="form__btns" style="margin-top: 30px;">
+          <AppPrimaryBtn type="submit">Отправить</AppPrimaryBtn>
+        </div>
+      </AppForm>
+    </AppDialog>
+
+    <AppDialog v-model:show="dialogVisibleEdit">
+      <AppForm @submit="updatePlan" style="width: 400px;">
+        <h2 style="margin-bottom: 30px;">Изменить запись</h2>
+        <InputRows>
+          <!--          <div class="input-row">-->
+          <!--            <span>Дата</span>-->
+          <!--            <VueDatePicker v-model="planDate" locale="ru"></VueDatePicker>-->
+          <!--          </div>-->
+
+          <div class="input-row">
+            <span>Дата</span>
+            <AppDatePicker v-model="editForm.planDateNew"
+                           :minDate="String(this.currentDate)"
+                           :name="`date`"
+            ></AppDatePicker>
+          </div>
+
+          <div class="input-row">
+            <span>Время</span>
+            <AppTimePicker v-model="editForm.planTimeNew"
+                           :name="`time`"
+                           style="margin-left: auto;"></AppTimePicker>
           </div>
 
         </InputRows>
@@ -188,7 +237,8 @@ import {
   deletePlanApi,
   getCurrentEntriesApi,
   getFreeWindowsApi,
-  signUpPlanApi
+  signUpPlanApi,
+  updatePlanApi
 } from '@/services/plans_service'
 import AppDialog from '@/components/UI/AppDialog.vue'
 import AppForm from '@/components/AppForm.vue'
@@ -223,7 +273,7 @@ export default {
         isPublished: Boolean,
         author: {
           name: String,
-          awatar: String
+          avatar: String
         }
       },
       isLoaded: false,
@@ -238,7 +288,13 @@ export default {
       currentEntries: [],
       planDate: '',
       planTime: '',
-      dialogVisible: false
+      dialogVisibleCreate: false,
+      dialogVisibleEdit: false,
+      editForm: {
+        planDateNew: '',
+        planTimeNew: '',
+        editedPlan: ''
+      }
     }
   },
   mounted () {
@@ -264,7 +320,7 @@ export default {
       return store
     },
     avatarUrl () {
-      return getImageUrl(this.service.author.awatar)
+      return getImageUrl(this.service.author.avatar)
     }
   },
   methods: {
@@ -306,21 +362,24 @@ export default {
       //   dayTime: this.planDate + 'T' + this.planTime + ':00+07:00'
       // }
       const [year, month, day] = this.planDate.split('-')
-      const [hours, minutes] = this.planTime.split('-')
+      const [hours, minutes] = this.planTime.split(':')
 
       const payload = {
         idProduct: Number(this.serviceId),
-        year: Number(year),
-        month: Number(month),
-        day: Number(day),
-        hours: Number(hours),
-        minutes: Number(minutes)
+        year: String(year),
+        month: String(month),
+        day: String(day),
+        hours: String(hours),
+        minutes: String(minutes)
       }
       console.log(payload)
       try {
         await createPlanApi(payload)
-        this.dialogVisible = false
+        this.dialogVisibleCreate = false
         await this.fetchFreeWindows()
+
+        this.planTime = ''
+        this.planDate = ''
       } catch (err) {
         alert('Не удалось добавить окно.')
         console.log(err)
@@ -329,7 +388,7 @@ export default {
     async signPlanUp () {
       try {
         await signUpPlanApi(this.selectedWindowId)
-        await router.push('/my-records')
+        await router.push('/records')
       } catch (err) {
         console.log(err)
         alert('Не удалось записаться на услугу')
@@ -338,10 +397,46 @@ export default {
     async removePlan (plan) {
       console.log('deleting')
       try {
-        await deletePlanApi(plan.record.id)
+        await deletePlanApi(plan.id)
+        await this.fetchFreeWindows()
       } catch (err) {
         console.log(err)
         alert('Не удалось удалить услугу')
+      }
+    },
+    async openUpdateDialog (plan) {
+      this.dialogVisibleEdit = true
+      this.editForm.planDateNew = plan
+      this.editForm.planTimeNew = plan
+      this.editForm.editedPlan = plan
+
+      // const data = await getFreeWindowsApi(this.serviceId)
+      // const currentPlan = data.filter((item) => {
+      //   return (item.record.id === plan.record.id)
+      // })
+      // console.log(...currentPlan)
+    },
+    async updatePlan () {
+      console.log('updating')
+      const [year, month, day] = this.editForm.planDateNew.split('-')
+      const [hours, minutes] = this.editForm.planTimeNew.split(':')
+      const payload = {
+        planId: Number(this.editForm.editedPlan.id),
+        year: String(year),
+        month: String(month),
+        day: String(day),
+        hours: String(hours),
+        minutes: String(minutes)
+      }
+      try {
+        await updatePlanApi(payload)
+        this.dialogVisibleEdit = false
+        this.editForm.planTimeNew = ''
+        this.editForm.planDateNew = ''
+        await this.fetchCurrentEntries()
+      } catch (err) {
+        console.log(err)
+        alert('Не удалось изменить услугу')
       }
     }
   }
@@ -446,7 +541,7 @@ p {
 
 .windows__items {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
 }
@@ -463,7 +558,7 @@ p {
   flex-direction: column;
 }
 
-.tab-content__free-windows {
+.tab-content__free-windows, .tab-content__current-entries {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -479,7 +574,7 @@ p {
   }
 }
 
-.free-windows__list{
+.free-windows__list, .current-entries__list{
   margin-top: 30px;
 }
 

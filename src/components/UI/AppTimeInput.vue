@@ -1,12 +1,14 @@
 <template>
-  <div class="time-picker">
-    <input
-      type="time"
-      :value="selectedTime"
-      @input="updateSelectedTime($event.target.value)"
-      :min="minTime"
-      maxlength="4"
+  <div class="input-group">
+    <VeeField as="input"
+              type="time"
+              :value="selectedTime"
+              @input="updateSelectedTime($event.target.value)"
+              :name="name"
+              :rules="`required`"
     >
+    </VeeField>
+    <VeeErrorMessage :name="name" class="error-feedback"></VeeErrorMessage>
   </div>
 </template>
 
@@ -18,9 +20,7 @@ export default {
       type: String,
       default: ''
     },
-    minTime: {
-      type: String
-    }
+    name: String
   },
   data () {
     return {
@@ -37,9 +37,9 @@ export default {
 </script>
 
 <style scoped>
-.time-picker{
+.input-group{
   display: flex;
-  justify-content: end;
+  flex-direction: column;
 }
 .time-picker input[type="time"] {
   height: 40px;

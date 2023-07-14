@@ -19,14 +19,14 @@
             <AppInput v-model="form.password"
                       :type="`password`"
                       :name="`password`"
-                      :rules="`required|min:6`"
+                      :rules="`required`"
                       :placeholder="`Пароль`">
             </AppInput>
           </div>
         </InputRows>
 
         <AppPrimaryBtn
-          style="margin-top: 15px;"
+          style="margin-top: 20px;"
           type="submit">
           Войти
         </AppPrimaryBtn>
@@ -46,7 +46,6 @@
 </template>
 
 <script>
-import { useForm } from 'vee-validate'
 import { useStore } from 'vuex'
 import AppInput from '@/components/UI/AppInput.vue'
 import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
@@ -54,11 +53,14 @@ import AppForm from '@/components/AppForm.vue'
 import InputRows from '@/components/UI/InputRows.vue'
 
 export default {
-  components: { InputRows, AppForm, AppPrimaryBtn, AppInput },
+  components: {
+    InputRows,
+    AppForm,
+    AppPrimaryBtn,
+    AppInput
+  },
   setup () {
     const store = useStore()
-
-    const { resetForm, errors } = useForm()
 
     const form = {
       email: '',
@@ -66,14 +68,11 @@ export default {
     }
 
     const submitForm = () => {
-      if (Object.keys(errors.value).length === 0) {
-        const payload = {
-          email: form.email,
-          password: form.password
-        }
-        store.dispatch('auth/login', payload)
-        resetForm()
+      const payload = {
+        email: form.email,
+        password: form.password
       }
+      store.dispatch('auth/login', payload)
     }
 
     return {

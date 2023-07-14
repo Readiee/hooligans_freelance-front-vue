@@ -8,6 +8,8 @@
 
 <script>
 
+import router from '@/router/router'
+
 export default {
   name: 'HomePage',
   data () {
@@ -16,6 +18,7 @@ export default {
     }
   },
   mounted () {
+    router.push('/services')
   }
 }
 </script>

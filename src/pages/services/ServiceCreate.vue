@@ -99,6 +99,7 @@ export default {
         category: form.value.category,
         duration: form.value.duration
       }
+      console.log(payload)
       try {
         const responseData = await createServiceApi(payload)
         await router.push('/services/' + responseData.id)

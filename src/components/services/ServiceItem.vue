@@ -48,7 +48,7 @@ export default {
       isPublished: Boolean,
       author: {
         name: String,
-        awatar: String
+        avatar: String
       },
       required: true
     }
@@ -56,7 +56,7 @@ export default {
   computed: {
     userImage () {
       const API_URL = 'http://localhost:3000'
-      return `${API_URL}${this.service.author.awatar.substr(1)}`
+      return `${API_URL}${this.service.author.avatar.substr(1)}`
     }
   }
 }

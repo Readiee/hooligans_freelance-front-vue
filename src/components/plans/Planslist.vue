@@ -5,7 +5,9 @@
         :plan="plan"
         :number="index"
         :key="plan.id"
+        :canBeDeleted="canBeDeleted"
         @remove="$emit('remove', plan)"
+        @update="$emit('update', plan)"
       />
     </div>
 </template>
@@ -21,6 +23,10 @@ export default {
     plans: {
       type: Array,
       required: true
+    },
+    canBeDeleted: {
+      type: Boolean,
+      default: true
     }
   }
 }

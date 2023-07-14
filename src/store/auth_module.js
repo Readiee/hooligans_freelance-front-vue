@@ -102,7 +102,7 @@ const mutations = {
       id: data.id,
       name: data.name,
       email: data.email,
-      image: `${API_URL}${data.awatar.substr(1)}`,
+      image: `${API_URL}${data.avatar.substr(1)}`,
       role: data.role
     }
   }

@@ -4,7 +4,7 @@ import userRoutes from '@/router/modules/users'
 import clientsRoutes from '@/router/modules/clients'
 import servicesRoutes from '@/router/modules/services'
 import errorRoutes from '@/router/modules/errors'
-import plansRoutes from '@/router/modules/plans'
+import recordsRoutes from '@/router/modules/records'
 
 import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
@@ -16,7 +16,7 @@ const routes = [
   ...clientsRoutes,
   ...servicesRoutes,
   ...errorRoutes,
-  ...plansRoutes
+  ...recordsRoutes
 ]
 
 const router = createRouter({

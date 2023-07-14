@@ -17,7 +17,7 @@ const axiosInstanceWithCookie = axios.create({
 
 export async function getFreeWindowsApi (id) {
   try {
-    const response = await axiosInstance.get('/products/' + id + '/plans')
+    const response = await axiosInstance.get('/products/plans/' + id)
     console.log(response)
     return response.data
   } catch (err) {
@@ -28,7 +28,7 @@ export async function getFreeWindowsApi (id) {
 
 export async function getCurrentEntriesApi (id) {
   try {
-    const response = await axiosInstanceWithCookie.get('/products/' + id + '/plans/information')
+    const response = await axiosInstanceWithCookie.get('/products/plans/information/' + id)
     console.log(response)
     return response.data
   } catch (err) {
@@ -50,7 +50,7 @@ export async function createPlanApi (payload) {
 
 export async function signUpPlanApi (id) {
   try {
-    const response = await axiosInstanceWithCookie.patch('/plan/singup/' + id)
+    const response = await axiosInstanceWithCookie.patch('/plan/signup/' + id)
     console.log(response)
     return response
   } catch (err) {
@@ -58,9 +58,20 @@ export async function signUpPlanApi (id) {
     throw err
   }
 }
-export async function getRecordsApi () {
+
+export async function cancelRecordApi (id) {
   try {
-    const response = await axiosInstanceWithCookie.get('/users/my-records')
+    const response = await axiosInstanceWithCookie.patch('/plan/cancel/' + id)
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}
+export async function getRecordsApi (userId) {
+  try {
+    const response = await axiosInstanceWithCookie.get('/users/my-records/' + userId)
     console.log(response)
     return response.data //
   } catch (err) {
@@ -71,7 +82,18 @@ export async function getRecordsApi () {
 
 export async function deletePlanApi (id) {
   try {
-    const response = await axiosInstanceWithCookie.delete('/plans/delete/' + id)
+    const response = await axiosInstanceWithCookie.delete('/plan/delete/' + id)
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}
+
+export async function updatePlanApi (payload) {
+  try {
+    const response = await axiosInstanceWithCookie.patch('/plan/update/' + payload.planId, payload)
     console.log(response)
     return response
   } catch (err) {
