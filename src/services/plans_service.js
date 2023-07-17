@@ -37,6 +37,17 @@ export async function getCurrentEntriesApi (id) {
   }
 }
 
+export async function signUpPlanApi (id) {
+  try {
+    const response = await axiosInstanceWithCookie.patch('/plan/signup/' + id)
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}
+
 export async function createPlanApi (payload) {
   try {
     const response = await axiosInstanceWithCookie.post('/plan/create', payload)
@@ -48,9 +59,20 @@ export async function createPlanApi (payload) {
   }
 }
 
-export async function signUpPlanApi (id) {
+export async function deletePlanApi (id) {
   try {
-    const response = await axiosInstanceWithCookie.patch('/plan/signup/' + id)
+    const response = await axiosInstanceWithCookie.delete('/plan/delete/' + id)
+    console.log(response)
+    return response
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}
+
+export async function updatePlanApi (payload) {
+  try {
+    const response = await axiosInstanceWithCookie.patch('/plan/update/' + payload.planId, payload)
     console.log(response)
     return response
   } catch (err) {
@@ -74,28 +96,6 @@ export async function getRecordsApi (userId) {
     const response = await axiosInstanceWithCookie.get('/users/my-records/' + userId)
     console.log(response)
     return response.data //
-  } catch (err) {
-    console.log(err)
-    throw err
-  }
-}
-
-export async function deletePlanApi (id) {
-  try {
-    const response = await axiosInstanceWithCookie.delete('/plan/delete/' + id)
-    console.log(response)
-    return response
-  } catch (err) {
-    console.log(err)
-    throw err
-  }
-}
-
-export async function updatePlanApi (payload) {
-  try {
-    const response = await axiosInstanceWithCookie.patch('/plan/update/' + payload.planId, payload)
-    console.log(response)
-    return response
   } catch (err) {
     console.log(err)
     throw err

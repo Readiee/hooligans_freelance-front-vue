@@ -59,6 +59,12 @@ const clickOnTab = (tabName) => {
   gap: 10px;
 }
 
+.tab-nav-fit-content {
+  .tab-nav__item {
+    width: fit-content;
+  }
+}
+
 .tab-nav__item.selected {
   background-color: @secondary-color;
   outline: none;

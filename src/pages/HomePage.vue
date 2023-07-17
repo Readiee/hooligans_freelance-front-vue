@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <header>
-      <h3>{{ content }}</h3>
     </header>
   </div>
 </template>

@@ -28,7 +28,7 @@ export async function getServicesApi () {
     const response = await axiosInstance.get('/products')
     console.log(response.data)
     // response.data = response.data.map(item => ({
-    //   service: item.element, // ПЕРЕИМЕНВОАТЬ В PRODUCT С НОВЫМ БЭКОМ
+    //   service: item.element
     //   author: item.author
     // }))
     console.log(response.data)

@@ -9,8 +9,6 @@
           </div>
           <p class="user-group__username">{{ service.author.name }}</p>
         </div>
-<!--        <img class="" src="@/assets/images/more_details.svg"-->
-<!--             alt="More Service Details">-->
       </div>
       <p class="service-card__content__title">{{ service.title }}</p>
       <p class="service-card__content__desc">{{ service.description }}</p>

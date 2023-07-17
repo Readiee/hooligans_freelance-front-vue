@@ -44,9 +44,20 @@
           <p>Здесь могут быть ваши работы</p>
         </div>
         <div v-if="selectedTab === 'services'" class="tab-content__services">
+              <div class="tab-content__header">
+                <div class="header__title">
+                  <h2>Ваши услуги</h2>
+                </div>
+                <div class="header__btns">
+                  <router-link to="/services/create">
+                    <app-primary-btn class="header__btns_btn">Создать новую услугу</app-primary-btn>
+                  </router-link>
+                </div>
+              </div>
+              <SearchInput v-model="searchQuery" style="height: 45px;"></SearchInput>
           <div v-if="this.serviceCards.length > 0"
                class="content-block">
-            <service-list class="services-list" :serviceCards="serviceCards"></service-list>
+            <service-list class="services-list" :serviceCards="searchedCards"></service-list>
           </div>
           <p v-else>Здесь могут быть ваши услуги</p>
         </div>
@@ -67,13 +78,15 @@
 import AppTabs from '@/components/UI/AppTabs.vue'
 import AppSecondaryBtn from '@/components/UI/AppSecondaryButton.vue'
 import ServiceList from '@/components/services/ServiceList.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import store from '@/store'
 import { getUserServicesApi } from '@/services/users_service'
+import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
+import SearchInput from '@/components/UI/SearchInput.vue'
 
 export default {
   name: 'ProfilePage',
-  components: { ServiceList, AppSecondaryBtn, AppTabs },
+  components: { SearchInput, AppPrimaryBtn, ServiceList, AppSecondaryBtn, AppTabs },
   setup () {
     const tabs = [
       { name: 'jobs', label: 'Портфолио' },
@@ -98,18 +111,26 @@ export default {
 
     const changeTab = (tabName) => {
       selectedTab.value = tabName
-      if (tabName === 'services') {
+      if (tabName === 'services' && serviceCards.value.length === 0) {
         fetchUserServices()
         console.log(serviceCards.value)
       }
     }
+
+    const searchQuery = ref('')
+
+    const searchedCards = computed(() => {
+      return serviceCards.value.filter(card => card.title.toLocaleLowerCase().includes(searchQuery.value.toLocaleLowerCase()))
+    })
 
     return {
       tabs,
       selectedTab,
       userProfile,
       changeTab,
-      serviceCards
+      serviceCards,
+      searchQuery,
+      searchedCards
     }
   }
 }
@@ -210,10 +231,22 @@ p {
   }
 }
 
+.tab-content__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0;
+}
+
 .services-list {
+  margin-top: 30px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+}
+
+.content-block {
+  justify-content: start;
 }
 
 </style>
