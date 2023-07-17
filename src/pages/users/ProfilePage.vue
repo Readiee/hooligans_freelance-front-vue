@@ -36,7 +36,9 @@
       </div>
     </div>
     <div class="profile__tabs-container">
-      <AppTabs :names="tabs" :selectedTab="selectedTab" @changeTab="changeTab">
+      <AppTabs :names="tabs"
+               :selectedTab="selectedTab"
+               @changeTab="changeTab">
       </AppTabs>
 
       <div class="tab-content">
@@ -54,7 +56,7 @@
                   </router-link>
                 </div>
               </div>
-              <SearchInput v-model="searchQuery" style="height: 45px;"></SearchInput>
+              <SearchInput v-model="searchQuery" style="height: 45px; margin-bottom: 20px;"></SearchInput>
           <div v-if="this.serviceCards.length > 0"
                class="content-block">
             <service-list class="services-list" :serviceCards="searchedCards"></service-list>
