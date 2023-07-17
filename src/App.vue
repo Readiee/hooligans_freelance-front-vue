@@ -172,6 +172,10 @@ a, a:visited, a:hover {
   background-color: white;
   box-shadow: @box-shadow;
   margin-bottom: 20px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
 .navbar__items {
@@ -215,7 +219,8 @@ a, a:visited, a:hover {
 }
 
 .page{
-  flex: 1
+  flex: 1;
+  padding-top: 100px;
 }
 
 footer{
