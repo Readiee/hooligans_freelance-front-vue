@@ -5,7 +5,7 @@
            :value="value"
            :checked="isChecked"
            @change="$emit('update:modelValue', $event.target.value)"/>
-    <label :for="value">{{ value }}</label>
+    <label :for="value">{{ label }}</label>
   </div>
 </template>
 
@@ -15,6 +15,7 @@ import { computed } from 'vue'
 export default {
   name: 'app-radio',
   props: {
+    label: String,
     value: String,
     modelValue: String
   },

@@ -28,7 +28,7 @@ export async function getServicesApi () {
     const response = await axiosInstance.get('/products')
     console.log(response.data)
     // response.data = response.data.map(item => ({
-    //   service: item.element, // ПЕРЕИМЕНВОАТЬ В PRODUCT С НОВЫМ БЭКОМ
+    //   service: item.element
     //   author: item.author
     // }))
     console.log(response.data)
@@ -81,7 +81,7 @@ export async function updateServiceApi (id, payload) {
 
 export async function deleteServiceApi (id) {
   try {
-    const response = await axiosInstancePost.post('products/delete/' + id)
+    const response = await axiosInstancePost.delete('products/delete/' + id)
     console.log(response)
     return response
   } catch (err) {

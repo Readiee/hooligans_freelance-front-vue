@@ -1,12 +1,19 @@
 <template>
-  <div class="date-picker">
-    <input
-      type="date"
-      :value="selectedDate"
-      @input="updateSelectedDate($event.target.value)"
-      :min="minDate"
-      maxlength="8"
+  <div class="input-group">
+    <VeeField as="input"
+              type="date"
+              :value="selectedDate"
+              @input="updateSelectedDate($event.target.value)"
+              @keydown="($event.preventDefault())"
+              :min="minDate"
+              :name="name"
+              :rules="`required`"
     >
+    </VeeField>
+
+    <VeeErrorMessage :name="name"
+                     class="error-feedback"
+                     style="margin-left: auto;"></VeeErrorMessage>
   </div>
 </template>
 
@@ -22,7 +29,8 @@ export default {
     },
     minDate: {
       type: String
-    }
+    },
+    name: String
   },
   setup (props, { emit }) {
     const selectedDate = ref(props.modelValue)
@@ -30,7 +38,9 @@ export default {
     const updateSelectedDate = (date) => {
       if (date > 8) {
         selectedDate.value = date.slice(0, 8)
-      } else selectedDate.value = date
+      } else {
+        selectedDate.value = date
+      }
       emit('update:modelValue', date)
     }
 
@@ -43,7 +53,13 @@ export default {
 </script>
 
 <style scoped lang="less">
-.date-picker input[type="date"] {
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+input[type="date"] {
   width: 100%;
 
   -webkit-appearance: none;

@@ -4,25 +4,36 @@
       <div class="container content-distributed">
 
         <ul class="navbar__items">
-          <li v-if="getLoggedIn" class="nav-item">
-            <router-link to="/clients"
-                         class="nav-link"
-                         :class="{active: activeNavLink === 'clients'}">
-              Клиенты
-            </router-link>
-          </li>
+
           <li class="nav-item">
             <router-link to="/services"
                          class="nav-link"
-                         :class="{active: activeNavLink === 'services'}">
+                         :class="{activeBRUH: activeNavLink === 'services'}">
               Услуги
             </router-link>
           </li>
+
+          <li v-if="getLoggedIn" class="nav-item">
+            <router-link to="/clients"
+                         class="nav-link"
+                         :class="{activeBRUH: activeNavLink === 'clients'}">
+              Клиенты
+            </router-link>
+          </li>
+
+          <li v-if="getLoggedIn" class="nav-item">
+            <router-link to="/records"
+                         class="nav-link"
+                         :class="{activeBRUH: activeNavLink === 'records'}">
+              Мои заказы
+            </router-link>
+          </li>
+
         </ul>
 
         <router-link to="/"
                      class="nav-link"
-                     :class="{active: activeNavLink === 'home'}"
+                     :class="{activeBRUH: activeNavLink === 'home'}"
                      style="position: absolute; left: 50%; font-weight: 700;">
           Logo
         </router-link>
@@ -41,10 +52,11 @@
         </ul>
 
         <ul v-else class="navbar__items">
+
           <li class="nav-item">
             <router-link to="/profile"
                          class="nav-link user-group"
-                         :class="{active: activeNavLink === 'profile'}">
+                         :class="{activeBRUH: activeNavLink === 'profile'}">
               <div class="user-group__avatar">
                 <img :src="getUserProfile.image" alt="User Avatar">
               </div>
@@ -160,6 +172,10 @@ a, a:visited, a:hover {
   background-color: white;
   box-shadow: @box-shadow;
   margin-bottom: 20px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
 .navbar__items {
@@ -203,7 +219,8 @@ a, a:visited, a:hover {
 }
 
 .page{
-  flex: 1
+  flex: 1;
+  padding-top: 100px;
 }
 
 footer{
@@ -274,6 +291,21 @@ input[type=radio]{
 i {
   &:hover {
     filter: brightness(0.8);
+  }
+}
+
+.error-feedback {
+  margin-top: 5px;
+  color: red;
+  font-size: 12px;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: default;
+
+  &:hover {
+    filter: brightness(1);
   }
 }
 

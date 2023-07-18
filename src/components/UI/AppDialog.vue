@@ -39,7 +39,7 @@ export default {
 
 .dialog__content {
   margin: auto;
-  padding: 60px;
+  padding: 40px;
   background: white;
   border-radius: 12px;
   min-width: 300px;

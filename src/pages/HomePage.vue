@@ -1,12 +1,13 @@
 <template>
   <div class="container">
     <header>
-      <h3>{{ content }}</h3>
     </header>
   </div>
 </template>
 
 <script>
+
+import router from '@/router/router'
 
 export default {
   name: 'HomePage',
@@ -16,6 +17,7 @@ export default {
     }
   },
   mounted () {
+    router.push('/services')
   }
 }
 </script>

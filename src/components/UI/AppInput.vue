@@ -74,10 +74,4 @@ textarea:focus {
   border-color: #007bff;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
 }
-
-.error-feedback {
-  margin-top: 5px;
-  color: red;
-  font-size: 12px;
-}
 </style>

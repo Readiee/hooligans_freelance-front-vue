@@ -1,29 +1,29 @@
 <template>
   <div>
     <div class="search">
-      <input v-model="search" placeholder="Search..." class="search_input">
+      <search-input
+        placeholder="Поиск..."
+        v-model="search"
+        class="search-input"
+      ></search-input>
     </div>
     <div>
-      <div v-for="serviceCard in filteredList" :key="serviceCard.id">
-        <a :href="serviceCard.link" target="_blank">
-          <div style="margin-top: 96px;" v-if="serviceCards.length > 0" class="content-block">
-            <service-list class="services-list" :serviceCards="serviceCards"></service-list>
-          </div>
-          <div v-else class="service-notfound">
-          <p>No services available on the website yet.</p>
-          </div>
-        </a>
+      <div style="margin-top: 96px;" v-if="filteredList.length > 0" class="content-block">
+        <service-list class="services-list" :serviceCards="filteredList"></service-list>
+      </div>
+      <div v-else class="service-notfound">
+        <p>По запросу "{{ this.search }}" ничего не найдено.</p>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import ServiceList from '@/components/services/ServiceList.vue'
 import { getServicesApi } from '@/services/services_service'
+import SearchInput from '@/components/UI/SearchInput.vue'
 
 export default {
-  components: { ServiceList },
+  components: { SearchInput, ServiceList },
   data () {
     return {
       search: '',
@@ -32,6 +32,8 @@ export default {
   },
 
   mounted () {
+    const searchParam = this.$route.query.search || ''
+    this.search = searchParam.toString()
     this.fetchServices()
   },
 
@@ -51,7 +53,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .search {
   display: inline-flex;
   align-items: center;
@@ -60,22 +62,10 @@ export default {
   height: fit-content;
   background: none;
   justify-content: center;
-}
-
-.search_input {
-  padding: 14px 391px 15px 40px;
-  align-items: center;
-  gap: 20px;
-  border-radius: 10px;
-  border: 1px solid rgba(1, 1, 1, 0.30);
-  background-image: url("@/assets/svg/search_icon.svg");
-  background-repeat: no-repeat;
-  background-position: 20px center;
-  background-color: #fff;
-  box-shadow: none;
-}
-.search_input::placeholder{
-  transform: translateX(10px);
+  .search-input {
+    margin: 0 auto;
+    width: 60%;
+  }
 }
 
 .content-block {
@@ -84,7 +74,6 @@ export default {
 }
 
 .services-list {
-  margin-left: 65px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
@@ -98,5 +87,9 @@ export default {
   line-height: normal;
   justify-content: center;
   margin-top: 50px;
+
+  p {
+    font-size: @font-size-medium;
+  }
 }
 </style>

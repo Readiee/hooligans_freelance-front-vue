@@ -9,8 +9,6 @@
           </div>
           <p class="user-group__username">{{ service.author.name }}</p>
         </div>
-<!--        <img class="" src="@/assets/images/more_details.svg"-->
-<!--             alt="More Service Details">-->
       </div>
       <p class="service-card__content__title">{{ service.title }}</p>
       <p class="service-card__content__desc">{{ service.description }}</p>
@@ -48,7 +46,7 @@ export default {
       isPublished: Boolean,
       author: {
         name: String,
-        awatar: String
+        avatar: String
       },
       required: true
     }
@@ -56,7 +54,7 @@ export default {
   computed: {
     userImage () {
       const API_URL = 'http://localhost:3000'
-      return `${API_URL}${this.service.author.awatar.substr(1)}`
+      return `${API_URL}${this.service.author.avatar.substr(1)}`
     }
   }
 }

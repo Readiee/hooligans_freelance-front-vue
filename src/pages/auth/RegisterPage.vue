@@ -44,7 +44,7 @@
         </InputRows>
 
         <AppPrimaryBtn
-          style="margin-top: 15px;"
+          style="margin-top: 20px;"
           type="submit">
           Зарегистрироваться
         </AppPrimaryBtn>

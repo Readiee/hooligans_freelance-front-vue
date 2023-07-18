@@ -1,6 +1,7 @@
 import { defineRule, configure, Field, Form, ErrorMessage } from 'vee-validate'
 import { localize, setLocale } from '@vee-validate/i18n'
 import AllRules from '@vee-validate/rules'
+
 // import ru from '@vee-validate/i18n/dist/locale/ru.json'
 
 export default function setupVeeValidate (app) {
@@ -10,6 +11,18 @@ export default function setupVeeValidate (app) {
 
   Object.keys(AllRules).forEach(rule => {
     defineRule(rule, AllRules[rule])
+  })
+
+  defineRule('date_format', value => {
+    if (!value || !value.length) {
+      return true
+    }
+
+    const regexPattern = /^(0[1-9]|1\d|2\d|3[01]):(0[1-9]|1[0-2]):(19|20)\d{2}$/
+    if (regexPattern.test(String(value)) || value.length !== 10) {
+      return 'Поле должно иметь формат DD:MM:YYYY.' + value.length
+    }
+    return true
   })
 
   configure({

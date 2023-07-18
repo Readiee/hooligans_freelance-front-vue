@@ -289,12 +289,4 @@ export default {
   }
 }
 
-.disabled {
-  opacity: 0.5;
-  cursor: default;
-
-  &:hover {
-    filter: brightness(1);
-  }
-}
 </style>

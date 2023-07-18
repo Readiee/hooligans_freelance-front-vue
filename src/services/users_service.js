@@ -16,7 +16,7 @@ const axiosInstancePatch = axios.create({
 // Обновить аватар
 export async function updateProfileMainInfoAvatarApi (payload) {
   try {
-    const response = await axiosInstancePatch.patch('users/awatar', payload, {
+    const response = await axiosInstancePatch.patch('users/avatar', payload, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -78,7 +78,7 @@ export async function getUserProfileApi (id) {
 // Получение услуг пользователя
 export async function getUserServicesApi (id) {
   try {
-    const response = await axiosInstance.get('users/' + id + '/products')
+    const response = await axiosInstance.get('users/products/' + id)
     console.log(response.data)
     return response.data
   } catch (err) {
