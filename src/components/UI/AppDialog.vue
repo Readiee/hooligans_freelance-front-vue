@@ -7,19 +7,26 @@
 </template>
 
 <script>
-import toggleMixin from '@/mixins/toggleMixin'
 
 export default {
-  name: 'my-dialog',
-  mixins: [toggleMixin],
-  mounted () {
-
+  name: 'app-dialog',
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    hideDialog () {
+      this.$emit('update:show', false)
+    }
   }
 }
 </script>
 
 <style>
 .dialog {
+  z-index: 200;
   position: fixed;
   top: 0;
   left: 0;
@@ -33,7 +40,7 @@ export default {
 
 .dialog__content {
   margin: auto;
-  padding: 20px;
+  padding: 40px;
   background: white;
   border-radius: 12px;
   min-width: 300px;

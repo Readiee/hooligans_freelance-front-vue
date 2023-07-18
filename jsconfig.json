@@ -18,6 +18,5 @@
       "dom.iterable",
       "scripthost"
     ]    
-  },
-  "include": ["typings"]
+  }
 }

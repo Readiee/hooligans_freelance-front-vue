@@ -1,11 +1,17 @@
-import MyButton from '@/components/UI/MyButton'
-import MyInput from '@/components/UI/MyInput'
-import MyDialog from '@/components/UI/MyDialog'
-import MySelect from '@/components/UI/MySelect'
+import AppButton from '@/components/UI/AppPrimaryButton'
+import AppInput from '@/components/UI/AppInput'
+import AppDialog from '@/components/UI/AppDialog'
+import AppSelect from '@/components/UI/AppSelect'
+import AppSecondaryButton from '@/components/UI/AppSecondaryButton'
+import AppTabs from '@/components/UI/AppTabs.vue'
+import AppVerticalTabs from '@/components/UI/AppVerticalTabs'
 
 export default [
-  MyButton,
-  MyInput,
-  MyDialog,
-  MySelect
+  AppButton,
+  AppInput,
+  AppDialog,
+  AppSelect,
+  AppSecondaryButton,
+  AppTabs,
+  AppVerticalTabs
 ]

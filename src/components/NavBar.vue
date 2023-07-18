@@ -1,32 +1,61 @@
 <template>
   <div class="navbar">
-    <div @click="$router.push('/')">Logo</div>
-    <div class="navbar__btns">
-      <my-button @click="$router.push('/')">Вкладка</my-button>
-      <my-button @click="$router.push('/')" style="margin-left: 15px;">Вкладка</my-button>
-      <my-button @click="$router.push('/')" style="margin-left: 15px;">Вкладка</my-button>
-    </div>
+<!--    <div class="container">-->
+<!--      <a href="/">Logo</a>-->
+<!--      <div class="navbar__items">-->
+<!--        <li class="nav-item">-->
+<!--          <router-link to="/home" class="nav-link">-->
+<!--            Главная-->
+<!--          </router-link>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <router-link v-if="currentUser" to="/user" class="nav-link">User</router-link>-->
+<!--        </li>-->
+<!--      </div>-->
+
+<!--      <div v-if="!currentUser" class="navbar__items">-->
+<!--        <li class="nav-item">-->
+<!--          <router-link to="/register" class="nav-link">-->
+<!--            Регистрация-->
+<!--          </router-link>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <router-link to="/login" class="nav-link">-->
+<!--            Войти-->
+<!--          </router-link>-->
+<!--        </li>-->
+<!--      </div>-->
+
+<!--      <div v-if="currentUser" class="navbar__items">-->
+<!--        <li class="nav-item">-->
+<!--          <router-link to="/profile" class="nav-link">-->
+<!--            {{ currentUser.name }} {{ currentUser.surname }}-->
+<!--          </router-link>-->
+<!--        </li>-->
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link" @click.prevent="logOut">-->
+<!--            Выход-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
 <script>
-export default {
-  components: {}
 
-}
 </script>
 
 <style>
 .navbar {
-  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
   background-color: lightgray;
   box-shadow: 2px 2px 4px gray;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0px 15px;
 }
 
-.navbar__btns {
+.navbar__items {
 }
 </style>

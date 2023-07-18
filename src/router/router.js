@@ -1,16 +1,39 @@
-import MainPage from '@/pages/MainPage'
+import homeRoutes from '@/router/modules/home'
+import authRoutes from '@/router/modules/auth'
+import userRoutes from '@/router/modules/users'
+import clientsRoutes from '@/router/modules/clients'
+import servicesRoutes from '@/router/modules/services'
+import errorRoutes from '@/router/modules/errors'
+import recordsRoutes from '@/router/modules/records'
+
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/store'
 
 const routes = [
-  {
-    path: '/',
-    component: MainPage
-  }
+  ...homeRoutes,
+  ...authRoutes,
+  ...userRoutes,
+  ...clientsRoutes,
+  ...servicesRoutes,
+  ...errorRoutes,
+  ...recordsRoutes
 ]
 
 const router = createRouter({
   routes,
   history: createWebHistory(process.env.BASE_URL)
+})
+
+router.beforeEach(async (to, from, next) => {
+  await store.dispatch('auth/auth')
+  const loggedIn = store.getters['auth/getLoggedIn']
+
+  if (!to.meta.middleware) {
+    return next()
+  }
+  if (to.name !== 'login' && to.name !== 'register' && !loggedIn) return next({ name: 'login' })
+  else if ((to.name === 'login' || to.name === 'register') && loggedIn) return next({ name: 'home' })
+  else return next()
 })
 
 export default router
