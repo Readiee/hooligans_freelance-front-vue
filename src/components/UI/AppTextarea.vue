@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'app-input',
+  name: 'AppTextarea',
   props: {
     modelValue: [String, Number],
     type: {
@@ -38,9 +38,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .input-group{
   width: 100%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
 }
 
 input[type=text]{
@@ -57,7 +60,7 @@ input[type=text]{
 
 textarea {
   width: 100%;
-  height: 200px;
+  height: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -72,7 +75,7 @@ textarea:focus {
 }
 
 textarea::placeholder {
-  color: #999;
+  color: @non-active-color
 }
 
 input[type=textarea]{

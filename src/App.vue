@@ -226,7 +226,7 @@ a, a:visited, a:hover {
 footer{
   border-top: 1px solid #ccc;
   align-self: center;
-  margin-top: 40px;
+  margin-top: 60px;
   height:100px;
 }
 
@@ -241,21 +241,6 @@ footer{
   left: 50%;
   transform: translate(-50%, -50%);
   margin: auto;
-}
-
-.card {
-  margin: 0 auto;
-  width: 1000px;
-  display: flex;
-  background-color: white;
-  padding: 50px;
-  border-radius: @border-radius;
-  box-shadow: @box-shadow;
-  justify-content: space-between;
-}
-
-.card-img {
-  height: 480px;
 }
 
 .user-group{
@@ -307,6 +292,17 @@ i {
   &:hover {
     filter: brightness(1);
   }
+}
+
+.card {
+  margin: 0 auto;
+  width: 1000px;
+  display: flex;
+  background-color: white;
+  padding: 50px;
+  border-radius: @border-radius;
+  box-shadow: @box-shadow;
+  justify-content: space-between;
 }
 
 </style>

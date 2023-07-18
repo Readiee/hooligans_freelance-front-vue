@@ -6,15 +6,15 @@ const props = defineProps({
     required: true
   },
   selectedTab: {
-    type: String,
+    type: Object,
     required: false
   }
 })
 
 const emit = defineEmits(['changeTab'])
 
-const clickOnTab = (tabName) => {
-  emit('changeTab', tabName)
+const clickOnTab = (tab) => {
+  emit('changeTab', tab)
 }
 </script>
 
@@ -23,8 +23,8 @@ const clickOnTab = (tabName) => {
       <span
         v-for="tab in names"
         :key="tab.name"
-        :class="['tab-nav__item', {'selected': tab.name === selectedTab}]"
-        @click="clickOnTab(tab.name)"
+        :class="['tab-nav__item', {'selected': tab.name === selectedTab.name}]"
+        @click="clickOnTab(tab)"
       >
         {{ tab.label }}
       </span>
@@ -35,6 +35,7 @@ const clickOnTab = (tabName) => {
 .tab-nav {
   width: 100%;
   display: flex;
+  justify-content: start;
   gap: 15px;
   border-radius: 10px;
 }
@@ -52,7 +53,7 @@ const clickOnTab = (tabName) => {
   outline-offset: -1px;
   transition: background-color 0.2s;
   color: black;
-  font-size: @font-size-medium;
+  font-size: @font-size-small;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -63,6 +64,21 @@ const clickOnTab = (tabName) => {
   .tab-nav__item {
     width: fit-content;
   }
+}
+
+.small-tabs {
+  gap: 10px;
+  .tab-nav__item {
+    height: 30px;
+    padding: 15px;
+  }
+}
+
+.tab-nav-centered {
+  justify-content: center;
+}
+.tab-nav-wrap {
+  flex-wrap: wrap;
 }
 
 .tab-nav__item.selected {

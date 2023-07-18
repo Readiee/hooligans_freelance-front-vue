@@ -45,6 +45,8 @@ export default {
 <style scoped>
 .input-group{
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 input{
@@ -61,7 +63,7 @@ input{
 
 textarea {
   width: 100%;
-  height: 200px;
+  height: 150px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
