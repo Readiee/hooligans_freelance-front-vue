@@ -2,7 +2,7 @@
   <div class="record-card">
     <div class="record-card__content">
       <div v-if="record.datetime" class="record-card__content__header">
-        <h3>{{ record.datetime }}</h3>
+        <h3>{{ stringToDate(record.datetime) }}</h3>
       </div>
       <p class="record-card__content__title">{{ record.product.title }}</p>
       <p class="record-card__content__desc">{{ record.product.description }}</p>
@@ -25,26 +25,22 @@
 <script>
 import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
 import AppRedBtn from '@/components/UI/AppRedButton.vue'
+import { getImageUrl } from '@/hooks/imageUrl'
+import { dateToString } from '../../hooks/dateToString'
 
 export default {
   name: 'record-item',
+  methods: { stringToDate: dateToString },
   components: { AppRedBtn, AppPrimaryBtn },
   props: {
     record: {
       datetime: String,
       product: {
-        id: Number,
-        image: String,
-        createdAt: String,
-        updatedAt: String,
         places: String,
-        category: String,
         duration: String,
         title: String,
         cost: String,
         description: String,
-        authorId: Number,
-        isPublished: Boolean,
         author: {
           name: String,
           avatar: String
@@ -55,8 +51,7 @@ export default {
   },
   computed: {
     userImage () {
-      const API_URL = 'http://localhost:3000'
-      return `${API_URL}${this.record.author.avatar.substr(1)}`
+      return getImageUrl(this.record.product.author.avatar())
     }
   }
 }

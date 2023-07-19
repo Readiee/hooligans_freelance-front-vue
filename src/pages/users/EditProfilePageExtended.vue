@@ -15,7 +15,7 @@
       <div class="content-block__right">
         <div class="tab-content">
 
-          <div id="main-information" v-if="selectedTab === 'mainInformation'">
+          <div id="main-information" v-if="selectedTab.name === 'mainInformation'">
             <AppForm>
               <div class="form__inputs">
                 <div class="form__inputs__avatar" style="margin-right: 20px;">
@@ -54,7 +54,7 @@
             </AppForm>
           </div>
 
-          <div v-if="selectedTab === 'aboutMe'">
+          <div v-if="selectedTab.name === 'aboutMe'">
             <AppForm>
               <div class="form__inputs">
                 <InputRows>
@@ -71,15 +71,15 @@
             </AppForm>
           </div>
 
-          <div v-if="selectedTab === 'url'">
+          <div v-if="selectedTab.name === 'url'">
             Здесь могут быть отзывы о вас.
           </div>
 
-          <div v-if="selectedTab === 'exp'">
+          <div v-if="selectedTab.name === 'exp'">
             Здесь могут быть клиенты для которых вы выполняли работу.
           </div>
 
-          <div v-if="selectedTab === 'account'">
+          <div v-if="selectedTab.name === 'account'">
             Здесь могут быть клиенты для которых вы выполняли работу.
           </div>
         </div>
@@ -125,7 +125,8 @@ export default {
         { name: 'exp', label: 'Опыт работы' },
         { name: 'account', label: 'Управление аккаунтом' }
       ],
-      selectedTab: 'mainInformation',
+      // selectedTab: this.tabs[0],
+      selectedTab: { name: 'mainInformation', label: 'Основная информация' },
       forms: {
         mainInformation: {
           texts: {
@@ -195,8 +196,8 @@ export default {
         console.log('Тут должна быть логика обновления AboutMe')
       }
     },
-    changeTab (tabName) {
-      this.selectedTab = tabName
+    changeTab (tab) {
+      this.selectedTab = tab
     },
     uploadImage (e) {
       const image = e.target.files[0]

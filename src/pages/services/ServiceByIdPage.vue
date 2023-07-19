@@ -50,19 +50,19 @@
       </div>
       <div class="details__item">
         <p>Категория</p>
-        <h3>{{ service.category }}</h3>
+        <h3>{{ service.category.label }}</h3>
       </div>
       <div class="details__item">
         <p>Длительность</p>
         <h3>{{ service.duration }}</h3>
       </div>
       <div class="details__item">
-        <p>Последнее посещение</p>
-        <h3>{{ service.updatedAt }}</h3>
+        <p>Последнее изменение</p>
+        <h3>{{ stringToDate(( service.updatedAt )) }}</h3>
       </div>
       <div class="details__item">
-        <p>На портале с</p>
-        <h3>{{ service.createdAt }}</h3>
+        <p>Дата создания</p>
+        <h3>{{ stringToDate(( service.createdAt )) }}</h3>
       </div>
     </section>
 
@@ -73,7 +73,7 @@
       <div class="windows__items" v-if="freeWindows.length > 0">
         <app-radio v-for="window in freeWindows"
                    :key="window.id"
-                   :label="window.datetime"
+                   :label="stringToDate(window.datetime)"
                    :value="String(window.id)"
                    v-model="selectedWindowId">
         </app-radio>
@@ -101,19 +101,19 @@
         </div>
         <div class="details__item">
           <p>Категория</p>
-          <h3>{{ service.category }}</h3>
+          <h3>{{ service.category.label }}</h3>
         </div>
         <div class="details__item">
           <p>Длительность</p>
           <h3>{{ service.duration }}</h3>
         </div>
         <div class="details__item">
-          <p>Последнее посещение</p>
-          <h3>{{ service.updatedAt }}</h3>
+          <p>Последнее изменение</p>
+          <h3>{{ stringToDate(( service.updatedAt )) }}</h3>
         </div>
         <div class="details__item">
-          <p>На портале с</p>
-          <h3>{{ service.createdAt }}</h3>
+          <p>Дата создания</p>
+          <h3>{{ stringToDate(( service.createdAt )) }}</h3>
         </div>
       </div>
 
@@ -127,7 +127,7 @@
 
         <div class="windows-block__tab-content">
 
-          <div v-if="selectedTab === 'freeWindows' && store.getters['auth/getLoggedIn']"
+          <div v-if="selectedTab.name === 'freeWindows' && store.getters['auth/getLoggedIn']"
                class="tab-content__free-windows">
             <div v-if="this.freeWindows.length > 0">
               <PlanList class="free-windows__list"
@@ -142,7 +142,7 @@
             </div>
           </div>
 
-          <div v-if="selectedTab === 'currentEntries'" class="tab-content__current-entries">
+          <div v-if="selectedTab.name === 'currentEntries'" class="tab-content__current-entries">
             <div v-if="this.currentEntries.length > 0">
               <PlanList class="current-entries__list"
                         :plans="currentEntries"
@@ -256,6 +256,7 @@ import { roundTime } from '@/hooks/roundTime'
 import PlanList from '@/components/plans/Planslist.vue'
 import router from '@/router/router'
 import AppRedBtn from '@/components/UI/AppRedButton.vue'
+import { dateToString } from '../../hooks/dateToString'
 
 export default {
   components: { AppRedBtn, PlanList, AppTimePicker, AppDatePicker, InputRows, AppForm, AppDialog, AppTabs, AppPrimaryBtn, AppRadio, AppImage },
@@ -264,10 +265,10 @@ export default {
       service: {
         id: Number,
         image: String,
-        createdAt: String,
-        updatedAt: String,
+        createdAt: Date,
+        updatedAt: Date,
         places: String,
-        category: String,
+        category: Object,
         duration: String,
         title: String,
         cost: String,
@@ -286,7 +287,7 @@ export default {
         { name: 'freeWindows', label: 'Свободные окна' },
         { name: 'currentEntries', label: 'Текущие записи' }
       ],
-      selectedTab: 'freeWindows',
+      selectedTab: { name: 'freeWindows', label: 'Свободные окна' },
       freeWindows: [],
       currentEntries: [],
       planDate: '',
@@ -327,6 +328,7 @@ export default {
     }
   },
   methods: {
+    stringToDate: dateToString,
     async setCreatorId () {
       this.creatorId = await getCreatorId(this.serviceId)
     },
@@ -337,7 +339,7 @@ export default {
     async deleteService () {
       try {
         await deleteServiceApi(this.serviceId)
-        this.$router.push('/services')
+        this.$router.push('/profile')
       } catch (err) {
         alert('Не удалось удалить услугу.')
         this.$router.push('/services/' + this.serviceId)
@@ -350,12 +352,12 @@ export default {
     async fetchCurrentEntries () {
       this.currentEntries = await getCurrentEntriesApi(this.serviceId)
     },
-    async changeTab (tabName) {
-      this.selectedTab = tabName
-      if (tabName === 'freeWindows') {
+    async changeTab (tab) {
+      this.selectedTab = tab
+      if (tab.name === 'freeWindows') {
         await this.fetchFreeWindows()
       }
-      if (tabName === 'currentEntries') {
+      if (tab.name === 'currentEntries') {
         await this.fetchCurrentEntries()
       }
     },

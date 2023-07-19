@@ -11,28 +11,14 @@
       </div>
       <div class="edit__profile">
         <router-link to="/edit_profile">
-          <app-secondary-btn>Редактировать профиль</app-secondary-btn>
+          <app-secondary-btn style="margin-bottom: 20px;">Редактировать профиль</app-secondary-btn>
         </router-link>
       </div>
-      <div class="profile__infr">
+      <div v-for="infoPosition in infos" :key="infoPosition.title" class="profile__infr">
         <div class="profile__position">
-          <p>Почта</p>
-          <h4>{{ userProfile.email }}</h4>
+          <p>{{ infoPosition.title }}</p>
+          <h4>{{ infoPosition.value }}</h4>
         </div>
-
-        <div class="profile__position">
-          <p>Почта</p>
-          <h4>{{ userProfile.email }}</h4>
-        </div>
-
-        <div class="profile__position">
-          <p>Почта</p>
-          <h4>{{ userProfile.email }}</h4>
-        </div>
-        <!--        <div class="profile__position">-->
-        <!--          <p>Компания</p>-->
-        <!--          <h4>{{ userProfile.company }}</h4>-->
-        <!--        </div>-->
       </div>
     </div>
     <div class="profile__tabs-container">
@@ -42,10 +28,10 @@
       </AppTabs>
 
       <div class="tab-content">
-        <div v-if="selectedTab === 'jobs'">
+        <div v-if="selectedTab.name === 'jobs'">
           <p>Здесь могут быть ваши работы</p>
         </div>
-        <div v-if="selectedTab === 'services'" class="tab-content__services">
+        <div v-if="selectedTab.name === 'services'" class="tab-content__services">
               <div class="tab-content__header">
                 <div class="header__title">
                   <h2>Ваши услуги</h2>
@@ -64,11 +50,11 @@
           <p v-else>Здесь могут быть ваши услуги</p>
         </div>
 
-        <div v-if="selectedTab === 'reviews'">
+        <div v-if="selectedTab.name === 'reviews'">
           <p>Здесь могут быть отзывы о вас.</p>
         </div>
 
-        <div v-if="selectedTab === 'clients'">
+        <div v-if="selectedTab.name === 'clients'">
           <p>Здесь могут быть клиенты для которых вы выполняли работу.</p>
         </div>
       </div>
@@ -96,7 +82,7 @@ export default {
       { name: 'reviews', label: 'Отзывы' },
       { name: 'clients', label: 'Клиенты' }
     ]
-    const selectedTab = ref('jobs')
+    const selectedTab = ref(tabs[0])
 
     const userProfile = store.getters['auth/getUserProfile']
 
@@ -111,9 +97,9 @@ export default {
       serviceCards.value = data
     }
 
-    const changeTab = (tabName) => {
-      selectedTab.value = tabName
-      if (tabName === 'services' && serviceCards.value.length === 0) {
+    const changeTab = (tab) => {
+      selectedTab.value = tab
+      if (tab.name === 'services' && serviceCards.value.length === 0) {
         fetchUserServices()
         console.log(serviceCards.value)
       }
@@ -125,6 +111,14 @@ export default {
       return serviceCards.value.filter(card => card.title.toLocaleLowerCase().includes(searchQuery.value.toLocaleLowerCase()))
     })
 
+    const infos = computed(() => {
+      return [
+        { title: 'Имя', value: userProfile.name },
+        { title: 'Почта', value: userProfile.email }
+        // { name: userProfile.company, label: 'company' }
+      ]
+    })
+
     return {
       tabs,
       selectedTab,
@@ -132,7 +126,8 @@ export default {
       changeTab,
       serviceCards,
       searchQuery,
-      searchedCards
+      searchedCards,
+      infos
     }
   }
 }
@@ -201,8 +196,6 @@ p {
 }
 
 .profile__position {
-  margin-top: 30px;
-
   h4 {
     margin-top: 5px;
   }

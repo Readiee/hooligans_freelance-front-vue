@@ -3,8 +3,8 @@
     <li
       v-for="tab in names"
       :key="tab.name"
-      :class="[{'selected': tab.name === selectedTab}]"
-      @click="clickOnTab(tab.name)"
+      :class="[{'selected': tab.name === selectedTab.name}]"
+      @click="clickOnTab(tab)"
     >{{ tab.label }}
     </li>
   </ul>
@@ -19,13 +19,13 @@ export default {
       required: true
     },
     selectedTab: {
-      type: String,
+      type: Object,
       required: false
     }
   },
   setup (props, { emit }) {
-    const clickOnTab = (tabName) => {
-      emit('changeTab', tabName)
+    const clickOnTab = (tab) => {
+      emit('changeTab', tab)
     }
 
     return {

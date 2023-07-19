@@ -89,3 +89,15 @@ export async function deleteServiceApi (id) {
     throw err
   }
 }
+
+export async function getProductsByCategoryApi (category) {
+  try {
+    console.log(category)
+    const response = await axiosInstance.get('/category/products/' + String(category.id))
+    console.log(response.data)
+    return response.data
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}

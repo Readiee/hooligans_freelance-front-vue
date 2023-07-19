@@ -30,9 +30,6 @@ const actions = {
       // alert('Регистрация прошла успешно! Теперь вы можете войти в свой аккаунт.')
       await router.push('/login')
     } catch (err) {
-      if (err.code === 'ERR_BAD_REQUEST') {
-        // alert(err.message)
-      }
       console.log(err)
       alert(err.message)
     }
@@ -42,12 +39,10 @@ const actions = {
     try {
       const response = await loginApi(payload)
       console.log(response)
-      await router.push('/home')
+      await router.push({ name: 'services' })
     } catch (err) {
-      if (err.code === 'ERR_BAD_REQUEST') {
-        // alert(err.message)
-      }
       console.log(err.message)
+      alert(err.message)
     }
   },
 

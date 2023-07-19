@@ -6,7 +6,7 @@
       </div>
       <div class="plan-row__date">
         <p>
-          {{ plan.datetime }}
+          {{ stringToDate(plan.datetime) }}
         </p>
       </div>
     </div>
@@ -36,8 +36,10 @@
 
 <script>
 import { getImageUrl } from '@/hooks/imageUrl'
+import { dateToString } from '../../hooks/dateToString'
 
 export default {
+  methods: { stringToDate: dateToString },
   props: {
     number: {
       type: Number,
