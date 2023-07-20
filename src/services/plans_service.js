@@ -70,9 +70,9 @@ export async function deletePlanApi (id) {
   }
 }
 
-export async function updatePlanApi (payload) {
+export async function updatePlanApi (planId, payload) {
   try {
-    const response = await axiosInstanceWithCookie.patch('/plan/update/' + payload.planId, payload)
+    const response = await axiosInstanceWithCookie.patch('/plan/update/' + planId, payload)
     console.log(response)
     return response
   } catch (err) {

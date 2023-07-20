@@ -2,7 +2,7 @@
   <TheTab :info="info">
     <InputRows>
       <div class="input-row">
-        <AppInput placeholder="Название услуги" rules="required|max:30" name="title" type="text"/>
+        <AppInput placeholder="Название услуги" rules="required|max:50" name="title" type="text"/>
       </div>
       <div class="input-row">
         <AppTextarea placeholder="Описание" rules="required|max:400" name="desc" type="textarea"/>

@@ -91,11 +91,7 @@ export default {
   display: flex;
   justify-content: center;
 }
-.services-list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
+
 .search{
   display: inline-flex;
   align-items: center;

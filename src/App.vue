@@ -13,13 +13,13 @@
             </router-link>
           </li>
 
-          <li v-if="getLoggedIn" class="nav-item">
-            <router-link to="/clients"
-                         class="nav-link"
-                         :class="{activeBRUH: activeNavLink === 'clients'}">
-              Клиенты
-            </router-link>
-          </li>
+<!--          <li v-if="getLoggedIn" class="nav-item">-->
+<!--            <router-link to="/clients"-->
+<!--                         class="nav-link"-->
+<!--                         :class="{activeBRUH: activeNavLink === 'clients'}">-->
+<!--              Клиенты-->
+<!--            </router-link>-->
+<!--          </li>-->
 
           <li v-if="getLoggedIn" class="nav-item">
             <router-link to="/records"
@@ -286,8 +286,8 @@ i {
 }
 
 .disabled {
+  pointer-events: none;
   opacity: 0.5;
-  cursor: default;
 
   &:hover {
     filter: brightness(1);

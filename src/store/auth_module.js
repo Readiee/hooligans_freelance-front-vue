@@ -8,7 +8,8 @@ const state = () => ({
     name: '',
     email: '',
     image: '',
-    role: 'User'
+    role: 'User',
+    company: null
   }
 })
 
@@ -31,7 +32,7 @@ const actions = {
       await router.push('/login')
     } catch (err) {
       console.log(err)
-      alert(err.message)
+      alert(err.response.data.message)
     }
   },
 
@@ -41,8 +42,9 @@ const actions = {
       console.log(response)
       await router.push({ name: 'services' })
     } catch (err) {
-      console.log(err.message)
-      alert(err.message)
+      console.log(err.response.data.message)
+      console.log(err.response.data.message)
+      alert(err.response.data.message)
     }
   },
 
@@ -82,7 +84,7 @@ const actions = {
       console.log(response)
       commit('setUserProfile', response.data)
     } catch (err) {
-      alert(err.message)
+      alert(err.response.data.message)
       console.log(err)
     }
   }
@@ -98,7 +100,8 @@ const mutations = {
       name: data.name,
       email: data.email,
       image: `${API_URL}${data.avatar.substr(1)}`,
-      role: data.role
+      role: data.role,
+      company: data.company
     }
   }
 }
