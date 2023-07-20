@@ -15,7 +15,7 @@ const axiosWithCookieInstance = axios.create({
 // Обновить аватар
 export async function inviteEmployeeApi (payload) {
   try {
-    const response = await axiosWithCookieInstance.post('/company/create_employee/' + payload.id, {
+    const response = await axiosWithCookieInstance.post('company/create_employee/' + payload.id, {
       email: payload.email
     })
     console.log(response)
@@ -38,7 +38,8 @@ export async function getAllEmployeesApi (idCompany) {
 
 export async function checkHashApi (payload) {
   try {
-    const response = await axiosInstance.get('company/infoEmployee/', payload)
+    console.log(payload)
+    const response = await axiosInstance.post('company/infoEmployee', payload)
     console.log(response)
     return response.data
   } catch (err) {
@@ -49,7 +50,19 @@ export async function checkHashApi (payload) {
 
 export async function registerEmployeeApi (payload) {
   try {
-    const response = await axiosInstance.post('company/registerEmployee', payload)
+    const response = await axiosInstance.patch('company/registerEmployee', payload)
+    console.log(response)
+    return response.data
+  } catch (err) {
+    console.log(err)
+    alert(err.response.data.message)
+  }
+}
+export async function fireEmployeeApi (companyId, employeeId) {
+  try {
+    const response = await axiosWithCookieInstance.patch('company/fire_employee/' + companyId, {
+      employeeId
+    })
     console.log(response)
     return response.data
   } catch (err) {

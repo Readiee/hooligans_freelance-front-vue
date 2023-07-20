@@ -1,4 +1,4 @@
-import { computed, onMounted, onUpdated, ref } from 'vue'
+import { computed, onBeforeUpdate, onMounted, ref } from 'vue'
 import { getAllEmployeesApi } from '@/services/companies_service'
 
 export default function useCompanyEmployees (companyId) {
@@ -6,16 +6,14 @@ export default function useCompanyEmployees (companyId) {
   const fetching = async () => {
     try {
       const responseData = await getAllEmployeesApi(companyId)
-      console.log(responseData)
       companyEmployees.value = responseData.filter(employee => employee.role !== 'Leader')
-      console.log(companyEmployees.value)
     } catch (err) {
       console.log(err)
     }
   }
 
   onMounted(fetching)
-  onUpdated(fetching)
+  onBeforeUpdate(fetching)
 
   const currentEmployees = computed(() => {
     return companyEmployees.value.filter(employee => employee.name !== null)
@@ -42,6 +40,6 @@ export default function useCompanyEmployees (companyId) {
   })
 
   return {
-    currentEmployees, employeesSearchQuery, searchedEmployees, currentInvites, inviteSearchQuery, searchedInvites
+    fetching, currentEmployees, employeesSearchQuery, searchedEmployees, currentInvites, inviteSearchQuery, searchedInvites
   }
 }

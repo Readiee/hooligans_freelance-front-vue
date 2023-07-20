@@ -42,7 +42,7 @@
             </template>
             <template v-slot:end>
               <router-link to="/services/create">
-                <app-primary-btn class="header__btns_btn">Создать новую услугу</app-primary-btn>
+                <app-primary-btn v-if="role !== 'Сотрудник'" class="header__btns_btn">Создать новую услугу</app-primary-btn>
               </router-link>
             </template>
           </ContentHeader>
@@ -103,7 +103,10 @@
                         type="text"/>
             </InputRows>
             <div class="form__btns" style="margin-top: 30px;">
-              <AppPrimaryBtn type="submit">Отправить приглашение</AppPrimaryBtn>
+              <AppPrimaryBtn type="submit">
+                <span v-if="invitationIsSent">Отправить приглашение</span>
+                <i v-else class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+              </AppPrimaryBtn>
             </div>
           </AppForm>
         </AppDialog>
@@ -228,7 +231,7 @@ export default {
           ]]
         case 'Employee':
           return [...defaultPositions, ...[
-            // { title: 'Компания', value: userProfile.company.name }
+            { title: 'Компания', value: userProfile.company.name }
           ]]
         default:
           return false
@@ -254,8 +257,10 @@ export default {
     })
     const inviteEmployeeDialogVisible = ref(false)
     const companyId = userProfile.company ? userProfile.company.id : 0
+    const invitationIsSent = ref(true)
 
     const inviteEmployee = async () => {
+      invitationIsSent.value = false
       // const payload = JSON.stringify(forms.value.inviteEmployee)
       const payload = {
         id: companyId,
@@ -269,11 +274,14 @@ export default {
         console.log(err)
       } finally {
         inviteEmployeeDialogVisible.value = false
-        inviteEmployeeForm.value.email
+        inviteEmployeeForm.value.email = ''
+        invitationIsSent.value = true
+        await fetching()
       }
     }
 
     const {
+      fetching,
       currentEmployees,
       employeesSearchQuery,
       searchedEmployees,
@@ -283,9 +291,12 @@ export default {
     } = useCompanyEmployees(companyId)
 
     return {
+      fetching,
       inviteEmployeeDialogVisible,
       inviteEmployee,
       inviteEmployeeForm,
+
+      invitationIsSent,
 
       tabs,
       selectedTab,

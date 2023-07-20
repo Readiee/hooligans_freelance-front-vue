@@ -260,6 +260,9 @@ export default {
       return store.getters['auth/getLoggedIn'] &&
         (store.getters['auth/getUserProfile'].id === this.creatorId || store.getters['auth/getUserProfile'].role === 'Admin')
     },
+    role () {
+      return store.getters['auth/getLoggedIn']
+    },
     store () {
       return store
     },
