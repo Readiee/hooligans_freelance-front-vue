@@ -6,8 +6,10 @@
     <div class="user-group__text">
       <div class="user-group__text__level">
         <h3>{{ main }}</h3>
-        <h4>·</h4>
-        <p v-if="interpunct">{{ interpunct }}</p>
+        <template v-if="interpunct">
+          <h4>·</h4>
+          <p>{{ interpunct }}</p>
+        </template>
       </div>
       <div v-if="desc" class="user-group__text__level">
         <p>{{ desc }}</p>

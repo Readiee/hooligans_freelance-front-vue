@@ -20,7 +20,7 @@ export default [
     }
   },
   {
-    path: '/register/:hash',
+    path: '/register/employee',
     name: 'registerEmployee',
     component: EmployeeRegisterPage,
     meta: {

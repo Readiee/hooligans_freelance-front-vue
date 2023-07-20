@@ -4,7 +4,7 @@
               :main="employee.email"
               :desc="employee.name"/>
     <div class="btns">
-      <app-red-btn @click="$emit('fireEmployee', employee)">Уволить</app-red-btn>
+      <app-red-btn @click="fireEmployee">Уволить</app-red-btn>
     </div>
   </div>
 </template>
@@ -13,6 +13,7 @@
 import UserItem from '@/components/users/UserItem.vue'
 import { getImageUrl } from '@/hooks/imageUrl'
 import AppRedBtn from '@/components/UI/AppRedButton.vue'
+import { fireEmployeeApi } from '@/services/companies_service'
 
 export default {
   components: { AppRedBtn, UserItem },
@@ -23,8 +24,17 @@ export default {
       required: true
     }
   },
-  setup () {
-    return {}
+  setup (props) {
+    const fireEmployee = async () => {
+      const employeeId = props.employee.id
+      const companyId = props.employee.company.id
+      try {
+        await fireEmployeeApi(companyId, employeeId)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    return { fireEmployee }
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <AppForm @submit="submitForm">
       <h3>Logo</h3>
       <h1 style="margin: 30px 0 10px;">Регистрация</h1>
-      <p style="margin-bottom: 10px;">Вы были приглашены компанией {{ c }}.</p>
+      <p style="margin-bottom: 10px;">Вы были приглашены компанией <strong>{{ company.name }}</strong>.</p>
       <p style="margin-bottom: 30px;">Зарегистрируйтесь, чтобы стать сотрудником компании.</p>
 
       <InputRows>
@@ -61,6 +61,7 @@ import { checkHashApi, registerEmployeeApi } from '@/services/companies_service'
 import router from '@/router/router'
 import { loginApi } from '@/services/auth_service'
 import { useRoute } from 'vue-router'
+import store from '@/store'
 
 export default {
   components: { TheCard, InputRows, AppPrimaryBtn, AppForm, AppInput },
@@ -71,22 +72,26 @@ export default {
     })
 
     const route = useRoute()
-    const hash = route.query
+    const hash = route.query.hash
     // const hash = getHashFromUrl(window.location.href)
     const company = ref('')
 
     onMounted(async () => {
-      console.log(hash)
-      const payload = JSON.stringify(hash)
-      console.log(payload)
-      try {
-        console.log('lfjl;asdf;lsk')
-        // const responseData = await checkHashApi(payload)
-        // company.value = responseData.company.name
-        // console.log(responseData)
-      } catch (err) {
-        console.log(err)
-        await router.push({ name: 'login' })
+      if (store.getters['auth/getLoggedIn']) {
+        await router.push({ name: 'home' })
+      } else {
+        console.log(hash)
+        const payload = { hash }
+        console.log(payload)
+        try {
+          console.log('checkingHash')
+          const responseData = await checkHashApi(payload)
+          company.value = responseData.company
+          console.log(responseData)
+        } catch (err) {
+          console.log(err)
+          // await router.push({ name: 'login' })
+        }
       }
     })
 
@@ -97,6 +102,7 @@ export default {
         password: form.value.password
       }
       try {
+        console.log(payload)
         const responseData = await registerEmployeeApi(payload)
         console.log(responseData)
         const loginPayload = {
@@ -122,6 +128,9 @@ export default {
 <style scoped lang="less">
 p {
   color: @non-active-color
+}
+strong {
+  //color: black;
 }
 form {
   width: 400px;
