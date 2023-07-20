@@ -38,8 +38,7 @@
     </section>
 
     <!--    Для других юзеров -->
-    <section class="content-block details-block"
-             v-if="!hasRights">
+    <section class="content-block details-block">
       <div class="details__item">
         <p>Место</p>
         <h3>{{ service.places }}</h3>
@@ -67,55 +66,18 @@
     </section>
 
     <!--    Для других юзеров -->
-    <section class="content-block windows-block"
-             v-if="!hasRights">
-      <h2 style="margin-bottom: 30px;">Свободные окна</h2>
-      <div class="windows__items" v-if="freeWindows.length > 0">
-        <app-radio v-for="window in freeWindows"
-                   :key="window.id"
-                   :label="stringToDate(window.datetime)"
-                   :value="String(window.id)"
-                   v-model="selectedWindowId">
-        </app-radio>
-      </div>
-      <p v-else>Пока что нет свободных окон для записи.</p>
-      <AppPrimaryBtn @click="signPlanUp"
-                     v-if="freeWindows.length > 0"
-                     style="width: fit-content; margin-top: 30px; margin-left: auto;"
-                     :disabled="!selectedWindowId"
-                     :class="{ disabled: !selectedWindowId }"
-      >Записаться</AppPrimaryBtn>
-    </section>
+    <!-- Это для всех   -->
+    <FreeWindows
+        v-if="!hasRights"
+        :freeWindows="freeWindows"
+        :selectedWindowId="selectedWindowId"
+        @update:selectedWindowId="updateSelectedWindowId"
+    />
 
     <!--    Для админа и креатора-->
+    <!--    Два отдельных компонента, перенсти freeWindows, current. Стили перенести-->
     <section class="content-block details-windows-block-for-creator"
              v-if="hasRights && store.getters['auth/getLoggedIn']">
-      <div class="details-block">
-        <div class="details__item">
-          <p>Место</p>
-          <h3>{{ service.places }}</h3>
-        </div>
-        <div class="details__item">
-          <p>Языки</p>
-          <h3>{{ service.language }}Русский</h3>
-        </div>
-        <div class="details__item">
-          <p>Категория</p>
-          <h3>{{ service.category.label }}</h3>
-        </div>
-        <div class="details__item">
-          <p>Длительность</p>
-          <h3>{{ service.duration }}</h3>
-        </div>
-        <div class="details__item">
-          <p>Последнее изменение</p>
-          <h3>{{ stringToDate(( service.updatedAt )) }}</h3>
-        </div>
-        <div class="details__item">
-          <p>Дата создания</p>
-          <h3>{{ stringToDate(( service.createdAt )) }}</h3>
-        </div>
-      </div>
 
       <div class="windows-block">
         <div class="windows-block__header">
@@ -127,33 +89,29 @@
 
         <div class="windows-block__tab-content">
 
-          <div v-if="selectedTab.name === 'freeWindows' && store.getters['auth/getLoggedIn']"
-               class="tab-content__free-windows">
-            <div v-if="this.freeWindows.length > 0">
-              <PlanList class="free-windows__list"
-                        :plans="freeWindows"
-                        @remove="removePlan"
-                        @update="openUpdateDialog"
-              ></PlanList>
-            </div>
-            <p style="text-align: center" v-else>Нет сеансов.</p>
-            <div class="tab-content__footer">
-              <h4 @click="dialogVisibleCreate = true">+ Добавить окно</h4>
-            </div>
-          </div>
+<!--          <div v-if="selectedTab.name === 'freeWindows' && store.getters['auth/getLoggedIn']" class="tab-content__free-windows">-->
+<!--            <FreeWindowsBlock v-if="this.freeWindows.length > 0" :freeWindows="freeWindows" @openCreateWindowDialog="openCreateWindowDialog" @openEditWindowDialog="openEditWindowDialog" @removePlan="removePlan">-->
+<!--&lt;!&ndash;              событие ссылающие на открытие модалки&ndash;&gt;-->
+<!--            </FreeWindowsBlock>-->
+<!--          </div>-->
+          <FreeWindowsBlock
+              v-if="selectedTab.name === 'freeWindows' && store.getters['auth/getLoggedIn']"
+              :freeWindows="freeWindows"
+              @openCreateWindowDialog="openCreateWindowDialog"
+              @openEditWindowDialog="openEditWindowDialog"
+              @removePlan="removePlan"
+          ></FreeWindowsBlock>
+          <CurrentEntries
+              v-else-if="selectedTab.name === 'currentEntries'"
+              :currentEntries="currentEntries"
+              @openUpdateDialog="openUpdateDialog"
+          ></CurrentEntries>
 
-          <div v-if="selectedTab.name === 'currentEntries'" class="tab-content__current-entries">
-            <div v-if="this.currentEntries.length > 0">
-              <PlanList class="current-entries__list"
-                        :plans="currentEntries"
-                        :can-be-deleted="false"
-                        @update="openUpdateDialog"
-              ></PlanList>
-            </div>
-            <p style="text-align: center" v-else>Нет записавшихся клиентов.</p>
-            <div class="tab-content__footer">
-            </div>
-          </div>
+<!--          <div v-if="selectedTab.name === 'currentEntries'" class="tab-content__current-entries">-->
+<!--           <CurrentEntries :currentEntries="currentEntries" v-if="this.currentEntries.length > 0" @openEditWindowDialog="openUpdateDialog" >-->
+<!--             &lt;!&ndash;              событие ссылающие на редактирование модалки&ndash;&gt;-->
+<!--           </CurrentEntries>-->
+<!--          </div>-->
 
         </div>
       </div>
@@ -231,7 +189,6 @@ import { deleteServiceApi, getServiceByIdApi } from '@/services/services_service
 import store from '@/store'
 import AppImage from '@/components/UI/AppImage.vue'
 import { getImageUrl } from '@/hooks/imageUrl'
-import AppRadio from '@/components/UI/AppRadio.vue'
 import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
 import { getCreatorId } from '@/hooks/getServiceCreatorId'
 import AppTabs from '@/components/UI/AppTabs.vue'
@@ -253,13 +210,16 @@ import AppTimePicker from '@/components/UI/AppTimeInput.vue'
 import { currentDate } from '@/hooks/currentDate'
 import { currentTime } from '@/hooks/currentTime'
 import { roundTime } from '@/hooks/roundTime'
-import PlanList from '@/components/plans/Planslist.vue'
 import router from '@/router/router'
 import AppRedBtn from '@/components/UI/AppRedButton.vue'
 import { dateToString } from '../../hooks/dateToString'
+import FreeWindows from '@/components/services/byIdService/FreeWindows.vue'
+import FreeWindowsBlock from '@/components/services/byIdService/FreeWindowsBlock.vue'
+import { ref } from 'vue'
+import CurrentEntries from '@/components/services/byIdService/CurrentEntries.vue'
 
 export default {
-  components: { AppRedBtn, PlanList, AppTimePicker, AppDatePicker, InputRows, AppForm, AppDialog, AppTabs, AppPrimaryBtn, AppRadio, AppImage },
+  components: { CurrentEntries, FreeWindowsBlock, AppRedBtn, AppTimePicker, AppDatePicker, InputRows, AppForm, AppDialog, AppTabs, AppPrimaryBtn, AppImage, FreeWindows },
   data () {
     return {
       service: {
@@ -287,7 +247,7 @@ export default {
         { name: 'freeWindows', label: 'Свободные окна' },
         { name: 'currentEntries', label: 'Текущие записи' }
       ],
-      selectedTab: { name: 'freeWindows', label: 'Свободные окна' },
+      // selectedTab: { name: 'freeWindows', label: 'Свободные окна' },
       freeWindows: [],
       currentEntries: [],
       planDate: '',
@@ -327,7 +287,38 @@ export default {
       return getImageUrl(this.service.author.avatar)
     }
   },
+  setup () {
+    const tabs = [
+      {
+        number: 1,
+        name: 'FreeWindow',
+        label: 'Свободные окна',
+        component: FreeWindowsBlock
+      },
+      {
+        number: 2,
+        name: 'CurrentEntrie',
+        label: 'Текущие записи',
+        component: CurrentEntries
+      }
+    ]
+    const selectedTab = ref(tabs[0])
+    return {
+      tabs,
+      selectedTab
+    }
+  },
   methods: {
+    updateSelectedWindowId (windowId) {
+      this.selectedWindowId = windowId
+    },
+    openCreateWindowDialog () {
+      // Открываем модальное окно при вызове события @openCreateWindowDialog
+      this.dialogVisibleCreate = true
+    },
+    openEditWindowDialog () {
+      this.dialogVisibleEdit = true
+    },
     stringToDate: dateToString,
     async setCreatorId () {
       this.creatorId = await getCreatorId(this.serviceId)
@@ -413,8 +404,8 @@ export default {
     },
     async openUpdateDialog (plan) {
       this.dialogVisibleEdit = true
-      this.editForm.planDateNew = plan
-      this.editForm.planTimeNew = plan
+      this.editForm.planDateNew = plan.planDate
+      this.editForm.planTimeNew = plan.planTime
       this.editForm.editedPlan = plan
 
       // const data = await getFreeWindowsApi(this.serviceId)
@@ -503,7 +494,6 @@ p {
 .details-windows-block-for-creator {
   height: max-content;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
 
@@ -583,19 +573,6 @@ p {
 
 .free-windows__list, .current-entries__list{
   margin-top: 30px;
-}
-
-.tab-content__footer {
-  margin-top: auto;
-  align-self: flex-end;
-  width: 100%;
-  * {
-    color: #8554D8;
-    cursor: pointer;
-    &:hover {
-      filter: brightness(0.9);
-    }
-  }
 }
 
 .input-row {

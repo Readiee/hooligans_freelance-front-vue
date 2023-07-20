@@ -15,6 +15,7 @@
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
     "primeicons": "^6.0.1",
+    "primevue": "^3.30.1",
     "vee-validate": "^4.10.5",
     "vue": "^3.2.13",
     "vue-cookies": "^1.8.3",

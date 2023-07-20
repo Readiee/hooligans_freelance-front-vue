@@ -1,20 +1,3 @@
-<!--<template>-->
-<!--  <div>-->
-<!--    <div class="search_content">-->
-<!--    <AppTabs style="margin-top: 50px; margin-left: 35px;" :names="tabs" :selectedTab="selectedTab" @changeTab="changeTab">-->
-<!--      <div class="title">-->
-<!--      </div>-->
-<!--    </AppTabs>-->
-<!--    </div>-->
-<!--    <div style="margin-top: 96px;" v-if="this.serviceCards.length > 0"-->
-<!--         class="content-block">-->
-<!--      <service-list class="services-list"-->
-<!--                    :serviceCards="this.serviceCards">-->
-<!--      </service-list>-->
-<!--    </div>-->
-<!--    <p v-else>Пока что на сайте нет ни одной услуги.</p>-->
-<!--  </div>-->
-<!--</template>-->
 <template>
   <div>
     <div class="search_content">

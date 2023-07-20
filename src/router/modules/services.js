@@ -3,6 +3,7 @@ import ServiceCreate from '@/pages/services/ServiceCreate.vue'
 import ServiceByIdPage from '@/pages/services/ServiceByIdPage.vue'
 import ServiceEdit from '@/pages/services/ServiceEdit.vue'
 import ServiceSearch from '@/pages/services/ServiceSearch.vue'
+import ServiceByIdPageExtended from '@/pages/services/ServiceByIdPageExtended.vue'
 
 export default [
   {
@@ -43,6 +44,14 @@ export default [
     name: 'services_search',
     meta: {
       middleware: false
+    }
+  },
+  {
+    path: '/servicesx/:id',
+    component: ServiceByIdPageExtended,
+    name: 'service_by_idx',
+    meta: {
+      middleware: false // Публичная
     }
   }
 ]
