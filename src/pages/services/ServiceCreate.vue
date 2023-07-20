@@ -12,7 +12,7 @@
       ></AppTabs>
       <AppForm @submit="submitForm">
 
-        <!--        <component :is="selectedTab.component" style="margin-top: 20px;"></component>-->
+<!--        <component :is="selectedTab.component" style="margin-top: 20px;"></component>-->
 
         <!--Первый таб-->
         <div v-show="selectedTab.number === 1" class="card tab-block">
@@ -22,7 +22,7 @@
           </div>
           <div class="tab-block__end">
             <InputRows>
-              <AppInput v-model="form.title" placeholder="Название услуги" rules="required|max:30" name="title"
+              <AppInput v-model="form.title" placeholder="Название услуги" rules="required|max:50" name="title"
                         type="text" />
               <AppTextarea v-model="form.description" placeholder="Описание" rules="required|max:400" name="desc"
                            type="textarea" />
@@ -44,8 +44,8 @@
           </div>
           <div class="tab-block__end">
             <InputRows>
-              <AppInput v-model="form.format" placeholder="Формат" rules="required|max:30" name="format" type="text" />
-              <AppInput v-model="form.places" placeholder="Место" rules="required|max:30" name="places" type="text" />
+              <AppInput v-model="form.format" placeholder="Формат" rules="required|max:50" name="format" type="text" />
+              <AppInput v-model="form.places" placeholder="Место" rules="required|max:50" name="places" type="text" />
             </InputRows>
           </div>
         </div>
@@ -58,9 +58,9 @@
           </div>
           <div class="tab-block__end">
             <InputRows>
-              <!--                <AppInput v-model="form.category" placeholder="Категория" rules="required|max:30" name="category" type="text"/>-->
+              <!--                <AppInput v-model="form.category" placeholder="Категория" rules="required|max:50" name="category" type="text"/>-->
               <AppInput v-model="form.cost" placeholder="Цена" rules="required|integer" name="cost" type="text" />
-              <AppInput v-model="form.duration" placeholder="Длительность" rules="required|max:30" name="duration" type="text" />
+              <AppInput v-model="form.duration" placeholder="Длительность" rules="required|max:50" name="duration" type="text" />
             </InputRows>
 
             <h4 style="margin: 40px 0 20px;">Выберите категорию:</h4>
@@ -77,10 +77,12 @@
                        class="btn"
                        @click.prevent="selectedTab = tabs.find(tab => tab.number === selectedTab.number + 1)">Далее
         </AppPrimaryBtn>
-        <AppPrimaryBtn v-if="selectedTab.name === tabs[tabs.length - 1].name"
-                       class="btn"
-                       type="submit">Отправить
-        </AppPrimaryBtn>
+        <ValidatorButton v-if="selectedTab.name === tabs[tabs.length - 1].name"
+                         class="btn"
+                         type="submit">
+          <AppPrimaryBtn>Отправить</AppPrimaryBtn>
+        </ValidatorButton>
+
       </AppForm>
     </div>
   </div>
@@ -100,9 +102,11 @@ import AppInput from '@/components/UI/AppInput.vue'
 import InputRows from '@/components/UI/InputRows.vue'
 import useCategories from '@/hooks/useCategories'
 import formatAndLocationTab from '@/components/services/createService/FormatAndLocationTab.vue'
+import ValidatorButton from '@/components/UI/ValidatorButton.vue'
 
 export default {
   components: {
+    ValidatorButton,
     InputRows,
     AppInput,
     AppTextarea,

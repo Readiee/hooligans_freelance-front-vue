@@ -1,5 +1,6 @@
 import LoginPage from '@/pages/auth/LoginPage.vue'
 import RegisterPage from '@/pages/auth/RegisterPage.vue'
+import EmployeeRegisterPage from '@/pages/auth/EmployeeRegisterPage.vue'
 
 export default [
   {
@@ -16,6 +17,14 @@ export default [
     component: RegisterPage,
     meta: {
       middleware: true // Только для неавторизованных
+    }
+  },
+  {
+    path: '/register/:hash',
+    name: 'registerEmployee',
+    component: EmployeeRegisterPage,
+    meta: {
+      middleware: false // Только для неавторизованных
     }
   }
 ]
