@@ -34,8 +34,8 @@
         <router-link to="/"
                      class="nav-link"
                      :class="{activeBRUH: activeNavLink === 'home'}"
-                     style="position: absolute; left: 50%; font-weight: 700;">
-          Logo
+                     style="position: absolute; margin: 0; left: 50%; top: 50%; transform: translate(-50%, -50%); font-weight: 700;">
+          RECORDUM
         </router-link>
 
         <ul v-if="!getLoggedIn" class="navbar__items">

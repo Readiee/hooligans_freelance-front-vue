@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <header>
-      <router-link to="/profile">Назад в профиль</router-link>
+      <router-link to="/profile" style="align-items: center">
+        <i class="icon pi pi-arrow-left" style="margin-right: 8px;"></i>
+        Назад в профиль
+      </router-link>
     </header>
     <div class="content-block">
       <AppTabs :names="tabs"
@@ -44,7 +47,14 @@
           </div>
           <div class="tab-block__end">
             <InputRows>
-              <AppInput v-model="form.format" placeholder="Формат" rules="required|max:50" name="format" type="text" />
+<!--              <AppInput v-model="form.format" placeholder="Формат" rules="required|max:50" name="format" type="text" />-->
+              <h4 style="margin-bottom: 20px;">Выберите формат:</h4>
+              <AppTabs :names="formats"
+                       @changeTab="form.format = $event"
+                       :selected-tab="form.format"
+                       class="tab-nav-fit-content small-tabs tab-nav-wrap"
+                       style="margin-bottom: 40px;"
+              ></AppTabs>
               <AppInput v-model="form.places" placeholder="Место" rules="required|max:50" name="places" type="text" />
             </InputRows>
           </div>
@@ -138,10 +148,16 @@ export default {
     const selectedTab = ref(tabs[0])
     const { categories } = useCategories()
 
+    const formats = ref([
+      { id: 1, name: 'online', label: 'Онлайн' },
+      { id: 2, name: 'offline', label: 'Оффлайн' }
+    ])
+
     const form = ref({
       title: '',
       description: '',
       places: '',
+      format: formats.value[0], // хуй
       category: { id: 1, name: 'Other', label: 'Другое' },
       duration: '',
       cost: ''
@@ -215,7 +231,8 @@ export default {
       submitForm,
       inputsExamples,
       form,
-      categories
+      categories,
+      formats
     }
   }
 }

@@ -73,7 +73,7 @@
 
           <SearchInput v-model="employeesSearchQuery" style="height: 45px; margin-bottom: 20px;"></SearchInput>
           <div v-if="currentEmployees.length > 0" class="content-block">
-            <employee-list :employees="searchedEmployees"></employee-list>
+            <employee-list :employees="searchedEmployees" @employeeFired="fetching"></employee-list>
           </div>
           <p v-else class="billet-block">У вашей компании пока нет сотрудников.</p>
 
@@ -105,7 +105,7 @@
             <div class="form__btns" style="margin-top: 30px;">
               <AppPrimaryBtn type="submit">
                 <span v-if="invitationIsSent">Отправить приглашение</span>
-                <i v-else class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                <i v-else class="pi pi-spin pi-spinner" style="font-size: 1.5rem"></i>
               </AppPrimaryBtn>
             </div>
           </AppForm>

@@ -2,9 +2,10 @@
   <div class="container" v-if="isLoaded">
     <header>
 <!--      <div @click="$router.push({ name: 'service_by_id_edit', params: { id: serviceId } })">-->
-      <div @click="$router.push(backRoute)">
+      <router-link :to="backRoute" style="align-items: center">
+        <i class="icon pi pi-arrow-left" style="margin-right: 8px;"></i>
         Назад к услуге
-      </div>
+      </router-link>
     </header>
 
     <div class="content-block">
@@ -48,7 +49,14 @@
           </div>
           <div class="tab-block__end">
             <InputRows>
-              <AppInput v-model="form.format" placeholder="Формат" rules="required|max:50" name="format" type="text" />
+<!--              <AppInput v-model="form.format" placeholder="Формат" rules="required|max:50" name="format" type="text" />-->
+              <h4 style="margin-bottom: 20px;">Выберите формат:</h4>
+              <AppTabs :names="formats"
+                       @changeTab="form.format = $event"
+                       :selected-tab="form.format"
+                       class="tab-nav-fit-content small-tabs tab-nav-wrap"
+                       style="margin-bottom: 40px;"
+              ></AppTabs>
               <AppInput v-model="form.places" placeholder="Место" rules="required|max:50" name="places" type="text" />
             </InputRows>
           </div>
@@ -153,10 +161,16 @@ export default {
     const selectedTab = ref(tabs[0])
     const { categories } = useCategories()
 
+    const formats = ref([
+      { id: 1, name: 'online', label: 'Онлайн' },
+      { id: 2, name: 'offline', label: 'Оффлайн' }
+    ])
+
     const form = ref({
       title: '',
       description: '',
       places: '',
+      format: formats.value[0],
       category: {
         id: 1,
         name: 'Other',
@@ -176,7 +190,7 @@ export default {
       const payload = {
         title: form.value.title,
         description: form.value.description,
-        // format: form.value.places,
+        // format: form.value.format,
         places: form.value.places,
         categoryId: form.value.category.id,
         duration: form.value.duration,
@@ -219,6 +233,7 @@ export default {
         form.value.category = data.category
         form.value.places = data.places
         form.value.duration = data.duration
+        form.value.format = 'Онлайн'
         isLoaded.value = true
       } else {
         await router.push('/services/' + serviceId)
@@ -234,7 +249,8 @@ export default {
       form,
       categories,
       isLoaded,
-      serviceId
+      serviceId,
+      formats
     }
   }
 }
