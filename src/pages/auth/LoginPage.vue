@@ -1,7 +1,7 @@
 <template>
   <TheCard image-name="reg_form_img.png">
       <AppForm @submit="submitForm" >
-        <h3>Logo</h3>
+        <h3>RECORDUM</h3>
         <h1 style="margin: 40px 0">Авторизация</h1>
 
         <InputRows>
@@ -85,6 +85,6 @@ export default {
 
 <style scoped lang="less">
 form {
-  width: 350px;
+  width: 400px;
 }
 </style>

@@ -5,6 +5,7 @@
         v-if="employee.role !== 'Leader'"
         :employee="employee"
         :key="employee.id"
+        @employeeFired="$emit('employeeFired')"
       />
     </template>
   </div>

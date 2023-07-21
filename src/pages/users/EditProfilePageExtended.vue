@@ -2,6 +2,7 @@
   <div class="container">
     <header>
       <router-link to="/profile">
+        <i class="icon pi pi-arrow-left" style="margin-right: 12px;"></i>
         <span>Назад в профиль</span>
       </router-link>
     </header>

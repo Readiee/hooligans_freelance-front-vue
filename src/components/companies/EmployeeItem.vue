@@ -24,7 +24,7 @@ export default {
       required: true
     }
   },
-  setup (props) {
+  setup (props, { emit }) {
     const fireEmployee = async () => {
       const employeeId = props.employee.id
       const companyId = props.employee.company.id
@@ -32,6 +32,8 @@ export default {
         await fireEmployeeApi(companyId, employeeId)
       } catch (err) {
         console.log(err)
+      } finally {
+        emit('employeeFired')
       }
     }
     return { fireEmployee }

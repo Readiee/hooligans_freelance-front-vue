@@ -1,7 +1,7 @@
 <template>
   <TheCard image-name="reg_form_img.png">
     <AppForm @submit="submitForm">
-      <h3>Logo</h3>
+      <h3>RECORDUM</h3>
       <h1 style="margin: 30px 0 10px;">Регистрация</h1>
       <p style="margin-bottom: 10px;">Вы были приглашены компанией <strong>{{ company.name }}</strong>.</p>
       <p style="margin-bottom: 30px;">Зарегистрируйтесь, чтобы стать сотрудником компании.</p>
