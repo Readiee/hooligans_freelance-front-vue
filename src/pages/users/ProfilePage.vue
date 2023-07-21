@@ -234,7 +234,7 @@ export default {
             { title: 'Компания', value: userProfile.company.name }
           ]]
         default:
-          return false
+          return [...defaultPositions]
       }
     })
 
@@ -246,6 +246,8 @@ export default {
           return 'Компания'
         case 'Employee':
           return 'Сотрудник'
+        case 'Admin':
+          return 'Администратор'
         default:
           return false
       }
