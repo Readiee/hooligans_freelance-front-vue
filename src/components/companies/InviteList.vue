@@ -31,7 +31,7 @@ export default {
   width: 100%;
   margin: 0;
   > *:not(:last-child) {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 }
 </style>

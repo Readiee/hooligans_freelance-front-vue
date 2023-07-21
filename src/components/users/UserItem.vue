@@ -54,8 +54,8 @@ export default {
 }
 
 .user-group__avatar {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
@@ -68,7 +68,7 @@ export default {
 }
 
 .user-group__username {
-  margin-left: 10px;
+  margin-left: 14px;
   font-size: @font-size-small;
   font-weight: 400;
 }

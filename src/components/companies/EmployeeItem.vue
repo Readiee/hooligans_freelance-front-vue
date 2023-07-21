@@ -4,7 +4,7 @@
               :main="employee.email"
               :desc="employee.name"/>
     <div class="btns">
-      <app-red-btn @click="fireEmployee">Уволить</app-red-btn>
+      <app-red-btn style="padding: 10px 18px; " @click="fireEmployee">Уволить</app-red-btn>
     </div>
   </div>
 </template>
