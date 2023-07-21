@@ -33,5 +33,8 @@ export default {
 .list-container {
   margin: 0;
   width: 100%;
+  > *:not(:last-child) {
+    margin-bottom: 10px;
+  }
 }
 </style>
