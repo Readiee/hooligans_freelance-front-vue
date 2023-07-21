@@ -128,7 +128,7 @@ export default {
   background: rgba(133, 84, 216, 0.2);
   font-weight: 700;
 
-  P {
+  p {
     color: @secondary-color;
   }
 }

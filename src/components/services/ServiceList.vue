@@ -1,5 +1,5 @@
 <template>
-  <div v-if="serviceCards.length > 0" class="card-container">
+  <div v-if="serviceCards.length > 0" class="card-container services-list">
     <service-item
       v-for="card in serviceCards"
       :service="card"
@@ -29,5 +29,11 @@ export default {
 .card-container {
   margin: 0;
   width: fit-content;
+}
+
+.services-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 </style>

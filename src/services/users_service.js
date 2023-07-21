@@ -66,9 +66,9 @@ export async function updateProfileAboutMeApi (payload) {
 // Получение информации о пользователе
 export async function getUserProfileApi (id) {
   try {
-    const response = await axiosInstance.get('users/' + id)
+    const response = await axiosInstance.get('users/information/' + id)
     console.log(response)
-    return response
+    return response.data
   } catch (err) {
     console.log(err)
     // alert(err.message)

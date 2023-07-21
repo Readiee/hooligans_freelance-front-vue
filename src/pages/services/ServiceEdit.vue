@@ -2,9 +2,10 @@
   <div class="container" v-if="isLoaded">
     <header>
 <!--      <div @click="$router.push({ name: 'service_by_id_edit', params: { id: serviceId } })">-->
-      <div @click="$router.push(backRoute)">
+      <router-link :to="backRoute" style="align-items: center">
+        <i class="icon pi pi-arrow-left" style="margin-right: 8px;"></i>
         Назад к услуге
-      </div>
+      </router-link>
     </header>
 
     <div class="content-block">
@@ -26,7 +27,7 @@
           </div>
           <div class="tab-block__end">
             <InputRows>
-              <AppInput v-model="form.title" placeholder="Название услуги" rules="required|max:30" name="title"
+              <AppInput v-model="form.title" placeholder="Название услуги" rules="required|max:50" name="title"
                         type="text" />
               <AppTextarea v-model="form.description" placeholder="Описание" rules="required|max:400" name="desc"
                            type="textarea" />
@@ -48,8 +49,15 @@
           </div>
           <div class="tab-block__end">
             <InputRows>
-              <AppInput v-model="form.format" placeholder="Формат" rules="required|max:30" name="format" type="text" />
-              <AppInput v-model="form.places" placeholder="Место" rules="required|max:30" name="places" type="text" />
+<!--              <AppInput v-model="form.format" placeholder="Формат" rules="required|max:50" name="format" type="text" />-->
+              <h4 style="margin-bottom: 20px;">Выберите формат:</h4>
+              <AppTabs :names="formats"
+                       @changeTab="form.format = $event"
+                       :selected-tab="form.format"
+                       class="tab-nav-fit-content small-tabs tab-nav-wrap"
+                       style="margin-bottom: 40px;"
+              ></AppTabs>
+              <AppInput v-model="form.places" placeholder="Место" rules="required|max:50" name="places" type="text" />
             </InputRows>
           </div>
         </div>
@@ -62,9 +70,9 @@
           </div>
           <div class="tab-block__end">
             <InputRows>
-              <!--                <AppInput v-model="form.category" placeholder="Категория" rules="required|max:30" name="category" type="text"/>-->
+              <!--                <AppInput v-model="form.category" placeholder="Категория" rules="required|max:50" name="category" type="text"/>-->
               <AppInput v-model="form.cost" placeholder="Цена" rules="required|integer" name="cost" type="text" />
-              <AppInput v-model="form.duration" placeholder="Длительность" rules="required|max:30" name="duration"
+              <AppInput v-model="form.duration" placeholder="Длительность" rules="required|max:50" name="duration"
                         type="text" />
             </InputRows>
 
@@ -82,10 +90,11 @@
                        class="btn"
                        @click.prevent="selectedTab = tabs.find(tab => tab.number === selectedTab.number + 1)">Далее
         </AppPrimaryBtn>
-        <AppPrimaryBtn v-if="selectedTab.name === tabs[tabs.length - 1].name"
-                       class="btn"
-                       type="submit">Отправить
-        </AppPrimaryBtn>
+        <validator-button v-if="selectedTab.name === tabs[tabs.length - 1].name"
+                         class="btn"
+                         type="submit">
+          <AppPrimaryBtn>Отправить</AppPrimaryBtn>
+        </validator-button>
       </AppForm>
     </div>
   </div>
@@ -108,6 +117,7 @@ import formatAndLocationTab from '@/components/services/createService/FormatAndL
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { getCreatorId } from '@/hooks/getServiceCreatorId'
+import ValidatorButton from '@/components/UI/ValidatorButton.vue'
 
 export default {
   methods: {
@@ -116,6 +126,7 @@ export default {
     }
   },
   components: {
+    ValidatorButton,
     InputRows,
     AppInput,
     AppTextarea,
@@ -150,10 +161,16 @@ export default {
     const selectedTab = ref(tabs[0])
     const { categories } = useCategories()
 
+    const formats = ref([
+      { id: 1, name: 'online', label: 'Онлайн' },
+      { id: 2, name: 'offline', label: 'Оффлайн' }
+    ])
+
     const form = ref({
       title: '',
       description: '',
       places: '',
+      format: formats.value[0],
       category: {
         id: 1,
         name: 'Other',
@@ -173,7 +190,7 @@ export default {
       const payload = {
         title: form.value.title,
         description: form.value.description,
-        // format: form.value.places,
+        // format: form.value.format,
         places: form.value.places,
         categoryId: form.value.category.id,
         duration: form.value.duration,
@@ -216,6 +233,7 @@ export default {
         form.value.category = data.category
         form.value.places = data.places
         form.value.duration = data.duration
+        form.value.format = 'Онлайн'
         isLoaded.value = true
       } else {
         await router.push('/services/' + serviceId)
@@ -231,7 +249,8 @@ export default {
       form,
       categories,
       isLoaded,
-      serviceId
+      serviceId,
+      formats
     }
   }
 }

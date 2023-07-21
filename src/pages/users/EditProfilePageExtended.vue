@@ -2,6 +2,7 @@
   <div class="container">
     <header>
       <router-link to="/profile">
+        <i class="icon pi pi-arrow-left" style="margin-right: 12px;"></i>
         <span>Назад в профиль</span>
       </router-link>
     </header>
@@ -15,7 +16,7 @@
       <div class="content-block__right">
         <div class="tab-content">
 
-          <div id="main-information" v-if="selectedTab.name === 'mainInformation'">
+          <div id="main-information" v-show="selectedTab.name === 'mainInformation'">
             <AppForm>
               <div class="form__inputs">
                 <div class="form__inputs__avatar" style="margin-right: 20px;">
@@ -72,15 +73,15 @@
           </div>
 
           <div v-if="selectedTab.name === 'url'">
-            Здесь могут быть отзывы о вас.
+            Здесь должны были быть поля.
           </div>
 
           <div v-if="selectedTab.name === 'exp'">
-            Здесь могут быть клиенты для которых вы выполняли работу.
+            Здесь должны были быть поля.
           </div>
 
           <div v-if="selectedTab.name === 'account'">
-            Здесь могут быть клиенты для которых вы выполняли работу.
+            Здесь должны были быть поля.
           </div>
         </div>
 

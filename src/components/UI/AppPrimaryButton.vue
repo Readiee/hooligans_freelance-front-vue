@@ -1,17 +1,19 @@
 <template>
-  <button class="btn">
+  <button>
     <slot></slot>
   </button>
 </template>
 
 <script>
 export default {
-  name: 'app-primary-btn'
+  name: 'app-primary-btn',
+  setup () {
+  }
 }
 </script>
 
 <style scoped lang="less">
-.btn {
+button {
   width: 100%;
   padding: 14px 20px;
   background: @primary-color;

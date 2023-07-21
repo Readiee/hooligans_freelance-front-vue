@@ -6,21 +6,23 @@
       </div>
       <div class="profile__description">
         <h2>{{ userProfile.name }}</h2>
-        <p class="hobby">{{ userProfile.hobby }} Графический дизайнер</p>
-        <p class="location">{{ userProfile.location }} Красноярск</p>
+<!--        <p>{{ userProfile.hobby }} Графический дизайнер</p>-->
+        <p>{{ userProfile.location }} Красноярск</p>
+        <app-billet style="width: fit-content; margin-top: 5px">{{ role }}</app-billet>
       </div>
       <div class="edit__profile">
         <router-link to="/edit_profile">
           <app-secondary-btn style="margin-bottom: 20px;">Редактировать профиль</app-secondary-btn>
         </router-link>
       </div>
-      <div v-for="infoPosition in infos" :key="infoPosition.title" class="profile__infr">
-        <div class="profile__position">
+      <div class="profile__infr">
+        <div v-for="infoPosition in infos" :key="infoPosition.title" class="profile__position">
           <p>{{ infoPosition.title }}</p>
           <h4>{{ infoPosition.value }}</h4>
         </div>
       </div>
     </div>
+
     <div class="profile__tabs-container">
       <AppTabs :names="tabs"
                :selectedTab="selectedTab"
@@ -28,35 +30,86 @@
       </AppTabs>
 
       <div class="tab-content">
+
         <div v-if="selectedTab.name === 'jobs'">
-          <p>Здесь могут быть ваши работы</p>
+          <p class="billet-block">Здесь могут быть ваши работы</p>
         </div>
+
         <div v-if="selectedTab.name === 'services'" class="tab-content__services">
-              <div class="tab-content__header">
-                <div class="header__title">
-                  <h2>Ваши услуги</h2>
-                </div>
-                <div class="header__btns">
-                  <router-link to="/services/create">
-                    <app-primary-btn class="header__btns_btn">Создать новую услугу</app-primary-btn>
-                  </router-link>
-                </div>
-              </div>
-              <SearchInput v-model="searchQuery" style="height: 45px; margin-bottom: 20px;"></SearchInput>
-          <div v-if="this.serviceCards.length > 0"
-               class="content-block">
+          <ContentHeader>
+            <template v-slot:start>
+              <h2>Ваши услуги</h2>
+            </template>
+            <template v-slot:end>
+              <router-link to="/services/create">
+                <app-primary-btn v-if="role !== 'Сотрудник'" class="header__btns_btn">Создать новую услугу</app-primary-btn>
+              </router-link>
+            </template>
+          </ContentHeader>
+          <SearchInput v-model="servicesSearchQuery" style="height: 45px; margin-bottom: 20px;"></SearchInput>
+          <div v-if="serviceCards.length > 0" class="content-block">
             <service-list class="services-list" :serviceCards="searchedCards"></service-list>
           </div>
-          <p v-else>Здесь могут быть ваши услуги</p>
+          <p class="billet-block" v-else>Здесь могут быть ваши услуги</p>
         </div>
 
         <div v-if="selectedTab.name === 'reviews'">
-          <p>Здесь могут быть отзывы о вас.</p>
+          <p class="billet-block">Здесь могут быть отзывы о вас.</p>
         </div>
 
         <div v-if="selectedTab.name === 'clients'">
-          <p>Здесь могут быть клиенты для которых вы выполняли работу.</p>
+          <p class="billet-block">Здесь могут быть клиенты для которых вы выполняли работу.</p>
         </div>
+
+        <div v-if="selectedTab.name === 'companies'">
+          <ContentHeader>
+            <template v-slot:start>
+              <h2>Ваши сотрудники</h2>
+            </template>
+            <template v-slot:end>
+              <app-primary-btn @click="inviteEmployeeDialogVisible = true">Добавить сотрудника</app-primary-btn>
+            </template>
+          </ContentHeader>
+
+          <SearchInput v-model="employeesSearchQuery" style="height: 45px; margin-bottom: 20px;"></SearchInput>
+          <div v-if="currentEmployees.length > 0" class="content-block">
+            <employee-list :employees="searchedEmployees" @employeeFired="fetching"></employee-list>
+          </div>
+          <p v-else class="billet-block">У вашей компании пока нет сотрудников.</p>
+
+          <ContentHeader style="margin-top: 60px;">
+            <template v-slot:start>
+              <h2>Приглашения</h2>
+            </template>
+            <template v-slot:end>
+              <p>Ссылки-приглашения действуют 24 часа</p>
+            </template>
+          </ContentHeader>
+          <SearchInput v-model="inviteSearchQuery" style="height: 45px; margin-bottom: 20px;"></SearchInput>
+          <div v-if="currentInvites.length > 0" class="content-block">
+            <invite-list :invites="searchedInvites"></invite-list>
+          </div>
+          <p v-else class="billet-block">Здесь будет список приглашенных сотрудников.</p>
+        </div>
+
+        <AppDialog v-model:show="inviteEmployeeDialogVisible">
+          <AppForm @submit="inviteEmployee" style="width: 400px;">
+            <h2 style="margin-bottom: 30px;">Добавить сотрудника</h2>
+            <InputRows>
+              <AppInput placeholder="Email"
+                        v-model="inviteEmployeeForm.email"
+                        rules="required|email"
+                        name="employee_email"
+                        type="text"/>
+            </InputRows>
+            <div class="form__btns" style="margin-top: 30px;">
+              <AppPrimaryBtn type="submit">
+                <span v-if="invitationIsSent">Отправить приглашение</span>
+                <i v-else class="pi pi-spin pi-spinner" style="font-size: 1.5rem"></i>
+              </AppPrimaryBtn>
+            </div>
+          </AppForm>
+        </AppDialog>
       </div>
     </div>
   </div>
@@ -68,23 +121,66 @@ import AppSecondaryBtn from '@/components/UI/AppSecondaryButton.vue'
 import ServiceList from '@/components/services/ServiceList.vue'
 import { computed, ref } from 'vue'
 import store from '@/store'
-import { getUserServicesApi } from '@/services/users_service'
 import AppPrimaryBtn from '@/components/UI/AppPrimaryButton.vue'
 import SearchInput from '@/components/UI/SearchInput.vue'
+import { getUserServicesApi } from '@/services/users_service'
+import AppBillet from '@/components/UI/AppBillet.vue'
+import ContentHeader from '@/components/ContentHeader.vue'
+import AppDialog from '@/components/UI/AppDialog.vue'
+import AppForm from '@/components/AppForm.vue'
+import InputRows from '@/components/UI/InputRows.vue'
+import AppInput from '@/components/UI/AppInput.vue'
+import { inviteEmployeeApi } from '@/services/companies_service'
+import useCompanyEmployees from '@/hooks/companies/useCompanyEmployees'
+import InviteList from '@/components/companies/InviteList.vue'
+import EmployeeList from '@/components/companies/EmployeeList.vue'
+// import router from '@/router/router'
+// import { useRoute } from 'vue-router'
+// import { getUserProfileApi, getUserServicesApi } from '@/services/users_service'
 
 export default {
   name: 'ProfilePage',
-  components: { SearchInput, AppPrimaryBtn, ServiceList, AppSecondaryBtn, AppTabs },
+  components: {
+    EmployeeList,
+    InviteList,
+    AppInput,
+    InputRows,
+    AppForm,
+    AppDialog,
+    ContentHeader,
+    AppBillet,
+    SearchInput,
+    AppPrimaryBtn,
+    ServiceList,
+    AppSecondaryBtn,
+    AppTabs
+  },
   setup () {
-    const tabs = [
-      { name: 'jobs', label: 'Портфолио' },
-      { name: 'services', label: 'Услуги' },
-      { name: 'reviews', label: 'Отзывы' },
-      { name: 'clients', label: 'Клиенты' }
-    ]
-    const selectedTab = ref(tabs[0])
-
+    // const route = useRoute();
+    // const userId = route.params.id
+    // const userId = store.getters['auth/getUserProfile'].id
+    // const userProfile = getUserProfileApi()
     const userProfile = store.getters['auth/getUserProfile']
+
+    const tabs = computed(() => {
+      if (userProfile.role === 'Leader') {
+        return [
+          { name: 'jobs', label: 'Портфолио' },
+          { name: 'services', label: 'Услуги' },
+          { name: 'companies', label: 'Сотрудники' },
+          { name: 'reviews', label: 'Отзывы' },
+          { name: 'clients', label: 'Клиенты' }
+        ]
+      } else {
+        return [
+          { name: 'jobs', label: 'Портфолио' },
+          { name: 'services', label: 'Услуги' },
+          { name: 'reviews', label: 'Отзывы' },
+          { name: 'clients', label: 'Клиенты' }
+        ]
+      }
+    })
+    const selectedTab = ref(tabs.value[0])
 
     const serviceCards = ref([])
 
@@ -105,29 +201,122 @@ export default {
       }
     }
 
-    const searchQuery = ref('')
+    const servicesSearchQuery = ref('')
 
     const searchedCards = computed(() => {
-      return serviceCards.value.filter(card => card.title.toLocaleLowerCase().includes(searchQuery.value.toLocaleLowerCase()))
+      return serviceCards.value.filter(card => card.title.toLocaleLowerCase().includes(servicesSearchQuery.value.toLocaleLowerCase()))
     })
 
     const infos = computed(() => {
-      return [
-        { title: 'Имя', value: userProfile.name },
-        { title: 'Почта', value: userProfile.email }
-        // { name: userProfile.company, label: 'company' }
+      const defaultPositions = [
+        {
+          title: 'Имя',
+          value: userProfile.name
+        },
+        {
+          title: 'Почта',
+          value: userProfile.email
+        }
       ]
+
+      switch (userProfile.role) {
+        case 'User':
+          return [...defaultPositions]
+        case 'Leader':
+          return [...defaultPositions, ...[
+            {
+              title: 'О компании',
+              value: userProfile.company.about
+            } // aboutme
+          ]]
+        case 'Employee':
+          return [...defaultPositions, ...[
+            { title: 'Компания', value: userProfile.company.name }
+          ]]
+        default:
+          return false
+      }
     })
 
+    const role = computed(() => {
+      switch (userProfile.role) {
+        case 'User':
+          return 'Фрилансер'
+        case 'Leader':
+          return 'Компания'
+        case 'Employee':
+          return 'Сотрудник'
+        default:
+          return false
+      }
+    })
+
+    const inviteEmployeeForm = ref({
+      email: ''
+      // name: ''
+    })
+    const inviteEmployeeDialogVisible = ref(false)
+    const companyId = userProfile.company ? userProfile.company.id : 0
+    const invitationIsSent = ref(true)
+
+    const inviteEmployee = async () => {
+      invitationIsSent.value = false
+      // const payload = JSON.stringify(forms.value.inviteEmployee)
+      const payload = {
+        id: companyId,
+        email: inviteEmployeeForm.value.email
+      }
+      console.log(payload)
+      try {
+        const data = await inviteEmployeeApi(payload)
+        console.log(data)
+      } catch (err) {
+        console.log(err)
+      } finally {
+        inviteEmployeeDialogVisible.value = false
+        inviteEmployeeForm.value.email = ''
+        invitationIsSent.value = true
+        await fetching()
+      }
+    }
+
+    const {
+      fetching,
+      currentEmployees,
+      employeesSearchQuery,
+      searchedEmployees,
+      currentInvites,
+      inviteSearchQuery,
+      searchedInvites
+    } = useCompanyEmployees(companyId)
+
     return {
+      fetching,
+      inviteEmployeeDialogVisible,
+      inviteEmployee,
+      inviteEmployeeForm,
+
+      invitationIsSent,
+
       tabs,
       selectedTab,
-      userProfile,
       changeTab,
+
+      userProfile,
+      role,
+      infos,
+
       serviceCards,
-      searchQuery,
+      servicesSearchQuery,
       searchedCards,
-      infos
+
+      currentEmployees,
+      employeesSearchQuery,
+      searchedEmployees,
+
+      currentInvites,
+      inviteSearchQuery,
+      searchedInvites
     }
   }
 }
@@ -178,9 +367,13 @@ p {
 .profile__description {
   margin-top: 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   > * {
-    margin-bottom: 8px;
+    margin-bottom: 5px;
   }
 }
 
@@ -196,8 +389,12 @@ p {
 }
 
 .profile__position {
+  &:not(:first-child) {
+    margin-top: 15px;
+  }
+
   h4 {
-    margin-top: 5px;
+    //margin-top: 5px;
   }
 }
 
@@ -217,12 +414,18 @@ p {
   height: fit-content;
   background: none;
 
-  > div {
-    p {
-      padding: 30px;
-      background-color: white;
-      box-shadow: @box-shadow;
-    }
+  //> div {
+  //  p {
+  //    padding: 30px;
+  //    background-color: white;
+  //    box-shadow: @box-shadow;
+  //  }
+  //}
+
+  .billet-block {
+    padding: 30px;
+    background-color: white;
+    box-shadow: @box-shadow;
   }
 }
 

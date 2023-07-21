@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+
     <section class="content-block">
       <div class="user-avatar">
         <AppImage class="user-avatar"
@@ -19,10 +20,7 @@
         <div class="user-group__text__level">
           <p class="service-cost">{{ service.cost }}₽</p>
         </div>
-        <!--        <div class="user-group__text__level">-->
-        <!--          <p>{{ service.otsenka }}</p>-->
-        <!--        </div>-->
-        <div class="user-group__text__level" v-if="hasRights && store.getters['auth/getLoggedIn']">
+        <div class="user-group__text__level" v-if="hasAllRights">
           <AppPrimaryBtn
             @click="this.$router.push('/services/' + service.id  + '/edit')"
             style="width: 180px; margin-top: 15px;">
@@ -37,38 +35,18 @@
       </div>
     </section>
 
-    <!--    Для других юзеров -->
+    <!--  Для других юзеров -->
     <section class="content-block details-block"
-             v-if="!hasRights">
-      <div class="details__item">
-        <p>Место</p>
-        <h3>{{ service.places }}</h3>
-      </div>
-      <div class="details__item">
-        <p>Языки</p>
-        <h3>{{ service.language }}Русский</h3>
-      </div>
-      <div class="details__item">
-        <p>Категория</p>
-        <h3>{{ service.category.label }}</h3>
-      </div>
-      <div class="details__item">
-        <p>Длительность</p>
-        <h3>{{ service.duration }}</h3>
-      </div>
-      <div class="details__item">
-        <p>Последнее изменение</p>
-        <h3>{{ stringToDate(( service.updatedAt )) }}</h3>
-      </div>
-      <div class="details__item">
-        <p>Дата создания</p>
-        <h3>{{ stringToDate(( service.createdAt )) }}</h3>
+             v-if="!hasAllRights">
+      <div v-for="info in this.infos" :key="info" class="details__item">
+        <p>{{ info.title }}</p>
+        <h3>{{ info.value  }}</h3>
       </div>
     </section>
 
-    <!--    Для других юзеров -->
+    <!--  Запись  -->
     <section class="content-block windows-block"
-             v-if="!hasRights">
+             v-if="!hasAllRights">
       <h2 style="margin-bottom: 30px;">Свободные окна</h2>
       <div class="windows__items" v-if="freeWindows.length > 0">
         <app-radio v-for="window in freeWindows"
@@ -89,31 +67,12 @@
 
     <!--    Для админа и креатора-->
     <section class="content-block details-windows-block-for-creator"
-             v-if="hasRights && store.getters['auth/getLoggedIn']">
+             v-if="hasAllRights">
+
       <div class="details-block">
-        <div class="details__item">
-          <p>Место</p>
-          <h3>{{ service.places }}</h3>
-        </div>
-        <div class="details__item">
-          <p>Языки</p>
-          <h3>{{ service.language }}Русский</h3>
-        </div>
-        <div class="details__item">
-          <p>Категория</p>
-          <h3>{{ service.category.label }}</h3>
-        </div>
-        <div class="details__item">
-          <p>Длительность</p>
-          <h3>{{ service.duration }}</h3>
-        </div>
-        <div class="details__item">
-          <p>Последнее изменение</p>
-          <h3>{{ stringToDate(( service.updatedAt )) }}</h3>
-        </div>
-        <div class="details__item">
-          <p>Дата создания</p>
-          <h3>{{ stringToDate(( service.createdAt )) }}</h3>
+        <div v-for="info in this.infos" :key="info" class="details__item">
+          <p>{{ info.title }}</p>
+          <h3>{{ info.value  }}</h3>
         </div>
       </div>
 
@@ -122,19 +81,14 @@
           <AppTabs :names="planTabs"
                    :selectedTab="selectedTab"
                    @changeTab="changeTab"
-                   class="tab-nav"></AppTabs>
+                   class="tab-nav"/>
         </div>
 
         <div class="windows-block__tab-content">
-
           <div v-if="selectedTab.name === 'freeWindows' && store.getters['auth/getLoggedIn']"
                class="tab-content__free-windows">
             <div v-if="this.freeWindows.length > 0">
-              <PlanList class="free-windows__list"
-                        :plans="freeWindows"
-                        @remove="removePlan"
-                        @update="openUpdateDialog"
-              ></PlanList>
+              <PlanList class="free-windows__list" :plans="freeWindows" @remove="removePlan" @update="openUpdateDialog"/>
             </div>
             <p style="text-align: center" v-else>Нет сеансов.</p>
             <div class="tab-content__footer">
@@ -144,11 +98,7 @@
 
           <div v-if="selectedTab.name === 'currentEntries'" class="tab-content__current-entries">
             <div v-if="this.currentEntries.length > 0">
-              <PlanList class="current-entries__list"
-                        :plans="currentEntries"
-                        :can-be-deleted="false"
-                        @update="openUpdateDialog"
-              ></PlanList>
+              <PlanList class="current-entries__list" :plans="currentEntries" :can-be-deleted="false" @update="openUpdateDialog"/>
             </div>
             <p style="text-align: center" v-else>Нет записавшихся клиентов.</p>
             <div class="tab-content__footer">
@@ -164,11 +114,6 @@
       <AppForm @submit="createPlan" style="width: 400px;">
         <h2 style="margin-bottom: 30px;">Добавить окно</h2>
         <InputRows>
-<!--          <div class="input-row">-->
-<!--            <span>Дата</span>-->
-<!--            <VueDatePicker v-model="planDate" locale="ru"></VueDatePicker>-->
-<!--          </div>-->
-
           <div class="input-row">
             <span>Дата</span>
             <AppDatePicker v-model="planDate"
@@ -176,14 +121,12 @@
                            :name="`date`"
             ></AppDatePicker>
           </div>
-
           <div class="input-row">
             <span>Время</span>
             <AppTimePicker v-model="planTime"
                            :name="`time`"
                            style="margin-left: auto;"></AppTimePicker>
           </div>
-
         </InputRows>
         <div class="form__btns" style="margin-top: 30px;">
           <AppPrimaryBtn type="submit">Отправить</AppPrimaryBtn>
@@ -221,7 +164,6 @@
         </div>
       </AppForm>
     </AppDialog>
-
   </div>
 </template>
 
@@ -263,7 +205,6 @@ export default {
   data () {
     return {
       service: {
-        id: Number,
         image: String,
         createdAt: Date,
         updatedAt: Date,
@@ -273,8 +214,6 @@ export default {
         title: String,
         cost: String,
         description: String,
-        authorId: Number,
-        isPublished: Boolean,
         author: {
           name: String,
           avatar: String
@@ -317,14 +256,28 @@ export default {
     serviceId () {
       return Number(this.$route.params.id)
     },
-    hasRights () {
-      return (store.getters['auth/getUserProfile'].id === this.creatorId || store.getters['auth/getUserProfile'].role === 'Admin')
+    hasAllRights () {
+      return store.getters['auth/getLoggedIn'] &&
+        (store.getters['auth/getUserProfile'].id === this.creatorId || store.getters['auth/getUserProfile'].role === 'Admin')
+    },
+    role () {
+      return store.getters['auth/getLoggedIn']
     },
     store () {
       return store
     },
     avatarUrl () {
       return getImageUrl(this.service.author.avatar)
+    },
+    infos () {
+      return [
+        { title: 'Место', value: this.service.places },
+        { title: 'Языки', value: 'Русский' },
+        { title: 'Категория', value: this.service.category.label },
+        { title: 'Длительность', value: this.service.duration },
+        { title: 'Последнее изменение', value: dateToString(this.service.updatedAt) },
+        { title: 'Дата создания', value: dateToString(this.service.createdAt) }
+      ]
     }
   },
   methods: {
@@ -408,7 +361,7 @@ export default {
         await this.fetchFreeWindows()
       } catch (err) {
         console.log(err)
-        alert('Не удалось удалить услугу')
+        alert('Не удалось удалить запись')
       }
     },
     async openUpdateDialog (plan) {
@@ -428,7 +381,6 @@ export default {
       const [year, month, day] = this.editForm.planDateNew.split('-')
       const [hours, minutes] = this.editForm.planTimeNew.split(':')
       const payload = {
-        planId: Number(this.editForm.editedPlan.id),
         year: String(year),
         month: String(month),
         day: String(day),
@@ -436,14 +388,15 @@ export default {
         minutes: String(minutes)
       }
       try {
-        await updatePlanApi(payload)
+        await updatePlanApi(Number(this.editForm.editedPlan.id), payload)
         this.dialogVisibleEdit = false
         this.editForm.planTimeNew = ''
         this.editForm.planDateNew = ''
         await this.fetchCurrentEntries()
+        await this.fetchFreeWindows()
       } catch (err) {
         console.log(err)
-        alert('Не удалось изменить услугу')
+        alert('Не удалось изменить запись')
       }
     }
   }
@@ -452,10 +405,13 @@ export default {
 
 <style scoped lang="less">
 .content-block {
-  margin-top: 40px;
   display: flex;
   //padding: 30px;
   //box-shadow: @box-shadow;
+
+  &:not(:first-child) {
+    margin-top: 40px;
+  }
 }
 
 .user-group {
@@ -486,7 +442,6 @@ p {
   > * {
     margin-right: 10px;
   }
-
 }
 
 .service-cost {
